@@ -1,8 +1,12 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://c2cu6onxagf3l"]
 
-[ext_resource type="Script" path="res://scripts/game_director.gd" id="1_director"]
+[ext_resource type="Script" uid="uid://caty4ydhamml2" path="res://scripts/game_director.gd" id="1_director"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_line"]
+content_margin_left = 28.0
+content_margin_top = 18.0
+content_margin_right = 28.0
+content_margin_bottom = 18.0
 bg_color = Color(0.06, 0.06, 0.09, 0.94)
 border_width_left = 1
 border_width_top = 1
@@ -13,21 +17,17 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
-content_margin_left = 28.0
-content_margin_top = 18.0
-content_margin_right = 28.0
-content_margin_bottom = 18.0
 
-[node name="Game" type="Node"]
+[node name="Game" type="Node" unique_id=793015983]
 script = ExtResource("1_director")
 
-[node name="World" type="Node" parent="."]
+[node name="World" type="Node" parent="." unique_id=1620290625]
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=22926548]
 layer = 10
 
-[node name="Fade" type="ColorRect" parent="UI"]
-layout_mode = 3
+[node name="Fade" type="ColorRect" parent="UI" unique_id=607977714]
+modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -35,11 +35,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
-modulate = Color(1, 1, 1, 0)
 
-[node name="LineBox" type="CenterContainer" parent="UI"]
+[node name="LineBox" type="CenterContainer" parent="UI" unique_id=902035067]
 visible = false
-layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -47,14 +45,13 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Panel" type="PanelContainer" parent="UI/LineBox"]
+[node name="Panel" type="PanelContainer" parent="UI/LineBox" unique_id=754005638]
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_line")
 
-[node name="Label" type="Label" parent="UI/LineBox/Panel"]
+[node name="Label" type="Label" parent="UI/LineBox/Panel" unique_id=853699108]
 layout_mode = 2
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.96, 0.93, 0.86, 1)
 theme_override_font_sizes/font_size = 30
 text = "You will never drift away..."

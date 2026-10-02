@@ -36,6 +36,10 @@ var _player: Node2D
 @onready var hitbox: Area2D = $Body
 
 
+func _enter_tree() -> void:
+	add_to_group("seed")
+
+
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		_preview()

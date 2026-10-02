@@ -15,7 +15,7 @@ var _listen_for_chase := false
 @onready var glow: CanvasItem = $Platform/CompletionArea/Glow
 @onready var completion_area: Area2D = $Platform/CompletionArea
 @onready var prompt: Label = $UI/Prompt
-@onready var drifter: Node = $Drifter
+@onready var peppermint: Node = $Peppermint
 
 
 func _enter_tree() -> void:
@@ -64,8 +64,8 @@ func _opening() -> void:
 	if not is_inside_tree():
 		return
 	prompt.visible = false
-	if drifter.has_method("start_run"):
-		drifter.start_run()
+	if peppermint.has_method("start_run"):
+		peppermint.start_run()
 
 
 func note_collected() -> void:

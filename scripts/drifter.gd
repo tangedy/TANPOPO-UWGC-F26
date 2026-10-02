@@ -1,31 +1,48 @@
 extends CharacterBody2D
 
 const InputSetup = preload("res://scripts/input_setup.gd")
-const STAND_TEX := preload("res://Assets/images/peppermint_stand_rough.png")
-const RUN_TEX := preload("res://Assets/images/peppermint_run_rough.png")
-const MOVE_TEX := preload("res://Assets/images/peppermint_move_rough.png")
+const PAPER_SHADER := preload("res://shaders/white_key.gdshader")
+const STAND_TEX := preload("res://Assets/images/peppermint/standing_idle.png")
+const RUN_TEX := preload("res://Assets/images/peppermint/peppermint_run_rough.png")
+const MOVE_A_TEX := preload("res://Assets/images/peppermint/moving_A_right.png")
+const MOVE_B_TEX := preload("res://Assets/images/peppermint/moving_B_right.png")
+const REACH_A_TEX := preload("res://Assets/images/peppermint/reaching_A_right.png")
+const REACH_B_TEX := preload("res://Assets/images/peppermint/reaching_B_right.png")
 
-## Drawn height of each peppermint pose, in pixels.
-const TARGET_HEIGHT := 156.0
-const STAND_CONTENT := Rect2(59, 25, 317, 756)
-const RUN_CONTENT := Rect2(76, 6, 758, 784)
-const MOVE_CONTENT := Rect2(828, 324, 1494, 1560)
+## Drawn height of each image, in pixels. Each anchor is your extra shift on top of that.
+@export var sprite_height := 156.0
+## Seconds each moving or reaching frame stays up.
+@export var frame_time := 0.2
+## How close a seed must be before she reaches for it, in pixels.
+@export var reach_range := 240.0
+## Sideways speed required before a nearby seed counts as one she is moving toward.
+@export var reach_speed := 20.0
+
+@export_group("Anchors")
+## Extra shift for this image after it is centered and stood on the origin. X is mirrored when she faces left.
+@export var standing_anchor := Vector2.ZERO
+@export var run_anchor := Vector2.ZERO
+@export var moving_a_anchor := Vector2.ZERO
+@export var moving_b_anchor := Vector2.ZERO
+@export var reaching_a_anchor := Vector2.ZERO
+@export var reaching_b_anchor := Vector2.ZERO
 
 enum State { WAIT, RUN_OFF, GLIDE, FINISHED }
-enum Pose { STAND, RUN, MOVE }
+enum Pose { STAND, RUN, MOVE, REACH }
 
+@export_group("Movement")
 ## Downward terminal with no sideways speed, in pixels per second.
 @export var fall_speed := 140.0
 ## Downward terminal base while S is held. Sideways speed stacks on top of this.
-@export var dive_speed := 360.0
+@export var dive_speed := 140.0
 ## Extra downward speed for each pixel per second sideways. 0.25 is one down per four across.
 @export var sink_per_horizontal := 0.25
 ## Downward acceleration while falling. Drag is solved from this so the terminal stays exact.
 @export var fall_gravity := 280.0
 ## Downward acceleration while rising, so wind and gusts arc back down.
-@export var gravity := 280.0
+@export var gravity := 60.0
 ## Fastest rise, in pixels per second. Wind and gusts cannot climb faster than this.
-@export var max_up_speed := 360.0
+@export var max_up_speed := 1200.0
 @export var glide_speed := 260.0
 ## Exponential steer rate while holding left or right. Higher reaches the target sooner.
 @export var glide_accel := 4.0
@@ -57,8 +74,11 @@ var _gust_pending := false
 var _gust_dir := Vector2.UP
 var _gust_speed := 0.0
 var _pose := Pose.STAND
-var _pose_ready := false
+var _facing := 1
+var _frame := 0
+var _frame_clock := 0.0
 var _lifted := false
+var _paper: ShaderMaterial
 
 @onready var camera: Camera2D = $Camera2D
 @onready var visual: Sprite2D = $Visual
@@ -70,6 +90,9 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	InputSetup.ensure()
+	_paper = ShaderMaterial.new()
+	_paper.shader = PAPER_SHADER
+	_paper.set_shader_parameter("cutoff", 0.988)
 	collision_layer = 2
 	collision_mask = 1
 	floor_snap_length = 12.0
@@ -136,11 +159,13 @@ func attach_follower(node: Node2D) -> void:
 func _physics_process(delta: float) -> void:
 	if state == State.FINISHED:
 		velocity = Vector2.ZERO
+		_sync_pose(delta)
 		return
 	if state == State.WAIT:
 		velocity.x = 0.0
 		velocity.y = 40.0
 		move_and_slide()
+		_sync_pose(delta)
 		return
 	if state == State.RUN_OFF:
 		_run_off(delta)
@@ -148,7 +173,7 @@ func _physics_process(delta: float) -> void:
 		_glide(delta)
 	_clear_forces()
 	move_and_slide()
-	_sync_pose()
+	_sync_pose(delta)
 	_record_trail()
 	_update_followers()
 
@@ -213,39 +238,98 @@ func _apply_vertical(delta: float, allow_dive: bool) -> void:
 	velocity.y += accel * delta
 
 
-func _sync_pose() -> void:
-	if state == State.FINISHED or state == State.WAIT:
-		_apply_pose(Pose.STAND)
-		return
+func _sync_pose(delta: float) -> void:
+	var pose := Pose.STAND
+	var facing := 0
 	if state == State.RUN_OFF:
-		_apply_pose(Pose.RUN)
-		return
-	if _lifted or velocity.y < 0.0:
-		_lifted = true
-		_apply_pose(Pose.MOVE)
+		pose = Pose.RUN
+		facing = 1
+	elif state == State.GLIDE:
+		if _lifted or velocity.y < 0.0:
+			_lifted = true
+		var reach := _reach_facing()
+		if reach != 0:
+			pose = Pose.REACH
+			facing = reach
+		elif _lifted:
+			pose = Pose.MOVE
+			if absf(velocity.x) >= reach_speed:
+				facing = 1 if velocity.x > 0.0 else -1
+			else:
+				facing = _facing
+		else:
+			pose = Pose.RUN
+			facing = 1
+	if pose == Pose.MOVE or pose == Pose.REACH:
+		_frame_clock += delta
+		if _frame_clock >= frame_time:
+			_frame_clock = fmod(_frame_clock, frame_time)
+			_frame = 1 - _frame
 	else:
-		_apply_pose(Pose.RUN)
+		_frame_clock = 0.0
+		_frame = 0
+	if facing != 0:
+		_facing = facing
+	_apply_pose(pose)
+
+
+func _reach_facing() -> int:
+	var best := reach_range + 1.0
+	var facing := 0
+	for node in get_tree().get_nodes_in_group("seed"):
+		if not is_instance_valid(node) or node.get("collected") == true:
+			continue
+		var body := node.get_node_or_null("Body") as Node2D
+		if body == null:
+			continue
+		var to_seed := body.global_position - _body_center()
+		var dist := to_seed.length()
+		if dist > reach_range or dist >= best or absf(to_seed.x) < 4.0:
+			continue
+		var toward := 1 if to_seed.x > 0.0 else -1
+		if absf(velocity.x) < reach_speed or signf(velocity.x) != float(toward):
+			continue
+		best = dist
+		facing = toward
+	return facing
 
 
 func _apply_pose(pose: Pose) -> void:
-	if visual == null or (_pose_ready and _pose == pose):
+	if visual == null:
 		return
-	_pose_ready = true
 	_pose = pose
 	var tex: Texture2D = STAND_TEX
-	var content := STAND_CONTENT
+	var anchor := standing_anchor
+	var keyed := false
 	if pose == Pose.RUN:
 		tex = RUN_TEX
-		content = RUN_CONTENT
+		anchor = run_anchor
+		keyed = true
 	elif pose == Pose.MOVE:
-		tex = MOVE_TEX
-		content = MOVE_CONTENT
+		if _frame == 0:
+			tex = MOVE_A_TEX
+			anchor = moving_a_anchor
+		else:
+			tex = MOVE_B_TEX
+			anchor = moving_b_anchor
+	elif pose == Pose.REACH:
+		if _frame == 0:
+			tex = REACH_A_TEX
+			anchor = reaching_a_anchor
+		else:
+			tex = REACH_B_TEX
+			anchor = reaching_b_anchor
 	visual.texture = tex
 	visual.centered = true
-	var fitted := TARGET_HEIGHT / content.size.y
+	visual.material = _paper if keyed else null
+	var fitted := sprite_height / maxf(tex.get_height(), 1.0)
 	visual.scale = Vector2(fitted, fitted)
-	var foot := Vector2(content.position.x + content.size.x * 0.5, content.end.y)
-	visual.position = (tex.get_size() * 0.5 - foot) * fitted
+	var facing_left := pose != Pose.STAND and _facing < 0
+	visual.flip_h = facing_left
+	var pos := Vector2(0, -sprite_height * 0.5) + anchor
+	if facing_left:
+		pos.x = -pos.x
+	visual.position = pos
 
 
 func _lean_with_speed() -> void:
