@@ -3,8 +3,8 @@ extends Area2D
 
 ## Upward speed of the one gust fired when the traveler is fully inside.
 ## Tuned so the arc crests at the top of the tall platform.
-@export var lift_speed := 406.0
-@export var zone_size := Vector2(4200, 700):
+@export var lift_speed := 300.0
+@export var zone_size := Vector2(4600, 700):
 	set(value):
 		zone_size = value
 		_apply_zone_size()
@@ -57,6 +57,10 @@ func lift_direction() -> Vector2:
 	if direction.length_squared() < 0.0001:
 		return Vector2.UP
 	return direction.normalized()
+
+
+func _edit_is_selected_on_click(at_position: Vector2, tolerance: float) -> bool:
+	return Rect2(-zone_size * 0.5, zone_size).grow(tolerance).has_point(at_position)
 
 
 func _apply_zone_size() -> void:

@@ -81,6 +81,10 @@ func _apply_zone_size() -> void:
 	shape_node.shape = rect
 
 
+func _edit_is_selected_on_click(at_position: Vector2, tolerance: float) -> bool:
+	return Rect2(-zone_size * 0.5, zone_size).grow(tolerance).has_point(at_position)
+
+
 func _get_configuration_warnings() -> PackedStringArray:
 	if not always_active and on_duration <= 0.0:
 		return PackedStringArray(["On duration is 0, so this wind never blows."])

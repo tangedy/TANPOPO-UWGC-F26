@@ -10,3 +10,4 @@ monitorable = false
 script = ExtResource("1_updraft")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+metadata/_edit_lock_ = true

@@ -15,15 +15,17 @@ enum State { WAIT, RUN_OFF, GLIDE, FINISHED }
 enum Pose { STAND, RUN, MOVE }
 
 ## Downward terminal with no sideways speed, in pixels per second.
-@export var fall_speed := 180.0
+@export var fall_speed := 140.0
 ## Downward terminal base while S is held. Sideways speed stacks on top of this.
 @export var dive_speed := 360.0
 ## Extra downward speed for each pixel per second sideways. 0.25 is one down per four across.
 @export var sink_per_horizontal := 0.25
 ## Downward acceleration while falling. Drag is solved from this so the terminal stays exact.
 @export var fall_gravity := 280.0
-## Upward pull. Kept gentler than fall_gravity so updraft arcs still crest the platform.
-@export var gravity := 50.0
+## Downward acceleration while rising, so wind and gusts arc back down.
+@export var gravity := 280.0
+## Fastest rise, in pixels per second. Wind and gusts cannot climb faster than this.
+@export var max_up_speed := 360.0
 @export var glide_speed := 260.0
 ## Exponential steer rate while holding left or right. Higher reaches the target sooner.
 @export var glide_accel := 4.0
@@ -171,9 +173,9 @@ func _leap() -> void:
 
 func _glide(delta: float) -> void:
 	floor_snap_length = 0.0
+	var can_steer := _control_timer <= 0.0
 	if _control_timer > 0.0:
 		_control_timer = maxf(_control_timer - delta, 0.0)
-		_apply_vertical(delta, false)
 	else:
 		var axis := Input.get_axis("left", "right")
 		var target_x := axis * glide_speed
@@ -186,8 +188,6 @@ func _glide(delta: float) -> void:
 			var along := velocity.dot(_lift_dir)
 			var new_along := move_toward(along, _lift_speed, _lift_accel * delta)
 			velocity += _lift_dir * (new_along - along)
-		else:
-			_apply_vertical(delta, true)
 
 	if _gust_pending:
 		var gust_along := velocity.dot(_gust_dir)
@@ -195,8 +195,9 @@ func _glide(delta: float) -> void:
 		_gust_pending = false
 
 	velocity += _air_push * delta
+	_apply_vertical(delta, can_steer)
 	velocity.x = clampf(velocity.x, -1100.0, 1100.0)
-	velocity.y = clampf(velocity.y, -1400.0, 520.0)
+	velocity.y = clampf(velocity.y, -max_up_speed, 520.0)
 	_lean_with_speed()
 
 

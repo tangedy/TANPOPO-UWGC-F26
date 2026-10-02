@@ -1,12 +1,16 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://uel7xvwc5jvp"]
 
-[ext_resource type="Script" path="res://scripts/wind_zone.gd" id="1_wind"]
+[ext_resource type="Script" uid="uid://b8eeskk73qnv7" path="res://scripts/wind_zone.gd" id="1_wind"]
 
-[node name="WindZone" type="Area2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xncwx"]
+size = Vector2(260, 180)
+
+[node name="WindZone" type="Area2D" unique_id=858789183]
 collision_layer = 0
 collision_mask = 6
-monitoring = true
 monitorable = false
 script = ExtResource("1_wind")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2097485913]
+shape = SubResource("RectangleShape2D_xncwx")
+metadata/_edit_lock_ = true

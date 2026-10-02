@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://cjdvgfeldo2vk" path="res://scripts/drift_room.gd" id="1_room"]
 [ext_resource type="PackedScene" path="res://scenes/updraft_zone.tscn" id="2_updraft"]
-[ext_resource type="PackedScene" path="res://scenes/wind_zone.tscn" id="3_wind"]
-[ext_resource type="PackedScene" path="res://scenes/drifting_object.tscn" id="4_object"]
+[ext_resource type="PackedScene" uid="uid://uel7xvwc5jvp" path="res://scenes/wind_zone.tscn" id="3_wind"]
+[ext_resource type="PackedScene" uid="uid://bbxbxebcdr7d0" path="res://scenes/drifting_object.tscn" id="4_object"]
 [ext_resource type="PackedScene" uid="uid://c5bm054jrtsb4" path="res://scenes/drifter.tscn" id="5_drifter"]
 [ext_resource type="Texture2D" uid="uid://d1qsrkeullnks" path="res://Assets/images/cliff_rough.png" id="6_cliff"]
 [ext_resource type="Texture2D" uid="uid://b5ot21jb3anjd" path="res://Assets/images/clouds_rough.png" id="7_clouds"]
@@ -29,22 +29,23 @@ color = Color(0.690196, 0.878431, 0.917647, 1)
 
 [node name="Updraft" parent="." unique_id=95024445 instance=ExtResource("2_updraft")]
 z_index = 2
-position = Vector2(1927, 2653)
-zone_size = Vector2(4600, 700)
+position = Vector2(1897, 2128)
 
 [node name="WindRight" parent="." unique_id=625048384 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(1500, 1050)
-strength = 260.0
+position = Vector2(1849.0001, 1233)
+scale = Vector2(1.0604767, 1.1432701)
+strength = 764.0
 on_duration = 1.4
 off_duration = 1.8
 zone_size = Vector2(340, 200)
 
 [node name="WindUp" parent="." unique_id=1057585122 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(2200, 1500)
+position = Vector2(1669.0001, 882)
 rotation = -1.570796
-strength = 300.0
+scale = Vector2(1.0604779, 1.1432711)
+strength = 515.0
 on_duration = 1.0
 off_duration = 2.3
 start_delay = 0.5
@@ -52,66 +53,73 @@ zone_size = Vector2(260, 320)
 
 [node name="WindLeft" parent="." unique_id=883681909 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(980, 1450)
-rotation = 3.141593
-strength = 220.0
+position = Vector2(1323, 1414)
+rotation = -3.1415923
+scale = Vector2(1.0604779, 1.1432701)
+strength = 540.0
 on_duration = 1.2
 off_duration = 1.6
 start_delay = 0.2
-zone_size = Vector2(280, 200)
+zone_size = Vector2(400, 300)
 
 [node name="WindDown" parent="." unique_id=1493769024 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(1750, 900)
+position = Vector2(745, 1293)
 rotation = 1.570796
-strength = 150.0
+scale = Vector2(1.0604779, 1.1432711)
+strength = 325.0
+always_active = true
 on_duration = 0.7
 off_duration = 2.4
 start_delay = 1.0
-zone_size = Vector2(220, 180)
+zone_size = Vector2(260, 400)
 
 [node name="WindSteady" parent="." unique_id=322785786 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(1879, 1165)
-strength = 70.0
+position = Vector2(978.00006, 941)
+scale = Vector2(1.0604767, 1.1432701)
+strength = 200.0
 always_active = true
 zone_size = Vector2(300, 160)
 
 [node name="ObjectA" parent="." unique_id=760653982 instance=ExtResource("4_object")]
-position = Vector2(1300, 1200)
+position = Vector2(739, 1123)
+scale = Vector2(1.0604767, 1.1432701)
 breathe_amount = 0.45
 breathe_period = 3.4
 start_ratio = 0.05
 
 [node name="ObjectB" parent="." unique_id=623485281 instance=ExtResource("4_object")]
-position = Vector2(2100, 1650)
+position = Vector2(1518.9999, 1468)
+scale = Vector2(1.195, 1.281)
 speed = 60.0
 breathe_amount = 0.7
 breathe_period = 5.5
 start_ratio = 0.4
 
 [node name="ObjectC" parent="." unique_id=2135189073 instance=ExtResource("4_object")]
-position = Vector2(2574, 1332)
+position = Vector2(1641, 1083)
+scale = Vector2(0.63, 0.683)
 speed = 100.0
 breathe_amount = 0.35
 breathe_period = 2.6
 start_ratio = 0.75
 
 [node name="Platform" type="StaticBody2D" parent="." unique_id=1851131555]
-z_index = 0
 position = Vector2(280, 1450)
 collision_mask = 0
 
 [node name="Cliff" type="Sprite2D" parent="Platform" unique_id=1488769419]
-z_index = 0
 position = Vector2(-841.5, -408)
 texture = ExtResource("6_cliff")
+metadata/_edit_lock_ = true
 
 [node name="Clouds" type="Sprite2D" parent="Platform" unique_id=706455837]
 z_index = 1
 position = Vector2(797.17206, -395.99994)
 scale = Vector2(1.0191237, 1.0191234)
 texture = ExtResource("7_clouds")
+metadata/_edit_lock_ = true
 
 [node name="FloorCollider" type="CollisionPolygon2D" parent="Platform" unique_id=628338554]
 polygon = PackedVector2Array(-1800, -550, 102, -548, 0, -455, -100, -335, -200, -191, -300, 175, -1800, 165)
