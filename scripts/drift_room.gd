@@ -2,14 +2,20 @@ extends Node2D
 
 signal returned
 
+const InputSetup = preload("res://scripts/input_setup.gd")
+
 @export var required_collectibles := 3
 
 var collected := 0
 
 var _ending := false
+var _chase := false
+var _listen_for_chase := false
 
-@onready var glow: CanvasItem = $Platform/Glow
-@onready var return_zone: Area2D = $Platform/ReturnZone
+@onready var glow: CanvasItem = $Platform/CompletionArea/Glow
+@onready var completion_area: Area2D = $Platform/CompletionArea
+@onready var prompt: Label = $UI/Prompt
+@onready var drifter: Node = $Drifter
 
 
 func _enter_tree() -> void:
@@ -17,12 +23,49 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+	InputSetup.ensure()
 	glow.visible = false
-	return_zone.monitoring = false
-	return_zone.monitorable = false
-	return_zone.collision_mask = 2
-	return_zone.body_entered.connect(_on_return_body)
-	queue_redraw()
+	completion_area.monitoring = false
+	completion_area.monitorable = false
+	completion_area.collision_mask = 2
+	completion_area.body_entered.connect(_on_return_body)
+	prompt.visible = false
+	set_process_unhandled_input(true)
+	_opening()
+
+
+func _process(_delta: float) -> void:
+	if _listen_for_chase and Input.is_action_just_pressed("chase"):
+		_chase = true
+	if not glow.visible:
+		return
+	var pulse := 0.35 + 0.45 * (0.5 + 0.5 * sin(Time.get_ticks_msec() * 0.004))
+	glow.modulate = Color(1, 1, 1, pulse)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if _listen_for_chase and event.is_action_pressed("chase"):
+		_chase = true
+		get_viewport().set_input_as_handled()
+
+
+func _opening() -> void:
+	_chase = false
+	_listen_for_chase = false
+	prompt.visible = false
+	await get_tree().create_timer(1.15).timeout
+	if not is_inside_tree():
+		return
+	prompt.visible = true
+	_listen_for_chase = true
+	while is_inside_tree() and not _chase:
+		await get_tree().process_frame
+	_listen_for_chase = false
+	if not is_inside_tree():
+		return
+	prompt.visible = false
+	if drifter.has_method("start_run"):
+		drifter.start_run()
 
 
 func note_collected() -> void:
@@ -30,7 +73,7 @@ func note_collected() -> void:
 	if collected < required_collectibles:
 		return
 	glow.visible = true
-	return_zone.monitoring = true
+	completion_area.monitoring = true
 	_check_return_overlap.call_deferred()
 
 
@@ -38,7 +81,7 @@ func _check_return_overlap() -> void:
 	await get_tree().physics_frame
 	if _ending or not is_inside_tree():
 		return
-	for body in return_zone.get_overlapping_bodies():
+	for body in completion_area.get_overlapping_bodies():
 		_on_return_body(body)
 
 
@@ -47,29 +90,13 @@ func _on_return_body(body: Node) -> void:
 		return
 	if body.is_in_group("player"):
 		_ending = true
+		if body.has_method("finish"):
+			body.finish()
 		returned.emit()
 
 
 func _physics_process(_delta: float) -> void:
-	if _ending or collected < required_collectibles or not return_zone.monitoring:
+	if _ending or collected < required_collectibles or not completion_area.monitoring:
 		return
-	for body in return_zone.get_overlapping_bodies():
+	for body in completion_area.get_overlapping_bodies():
 		_on_return_body(body)
-
-
-func _process(_delta: float) -> void:
-	if not glow.visible:
-		return
-	var pulse := 0.35 + 0.45 * (0.5 + 0.5 * sin(Time.get_ticks_msec() * 0.004))
-	glow.modulate = Color(1, 1, 1, pulse)
-
-
-func _draw() -> void:
-	var origin := Vector2(-1800, -3200)
-	var cell := 160
-	var blue := Color(0.36, 0.58, 0.92)
-	var white := Color(0.96, 0.97, 1)
-	for y in 48:
-		for x in 48:
-			var color := blue if (x + y) % 2 == 0 else white
-			draw_rect(Rect2(origin + Vector2(x * cell, y * cell), Vector2(cell, cell)), color)

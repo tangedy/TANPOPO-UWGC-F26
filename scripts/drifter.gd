@@ -1,8 +1,18 @@
 extends CharacterBody2D
 
 const InputSetup = preload("res://scripts/input_setup.gd")
+const STAND_TEX := preload("res://Assets/images/peppermint_stand_rough.png")
+const RUN_TEX := preload("res://Assets/images/peppermint_run_rough.png")
+const MOVE_TEX := preload("res://Assets/images/peppermint_move_rough.png")
 
-enum State { RUN_OFF, GLIDE }
+## Drawn height of each peppermint pose, in pixels.
+const TARGET_HEIGHT := 156.0
+const STAND_CONTENT := Rect2(59, 25, 317, 756)
+const RUN_CONTENT := Rect2(76, 6, 758, 784)
+const MOVE_CONTENT := Rect2(828, 324, 1494, 1560)
+
+enum State { WAIT, RUN_OFF, GLIDE, FINISHED }
+enum Pose { STAND, RUN, MOVE }
 
 ## Downward terminal with no sideways speed, in pixels per second.
 @export var fall_speed := 180.0
@@ -30,7 +40,7 @@ enum State { RUN_OFF, GLIDE }
 ## Distance between the traveler and each collected object.
 @export var follow_spacing := 46.0
 
-var state := State.RUN_OFF
+var state := State.WAIT
 var followers: Array[Node2D] = []
 
 var _air_push := Vector2.ZERO
@@ -44,9 +54,12 @@ var _control_timer := 0.0
 var _gust_pending := false
 var _gust_dir := Vector2.UP
 var _gust_speed := 0.0
+var _pose := Pose.STAND
+var _pose_ready := false
+var _lifted := false
 
 @onready var camera: Camera2D = $Camera2D
-@onready var visual: Node2D = $Visual
+@onready var visual: Sprite2D = $Visual
 
 
 func _enter_tree() -> void:
@@ -58,9 +71,25 @@ func _ready() -> void:
 	collision_layer = 2
 	collision_mask = 1
 	floor_snap_length = 12.0
-	velocity.x = 40.0
+	velocity = Vector2.ZERO
 	camera.make_current()
 	_leap_point = get_parent().get_node_or_null("Platform/LeapPoint") as Node2D
+	_apply_pose(Pose.STAND)
+
+
+func start_run() -> void:
+	if state != State.WAIT:
+		return
+	state = State.RUN_OFF
+	velocity.x = 40.0
+	_apply_pose(Pose.RUN)
+
+
+func finish() -> void:
+	state = State.FINISHED
+	velocity = Vector2.ZERO
+	visual.rotation = 0.0
+	_apply_pose(Pose.STAND)
 
 
 func add_air_push(accel: Vector2) -> void:
@@ -103,12 +132,21 @@ func attach_follower(node: Node2D) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if state == State.FINISHED:
+		velocity = Vector2.ZERO
+		return
+	if state == State.WAIT:
+		velocity.x = 0.0
+		velocity.y = 40.0
+		move_and_slide()
+		return
 	if state == State.RUN_OFF:
 		_run_off(delta)
 	else:
 		_glide(delta)
 	_clear_forces()
 	move_and_slide()
+	_sync_pose()
 	_record_trail()
 	_update_followers()
 
@@ -125,6 +163,7 @@ func _run_off(delta: float) -> void:
 
 func _leap() -> void:
 	state = State.GLIDE
+	_lifted = true
 	floor_snap_length = 0.0
 	_control_timer = leap_drift_time
 	velocity.y = -leap_speed
@@ -171,6 +210,41 @@ func _apply_vertical(delta: float, allow_dive: bool) -> void:
 	var drag := fall_gravity / terminal
 	var accel := fall_gravity - drag * velocity.y
 	velocity.y += accel * delta
+
+
+func _sync_pose() -> void:
+	if state == State.FINISHED or state == State.WAIT:
+		_apply_pose(Pose.STAND)
+		return
+	if state == State.RUN_OFF:
+		_apply_pose(Pose.RUN)
+		return
+	if _lifted or velocity.y < 0.0:
+		_lifted = true
+		_apply_pose(Pose.MOVE)
+	else:
+		_apply_pose(Pose.RUN)
+
+
+func _apply_pose(pose: Pose) -> void:
+	if visual == null or (_pose_ready and _pose == pose):
+		return
+	_pose_ready = true
+	_pose = pose
+	var tex: Texture2D = STAND_TEX
+	var content := STAND_CONTENT
+	if pose == Pose.RUN:
+		tex = RUN_TEX
+		content = RUN_CONTENT
+	elif pose == Pose.MOVE:
+		tex = MOVE_TEX
+		content = MOVE_CONTENT
+	visual.texture = tex
+	visual.centered = true
+	var fitted := TARGET_HEIGHT / content.size.y
+	visual.scale = Vector2(fitted, fitted)
+	var foot := Vector2(content.position.x + content.size.x * 0.5, content.end.y)
+	visual.position = (tex.get_size() * 0.5 - foot) * fitted
 
 
 func _lean_with_speed() -> void:

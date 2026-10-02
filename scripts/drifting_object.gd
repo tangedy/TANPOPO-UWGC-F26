@@ -14,10 +14,6 @@ extends Node2D
 @export var max_up_speed := 260.0
 ## Where on the path this object starts, from 0 to 1.
 @export_range(0.0, 1.0, 0.01) var start_ratio := 0.0
-@export var color: Color = Color(0.95, 0.62, 0.28, 1):
-	set(value):
-		color = value
-		_apply_color()
 @export var path_return := 36.0
 @export var max_drift_offset := 140.0
 
@@ -41,7 +37,6 @@ var _player: Node2D
 
 
 func _ready() -> void:
-	_apply_color()
 	if Engine.is_editor_hint():
 		_preview()
 		update_configuration_warnings()
@@ -164,12 +159,6 @@ func _finish_capture() -> void:
 	_player.attach_follower(hitbox)
 	if room and room.has_method("note_collected"):
 		room.note_collected()
-
-
-func _apply_color() -> void:
-	var visual := get_node_or_null("Body/Visual")
-	if visual and "color" in visual:
-		visual.color = color
 
 
 func _preview() -> void:

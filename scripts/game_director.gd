@@ -1,6 +1,5 @@
 extends Node
 
-const TOGETHER := preload("res://scenes/together.tscn")
 const DRIFT := preload("res://scenes/drift.tscn")
 const InputSetup = preload("res://scripts/input_setup.gd")
 
@@ -16,7 +15,7 @@ func _ready() -> void:
 	fade.color = Color.BLACK
 	fade.modulate.a = 0.0
 	line_box.visible = false
-	_play_opening(false)
+	_play_drift(false)
 
 
 func present_line() -> void:
@@ -30,37 +29,24 @@ func present_line() -> void:
 	line_box.visible = false
 
 
-func _play_opening(from_black: bool) -> void:
-	var scene := _swap(TOGETHER)
+func _play_drift(from_black: bool) -> void:
+	var scene := _swap(DRIFT)
 	if from_black:
 		await _fade_to(0.0, 1.15)
 	if not is_instance_valid(scene):
 		return
-	scene.finished.connect(_on_opening_finished, CONNECT_ONE_SHOT)
-	scene.play_opening()
-
-
-func _on_opening_finished() -> void:
-	_play_drift.call_deferred()
-
-
-func _play_drift() -> void:
-	var scene := _swap(DRIFT)
 	scene.returned.connect(_on_drift_returned, CONNECT_ONE_SHOT)
 
 
 func _on_drift_returned() -> void:
-	_play_reunion.call_deferred()
+	_end_and_loop.call_deferred()
 
 
-func _play_reunion() -> void:
-	var scene := _swap(TOGETHER)
-	scene.finished.connect(_on_reunion_finished, CONNECT_ONE_SHOT)
-	scene.play_reunion()
-
-
-func _on_reunion_finished() -> void:
-	_play_opening.bind(true).call_deferred()
+func _end_and_loop() -> void:
+	await present_line()
+	if not is_inside_tree():
+		return
+	await _play_drift(true)
 
 
 func _swap(packed: PackedScene) -> Node:

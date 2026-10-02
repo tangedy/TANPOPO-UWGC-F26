@@ -1,28 +1,26 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3 uid="uid://c5bm054jrtsb4"]
 
-[ext_resource type="Script" path="res://scripts/drifter.gd" id="1_drifter"]
-[ext_resource type="PackedScene" path="res://scenes/character_visual.tscn" id="2_visual"]
+[ext_resource type="Script" uid="uid://wybapgp620gv" path="res://scripts/drifter.gd" id="1_drifter"]
+[ext_resource type="Texture2D" uid="uid://dsarvnqsm06f5" path="res://Assets/images/peppermint_stand_rough.png" id="2_stand"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(28, 48)
 
-[node name="Drifter" type="CharacterBody2D"]
+[node name="Drifter" type="CharacterBody2D" unique_id=1715570050]
 z_index = 5
 collision_layer = 2
-collision_mask = 1
 floor_snap_length = 12.0
 script = ExtResource("1_drifter")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1202038279]
 position = Vector2(0, -24)
 shape = SubResource("RectangleShape2D_body")
 
-[node name="Visual" parent="." instance=ExtResource("2_visual")]
-body_color = Color(0.93, 0.75, 0.5, 1)
+[node name="Visual" type="Sprite2D" parent="." unique_id=1683881379]
+position = Vector2(1.9073486e-06, -79.999985)
+scale = Vector2(0.19710402, 0.19793841)
+texture = ExtResource("2_stand")
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(90, -40)
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1095772272]
+position = Vector2(90, -80)
 position_smoothing_enabled = true
-position_smoothing_speed = 5.0
-drag_horizontal_enabled = false
-drag_vertical_enabled = false
