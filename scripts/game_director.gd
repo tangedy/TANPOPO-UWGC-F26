@@ -1,0 +1,83 @@
+extends Node
+
+const TOGETHER := preload("res://scenes/together.tscn")
+const DRIFT := preload("res://scenes/drift.tscn")
+const InputSetup = preload("res://scripts/input_setup.gd")
+
+@onready var world: Node = $World
+@onready var fade: ColorRect = $UI/Fade
+@onready var line_box: Control = $UI/LineBox
+
+var _fade_tween: Tween
+
+
+func _ready() -> void:
+	InputSetup.ensure()
+	fade.color = Color.BLACK
+	fade.modulate.a = 0.0
+	line_box.visible = false
+	_play_opening(false)
+
+
+func present_line() -> void:
+	await _fade_to(1.0, 1.2)
+	if not is_inside_tree():
+		return
+	line_box.visible = true
+	await get_tree().create_timer(2.8).timeout
+	if not is_inside_tree():
+		return
+	line_box.visible = false
+
+
+func _play_opening(from_black: bool) -> void:
+	var scene := _swap(TOGETHER)
+	if from_black:
+		await _fade_to(0.0, 1.15)
+	if not is_instance_valid(scene):
+		return
+	scene.finished.connect(_on_opening_finished, CONNECT_ONE_SHOT)
+	scene.play_opening()
+
+
+func _on_opening_finished() -> void:
+	_play_drift.call_deferred()
+
+
+func _play_drift() -> void:
+	var scene := _swap(DRIFT)
+	scene.returned.connect(_on_drift_returned, CONNECT_ONE_SHOT)
+
+
+func _on_drift_returned() -> void:
+	_play_reunion.call_deferred()
+
+
+func _play_reunion() -> void:
+	var scene := _swap(TOGETHER)
+	scene.finished.connect(_on_reunion_finished, CONNECT_ONE_SHOT)
+	scene.play_reunion()
+
+
+func _on_reunion_finished() -> void:
+	_play_opening.bind(true).call_deferred()
+
+
+func _swap(packed: PackedScene) -> Node:
+	var old: Array[Node] = []
+	for child in world.get_children():
+		old.append(child)
+	for child in old:
+		world.remove_child(child)
+		child.queue_free()
+	var node := packed.instantiate()
+	world.add_child(node)
+	return node
+
+
+func _fade_to(target: float, duration: float) -> void:
+	if _fade_tween and _fade_tween.is_valid():
+		_fade_tween.kill()
+	_fade_tween = create_tween()
+	_fade_tween.tween_property(fade, "modulate:a", target, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	await _fade_tween.finished

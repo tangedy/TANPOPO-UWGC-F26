@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/drifting_object.gd" id="1_object"]
+[ext_resource type="Script" path="res://scripts/path_debug.gd" id="2_path"]
+[ext_resource type="Script" path="res://scripts/blob_visual.gd" id="3_blob"]
+
+[sub_resource type="Curve2D" id="Curve2D_default"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(0, -50, 0, 50, 180, 0, 99, 0, -99, 0, 0, 90, 0, 50, 0, -50, -180, 0, -99, 0, 99, 0, 0, -90, 0, -50, 0, 50, 180, 0)
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hit"]
+radius = 16.0
+
+[node name="DriftingObject" type="Node2D"]
+z_index = 3
+script = ExtResource("1_object")
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("Curve2D_default")
+script = ExtResource("2_path")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+rotates = false
+loop = true
+
+[node name="Body" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 2
+monitoring = true
+monitorable = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body"]
+shape = SubResource("CircleShape2D_hit")
+
+[node name="Visual" type="Node2D" parent="Body"]
+script = ExtResource("3_blob")

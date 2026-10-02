@@ -1,0 +1,146 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/drift_room.gd" id="1_room"]
+[ext_resource type="PackedScene" path="res://scenes/updraft_zone.tscn" id="2_updraft"]
+[ext_resource type="PackedScene" path="res://scenes/wind_zone.tscn" id="3_wind"]
+[ext_resource type="PackedScene" path="res://scenes/drifting_object.tscn" id="4_object"]
+[ext_resource type="PackedScene" path="res://scenes/drifter.tscn" id="5_drifter"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform"]
+size = Vector2(240, 1100)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_return"]
+size = Vector2(340, 1240)
+
+[sub_resource type="Curve2D" id="Curve2D_a"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(0, -116, 0, 116, 380, 0, 209, 0, -209, 0, 0, 210, 0, 116, 0, -116, -380, 0, -209, 0, 209, 0, 0, -210, 0, -116, 0, 116, 380, 0)
+}
+
+[sub_resource type="Curve2D" id="Curve2D_b"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(30, 50, 90, -40, -500, 60, -80, 30, 70, -20, -240, -170, -70, -60, 80, 50, 30, -20, -60, -30, 90, -10, 310, 190, -30, 60, 20, -80, 560, 10, 80, 10, -70, -30, 250, -210, 60, -50, -70, 40, -20, -80, 50, -40, -60, 10, -280, 180, 70, 20, 30, 50, -500, 60)
+}
+
+[sub_resource type="Curve2D" id="Curve2D_c"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(0, -187, 0, 187, 150, 0, 83, 0, -83, 0, 0, 340, 0, 187, 0, -187, -150, 0, -83, 0, 83, 0, 0, -340, 0, -187, 0, 187, 150, 0)
+}
+
+[node name="Drift" type="Node2D"]
+script = ExtResource("1_room")
+
+[node name="Updraft" parent="." instance=ExtResource("2_updraft")]
+position = Vector2(1900, 2850)
+zone_size = Vector2(4600, 700)
+lift_speed = 406.0
+
+[node name="WindRight" parent="." instance=ExtResource("3_wind")]
+position = Vector2(1500, 1050)
+strength = 260.0
+on_duration = 1.4
+off_duration = 1.8
+zone_size = Vector2(340, 200)
+
+[node name="WindUp" parent="." instance=ExtResource("3_wind")]
+position = Vector2(2200, 1500)
+rotation = -1.570796
+strength = 300.0
+on_duration = 1.0
+off_duration = 2.3
+start_delay = 0.5
+zone_size = Vector2(260, 320)
+
+[node name="WindLeft" parent="." instance=ExtResource("3_wind")]
+position = Vector2(980, 1450)
+rotation = 3.141593
+strength = 220.0
+on_duration = 1.2
+off_duration = 1.6
+start_delay = 0.2
+zone_size = Vector2(280, 200)
+
+[node name="WindDown" parent="." instance=ExtResource("3_wind")]
+position = Vector2(1750, 900)
+rotation = 1.570796
+strength = 150.0
+on_duration = 0.7
+off_duration = 2.4
+start_delay = 1.0
+zone_size = Vector2(220, 180)
+
+[node name="WindSteady" parent="." instance=ExtResource("3_wind")]
+position = Vector2(2500, 1750)
+strength = 70.0
+always_active = true
+zone_size = Vector2(300, 160)
+
+[node name="ObjectA" parent="." instance=ExtResource("4_object")]
+position = Vector2(1300, 1200)
+speed = 80.0
+breathe_amount = 0.45
+breathe_period = 3.4
+start_ratio = 0.05
+color = Color(0.95, 0.62, 0.28, 1)
+
+[node name="Path2D" parent="ObjectA" index="0"]
+curve = SubResource("Curve2D_a")
+
+[node name="ObjectB" parent="." instance=ExtResource("4_object")]
+position = Vector2(2100, 1650)
+speed = 60.0
+breathe_amount = 0.7
+breathe_period = 5.5
+start_ratio = 0.4
+color = Color(0.35, 0.78, 0.74, 1)
+
+[node name="Path2D" parent="ObjectB" index="0"]
+curve = SubResource("Curve2D_b")
+
+[node name="ObjectC" parent="." instance=ExtResource("4_object")]
+position = Vector2(2900, 1900)
+speed = 100.0
+breathe_amount = 0.35
+breathe_period = 2.6
+start_ratio = 0.75
+color = Color(0.86, 0.45, 0.58, 1)
+
+[node name="Path2D" parent="ObjectC" index="0"]
+curve = SubResource("Curve2D_c")
+
+[node name="Platform" type="StaticBody2D" parent="."]
+z_index = 1
+position = Vector2(280, 1450)
+collision_layer = 1
+collision_mask = 0
+
+[node name="Glow" type="Polygon2D" parent="Platform"]
+visible = false
+z_index = -1
+color = Color(0.95, 0.88, 0.62, 1)
+polygon = PackedVector2Array(-148, -578, 148, -578, 148, 578, -148, 578)
+
+[node name="Visual" type="Polygon2D" parent="Platform"]
+color = Color(0.46, 0.44, 0.56, 1)
+polygon = PackedVector2Array(-120, -550, 120, -550, 120, 550, -120, 550)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform"]
+shape = SubResource("RectangleShape2D_platform")
+
+[node name="ReturnZone" type="Area2D" parent="Platform"]
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform/ReturnZone"]
+shape = SubResource("RectangleShape2D_return")
+
+[node name="LeapPoint" type="Marker2D" parent="Platform"]
+position = Vector2(100, -550)
+
+[node name="Drifter" parent="." instance=ExtResource("5_drifter")]
+position = Vector2(210, 899)
