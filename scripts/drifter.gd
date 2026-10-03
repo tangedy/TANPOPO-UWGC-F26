@@ -21,7 +21,7 @@ const RUN_FPS_END := 7.0
 ## How many times the run cycle plays on the way to the ledge.
 const RUN_CYCLES := 2.5
 
-## Drawn height of each image, in pixels. Each anchor is your extra shift on top of that.
+## Drawn height of the idle sprite, in pixels. Flight frames share that scale. Anchors shift on top.
 @export var sprite_height := 156.0
 ## Seconds each moving or reaching frame stays up.
 @export var frame_time := 0.2
@@ -71,7 +71,7 @@ enum Pose { STAND, RUN, MOVE, REACH }
 @export var run_accel := 1800.0
 @export var run_max_speed := 430.0
 ## Small hop off the platform, in pixels per second upward.
-@export var leap_speed := 80.0
+@export var leap_speed := 120.0
 ## Seconds of carried run speed before left/right control turns on.
 @export var leap_drift_time := 1.0
 ## Distance between the traveler and each collected object.
@@ -98,6 +98,7 @@ var _frame_clock := 0.0
 var _run_cursor := 0.0
 var _run_frame := 0
 var _lifted := false
+var _run_start_x := 0.0
 
 @onready var camera: Camera2D = $Camera2D
 @onready var visual: Sprite2D = $Visual
@@ -114,6 +115,7 @@ func _ready() -> void:
 	floor_snap_length = 12.0
 	velocity = Vector2.ZERO
 	camera.make_current()
+	camera.zoom = Vector2(1.0, 1.0)
 	_leap_point = get_parent().get_node_or_null("Platform/LeapPoint") as Node2D
 	_apply_pose(Pose.STAND)
 
@@ -125,6 +127,7 @@ func start_run() -> void:
 	velocity.x = 40.0
 	_run_cursor = 0.0
 	_run_frame = 0
+	_run_start_x = global_position.x
 	_apply_pose(Pose.RUN)
 
 
@@ -170,8 +173,8 @@ func attach_follower(node: Node2D) -> void:
 		return
 	followers.append(node)
 	node.z_index = 4
-	_ensure_trail_length(follow_spacing * float(followers.size()) + 8.0)
-	node.global_position = _point_behind(follow_spacing * float(followers.size()))
+	_ensure_trail_length(_follow_distance(followers.size() - 1) + 8.0)
+	node.global_position = _point_behind(_follow_distance(followers.size() - 1))
 
 
 func _physics_process(delta: float) -> void:
@@ -193,12 +196,13 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	_sync_pose(delta)
 	_record_trail()
-	_update_followers()
+	_update_followers(delta)
 
 
 func _run_off(delta: float) -> void:
 	floor_snap_length = 12.0
 	visual.rotation = 0.0
+	_zoom_through_run()
 	if _leap_point and global_position.x >= _leap_point.global_position.x:
 		_leap()
 		return
@@ -215,6 +219,19 @@ func _leap() -> void:
 	floor_snap_length = 0.0
 	_control_timer = leap_drift_time
 	velocity.y = -leap_speed
+	camera.zoom = Vector2(0.5, 0.5)
+
+
+func _zoom_through_run() -> void:
+	if _leap_point == null:
+		return
+	var span := _leap_point.global_position.x - _run_start_x
+	var t := 1.0
+	if span > 1.0:
+		t = clampf((global_position.x - _run_start_x) / span, 0.0, 1.0)
+	var eased := t * t * (3.0 - 2.0 * t)
+	var zoom := lerpf(1.0, 0.5, eased)
+	camera.zoom = Vector2(zoom, zoom)
 
 
 func _glide(delta: float) -> void:
@@ -366,11 +383,15 @@ func _apply_pose(pose: Pose) -> void:
 	visual.texture = tex
 	visual.centered = true
 	visual.material = null
-	var fitted := sprite_height / maxf(tex.get_height(), 1.0)
+	# Fit every pose to the idle canvas height so taller flight frames stay the same size.
+	var fitted := sprite_height / maxf(STAND_TEX.get_height(), 1.0)
+	if pose == Pose.MOVE or pose == Pose.REACH:
+		fitted *= 0.92
 	visual.scale = Vector2(fitted, fitted)
 	var facing_left := pose != Pose.STAND and _facing < 0
 	visual.flip_h = facing_left
-	var pos := Vector2(0, -sprite_height * 0.5) + anchor
+	var drawn_h := tex.get_height() * fitted
+	var pos := Vector2(0, -drawn_h * 0.5) + anchor
 	if facing_left:
 		pos.x = -pos.x
 	visual.position = pos
@@ -389,14 +410,32 @@ func _clear_forces() -> void:
 
 
 func _body_center() -> Vector2:
-	return global_position + Vector2(0, -24)
+	# Local offset so character scale is included. Feet sit on the origin; this is the back of the head.
+	return to_global(Vector2(0, -sprite_height * 0.82))
+
+
+func _follow_distance(index: int) -> float:
+	return 22.0 + follow_spacing * float(index)
 
 
 func _record_trail() -> void:
 	var point := _body_center()
-	if _trail.is_empty() or _trail[_trail.size() - 1].distance_to(point) >= 5.0:
+	if _trail.is_empty():
 		_trail.append(point)
-	var keep := follow_spacing * float(followers.size() + 2) + 40.0
+		return
+	# The last point stays on the body so followers move every frame.
+	# A new point is kept once the body is a couple of pixels past the previous one.
+	if _trail.size() == 1:
+		if _trail[0].distance_to(point) >= 2.0:
+			_trail.append(point)
+		else:
+			_trail[0] = point
+	else:
+		var committed: Vector2 = _trail[_trail.size() - 2]
+		_trail[_trail.size() - 1] = point
+		if committed.distance_to(point) >= 2.0:
+			_trail.append(point)
+	var keep := _follow_distance(maxi(followers.size(), 1)) + follow_spacing + 40.0
 	_trim_trail(keep)
 
 
@@ -463,9 +502,11 @@ func _point_behind(distance: float) -> Vector2:
 	return _trail[0]
 
 
-func _update_followers() -> void:
+func _update_followers(delta: float) -> void:
+	var blend := 1.0 - exp(-14.0 * delta)
 	for i in followers.size():
 		var follower := followers[i]
 		if not is_instance_valid(follower):
 			continue
-		follower.global_position = _point_behind(follow_spacing * float(i + 1))
+		var target := _point_behind(_follow_distance(i))
+		follower.global_position = follower.global_position.lerp(target, blend)

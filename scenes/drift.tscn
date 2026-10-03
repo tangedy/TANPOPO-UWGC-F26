@@ -33,7 +33,6 @@ color = Color(0.690196, 0.878431, 0.917647, 1)
 [node name="Updraft" parent="." unique_id=95024445 instance=ExtResource("2_updraft")]
 z_index = 2
 position = Vector2(2741, 2395)
-lift_speed = 400.0
 
 [node name="WindRight" parent="." unique_id=625048384 instance=ExtResource("3_wind")]
 z_index = 2
@@ -166,7 +165,7 @@ texture = ExtResource("8_grandma")
 [node name="Peppermint" parent="." unique_id=262609286 instance=ExtResource("5_peppermint")]
 z_index = -1
 position = Vector2(-490.99976, 899)
-scale = Vector2(1.6, 1.6)
+scale = Vector2(2.5, 2.5)
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=2053258978]
 
