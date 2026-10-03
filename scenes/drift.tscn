@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://d1qsrkeullnks" path="res://Assets/images/cliff_rough.png" id="6_cliff"]
 [ext_resource type="Texture2D" uid="uid://b5ot21jb3anjd" path="res://Assets/images/clouds_rough.png" id="7_clouds"]
 [ext_resource type="Texture2D" uid="uid://c6wmgpoa2fhc1" path="res://Assets/images/grandma_stand_rough.png" id="8_grandma"]
+[ext_resource type="PackedScene" uid="uid://t0yrhsy5mo5e" path="res://scenes/grass.tscn" id="9_wgtfl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_complete"]
 size = Vector2(220, 160)
@@ -166,6 +167,18 @@ texture = ExtResource("8_grandma")
 z_index = -1
 position = Vector2(-488.00003, 899)
 scale = Vector2(2.5, 2.5)
+
+[node name="Foliage" type="Node2D" parent="." unique_id=1666564183]
+z_index = -4
+
+[node name="Grass" parent="Foliage" unique_id=1211563343 instance=ExtResource("9_wgtfl")]
+position = Vector2(-1059, 879)
+
+[node name="Grass2" parent="Foliage" unique_id=1109854014 instance=ExtResource("9_wgtfl")]
+position = Vector2(-1450, 884)
+
+[node name="Grass3" parent="Foliage" unique_id=1364408392 instance=ExtResource("9_wgtfl")]
+position = Vector2(209, 884)
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=2053258978]
 
