@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dsarvnqsm06f5"
-path="res://.godot/imported/peppermint_stand_rough.png-59728b4c0dd88b5ebce472e1ec45fc6e.ctex"
+uid="uid://nhavjb1pcbj1"
+path="res://.godot/imported/run_4.png-c90eac804cbbc03659dbbd3be2f2fd4f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/images/peppermint_stand_rough.png"
-dest_files=["res://.godot/imported/peppermint_stand_rough.png-59728b4c0dd88b5ebce472e1ec45fc6e.ctex"]
+source_file="res://Assets/images/peppermint/run_4.png"
+dest_files=["res://.godot/imported/run_4.png-c90eac804cbbc03659dbbd3be2f2fd4f.ctex"]
 
 [params]
 

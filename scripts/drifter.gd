@@ -1,13 +1,24 @@
 extends CharacterBody2D
 
 const InputSetup = preload("res://scripts/input_setup.gd")
-const PAPER_SHADER := preload("res://shaders/white_key.gdshader")
 const STAND_TEX := preload("res://Assets/images/peppermint/standing_idle.png")
-const RUN_TEX := preload("res://Assets/images/peppermint/peppermint_run_rough.png")
+const RUN_FRAMES: Array[Texture2D] = [
+	preload("res://Assets/images/peppermint/run_1.png"),
+	preload("res://Assets/images/peppermint/run_2.png"),
+	preload("res://Assets/images/peppermint/run_3.png"),
+	preload("res://Assets/images/peppermint/run_4.png"),
+	preload("res://Assets/images/peppermint/run_5.png"),
+	preload("res://Assets/images/peppermint/run_6.png"),
+]
 const MOVE_A_TEX := preload("res://Assets/images/peppermint/moving_A_right.png")
 const MOVE_B_TEX := preload("res://Assets/images/peppermint/moving_B_right.png")
 const REACH_A_TEX := preload("res://Assets/images/peppermint/reaching_A_right.png")
 const REACH_B_TEX := preload("res://Assets/images/peppermint/reaching_B_right.png")
+
+## Run-cycle playback, in frames per second.
+const RUN_FPS := 7.0
+## How many times the run cycle plays on the way to the ledge.
+const RUN_CYCLES := 1.5
 
 ## Drawn height of each image, in pixels. Each anchor is your extra shift on top of that.
 @export var sprite_height := 156.0
@@ -21,7 +32,12 @@ const REACH_B_TEX := preload("res://Assets/images/peppermint/reaching_B_right.pn
 @export_group("Anchors")
 ## Extra shift for this image after it is centered and stood on the origin. X is mirrored when she faces left.
 @export var standing_anchor := Vector2.ZERO
-@export var run_anchor := Vector2.ZERO
+@export var run_1_anchor := Vector2.ZERO
+@export var run_2_anchor := Vector2.ZERO
+@export var run_3_anchor := Vector2.ZERO
+@export var run_4_anchor := Vector2.ZERO
+@export var run_5_anchor := Vector2.ZERO
+@export var run_6_anchor := Vector2.ZERO
 @export var moving_a_anchor := Vector2.ZERO
 @export var moving_b_anchor := Vector2.ZERO
 @export var reaching_a_anchor := Vector2.ZERO
@@ -77,8 +93,9 @@ var _pose := Pose.STAND
 var _facing := 1
 var _frame := 0
 var _frame_clock := 0.0
+var _run_time := 0.0
+var _run_frame := 0
 var _lifted := false
-var _paper: ShaderMaterial
 
 @onready var camera: Camera2D = $Camera2D
 @onready var visual: Sprite2D = $Visual
@@ -90,9 +107,6 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	InputSetup.ensure()
-	_paper = ShaderMaterial.new()
-	_paper.shader = PAPER_SHADER
-	_paper.set_shader_parameter("cutoff", 0.988)
 	collision_layer = 2
 	collision_mask = 1
 	floor_snap_length = 12.0
@@ -107,6 +121,8 @@ func start_run() -> void:
 		return
 	state = State.RUN_OFF
 	velocity.x = 40.0
+	_run_time = 0.0
+	_run_frame = 0
 	_apply_pose(Pose.RUN)
 
 
@@ -181,6 +197,7 @@ func _physics_process(delta: float) -> void:
 func _run_off(delta: float) -> void:
 	floor_snap_length = 12.0
 	visual.rotation = 0.0
+	_run_time += delta
 	if _leap_point and global_position.x >= _leap_point.global_position.x:
 		_leap()
 		return
@@ -244,6 +261,8 @@ func _sync_pose(delta: float) -> void:
 	if state == State.RUN_OFF:
 		pose = Pose.RUN
 		facing = 1
+		var shown := mini(int(_run_time * RUN_FPS), _run_steps() - 1)
+		_run_frame = shown % RUN_FRAMES.size()
 	elif state == State.GLIDE:
 		if _lifted or velocity.y < 0.0:
 			_lifted = true
@@ -273,16 +292,29 @@ func _sync_pose(delta: float) -> void:
 	_apply_pose(pose)
 
 
+func _run_steps() -> int:
+	return int(round(RUN_CYCLES * float(RUN_FRAMES.size())))
+
+
+func _run_anchor(index: int) -> Vector2:
+	var anchors := [
+		run_1_anchor, run_2_anchor, run_3_anchor,
+		run_4_anchor, run_5_anchor, run_6_anchor,
+	]
+	if index < 0 or index >= anchors.size():
+		return Vector2.ZERO
+	return anchors[index]
+
+
 func _reach_facing() -> int:
 	var best := reach_range + 1.0
 	var facing := 0
 	for node in get_tree().get_nodes_in_group("seed"):
 		if not is_instance_valid(node) or node.get("collected") == true:
 			continue
-		var body := node.get_node_or_null("Body") as Node2D
-		if body == null:
+		if not node.has_method("seed_position"):
 			continue
-		var to_seed := body.global_position - _body_center()
+		var to_seed: Vector2 = node.seed_position() - _body_center()
 		var dist := to_seed.length()
 		if dist > reach_range or dist >= best or absf(to_seed.x) < 4.0:
 			continue
@@ -300,11 +332,10 @@ func _apply_pose(pose: Pose) -> void:
 	_pose = pose
 	var tex: Texture2D = STAND_TEX
 	var anchor := standing_anchor
-	var keyed := false
 	if pose == Pose.RUN:
-		tex = RUN_TEX
-		anchor = run_anchor
-		keyed = true
+		var run_index := clampi(_run_frame, 0, RUN_FRAMES.size() - 1)
+		tex = RUN_FRAMES[run_index]
+		anchor = _run_anchor(run_index)
 	elif pose == Pose.MOVE:
 		if _frame == 0:
 			tex = MOVE_A_TEX
@@ -321,7 +352,7 @@ func _apply_pose(pose: Pose) -> void:
 			anchor = reaching_b_anchor
 	visual.texture = tex
 	visual.centered = true
-	visual.material = _paper if keyed else null
+	visual.material = null
 	var fitted := sprite_height / maxf(tex.get_height(), 1.0)
 	visual.scale = Vector2(fitted, fitted)
 	var facing_left := pose != Pose.STAND and _facing < 0

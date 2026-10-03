@@ -12,8 +12,8 @@ _data = {
 }
 point_count = 5
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_hit"]
-radius = 16.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hit"]
+size = Vector2(112, 157)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_paper"]
 shader = ExtResource("4_shader")
@@ -37,10 +37,12 @@ position = Vector2(105, 49)
 collision_layer = 4
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Body" unique_id=2123519812]
-shape = SubResource("CircleShape2D_hit")
-
 [node name="Visual" type="Sprite2D" parent="Body" unique_id=1769403763]
 material = SubResource("ShaderMaterial_paper")
 scale = Vector2(0.27, 0.27)
 texture = ExtResource("3_seed")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body" unique_id=2123519812]
+position = Vector2(0.135, 1.08)
+scale = Vector2(0.27, 0.27)
+shape = SubResource("RectangleShape2D_hit")

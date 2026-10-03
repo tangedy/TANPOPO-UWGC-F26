@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://cppep8hbbjkb" path="res://Assets/images/peppermint/standing_idle.png" id="2_stand"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
-size = Vector2(28, 48)
+size = Vector2(72, 151)
 
 [node name="Peppermint" type="CharacterBody2D" unique_id=1715570050]
 z_index = 5
@@ -13,7 +13,7 @@ floor_snap_length = 12.0
 script = ExtResource("1_drifter")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1202038279]
-position = Vector2(0, -24)
+position = Vector2(0, -78.5)
 shape = SubResource("RectangleShape2D_body")
 
 [node name="Visual" type="Sprite2D" parent="." unique_id=1683881379]

@@ -31,9 +31,14 @@ var _lift_speed := 0.0
 var _lift_accel := 0.0
 var _player: Node2D
 
+## Drawn seed bounds inside the texture, measured from the sprite center.
+const SEED_ART_OFFSET := Vector2(0.5, 4.0)
+
 @onready var path: Path2D = $Path2D
 @onready var follow: PathFollow2D = $Path2D/PathFollow2D
 @onready var hitbox: Area2D = $Body
+@onready var visual: Sprite2D = $Body/Visual
+@onready var collect_shape: CollisionShape2D = $Body/CollisionShape2D
 
 
 func _enter_tree() -> void:
@@ -55,6 +60,7 @@ func _ready() -> void:
 	if path.curve and path.curve.point_count >= 2:
 		follow.progress_ratio = start_ratio
 	_along = speed
+	_sync_collider_to_sprite()
 
 
 func add_air_push(accel: Vector2) -> void:
@@ -90,6 +96,7 @@ func _physics_process(delta: float) -> void:
 	_advance_along_path(delta)
 	_apply_air(delta)
 	hitbox.global_position = follow.global_position + _offset
+	_sync_collider_to_sprite()
 
 
 func _advance_along_path(delta: float) -> void:
@@ -143,6 +150,21 @@ func _tangent() -> Vector2:
 	return xf.x.normalized()
 
 
+func seed_position() -> Vector2:
+	if collect_shape:
+		return collect_shape.global_position
+	if visual:
+		return visual.global_position
+	return global_position
+
+
+func _sync_collider_to_sprite() -> void:
+	if visual == null or collect_shape == null:
+		return
+	collect_shape.scale = visual.scale
+	collect_shape.position = visual.position + visual.scale * SEED_ART_OFFSET
+
+
 func _on_body_entered(body: Node2D) -> void:
 	if collected or not body.is_in_group("player"):
 		return
@@ -169,6 +191,7 @@ func _preview() -> void:
 	if hitbox == null or path == null or path.curve == null or path.curve.point_count < 2:
 		return
 	hitbox.global_position = path.to_global(path.curve.sample_baked(0))
+	_sync_collider_to_sprite()
 
 
 func _get_configuration_warnings() -> PackedStringArray:
