@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dguw2im0huc5"]
 
 [ext_resource type="Script" uid="uid://cjdvgfeldo2vk" path="res://scripts/drift_room.gd" id="1_room"]
-[ext_resource type="PackedScene" path="res://scenes/updraft_zone.tscn" id="2_updraft"]
+[ext_resource type="PackedScene" uid="uid://btc1tedokuue7" path="res://scenes/updraft_zone.tscn" id="2_updraft"]
 [ext_resource type="PackedScene" uid="uid://uel7xvwc5jvp" path="res://scenes/wind_zone.tscn" id="3_wind"]
 [ext_resource type="PackedScene" uid="uid://bbxbxebcdr7d0" path="res://scenes/drifting_object.tscn" id="4_object"]
 [ext_resource type="PackedScene" uid="uid://c5bm054jrtsb4" path="res://scenes/peppermint.tscn" id="5_peppermint"]
@@ -29,8 +29,8 @@ color = Color(0.690196, 0.878431, 0.917647, 1)
 
 [node name="Updraft" parent="." unique_id=95024445 instance=ExtResource("2_updraft")]
 z_index = 2
-position = Vector2(1897, 2128)
-lift_speed = 300.0
+position = Vector2(2741, 2395)
+lift_speed = 400.0
 
 [node name="WindRight" parent="." unique_id=625048384 instance=ExtResource("3_wind")]
 z_index = 2
@@ -114,13 +114,13 @@ metadata/_edit_lock_ = true
 
 [node name="Clouds" type="Sprite2D" parent="Platform" unique_id=706455837]
 z_index = 1
-position = Vector2(797.17206, -395.99994)
-scale = Vector2(1.0191237, 1.0191234)
+position = Vector2(1781, -373)
+scale = Vector2(1.4139069, 1.4139066)
 texture = ExtResource("7_clouds")
 metadata/_edit_lock_ = true
 
 [node name="FloorCollider" type="CollisionPolygon2D" parent="Platform" unique_id=628338554]
-polygon = PackedVector2Array(-1800, -550, 102, -548, 0, -455, -100, -335, -200, -191, -300, 175, -1800, 165)
+polygon = PackedVector2Array(-1800, -550, 102, -548, 0, -455, -100, -335, -200, -191, -612, 1402, -1870, 1375)
 
 [node name="CompletionArea" type="Area2D" parent="Platform" unique_id=959316670]
 z_index = 2
