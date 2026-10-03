@@ -9,33 +9,31 @@
 [ext_resource type="Texture2D" uid="uid://b5ot21jb3anjd" path="res://Assets/images/clouds_rough.png" id="7_clouds"]
 [ext_resource type="Texture2D" uid="uid://c6wmgpoa2fhc1" path="res://Assets/images/grandma_stand_rough.png" id="8_grandma"]
 [ext_resource type="PackedScene" uid="uid://t0yrhsy5mo5e" path="res://scenes/grass.tscn" id="9_wgtfl"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_complete"]
-size = Vector2(220, 160)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_5xdv5"]
-size = Vector2(361.0005, 9036.75)
+[ext_resource type="Script" uid="uid://mydps3xxhia8" path="res://scripts/path_debug.gd" id="10_path"]
 
 [sub_resource type="Curve2D" id="Curve2D_a"]
-resource_local_to_scene = true
 _data = {
-"points": PackedVector2Array(-25.342, 0, 25.342, 0, 0, -120, -20.502, -14.895, 20.502, 14.895, 70.534, -97.082, -7.831, -24.101, 7.831, 24.101, 114.127, -37.082, 7.831, -24.101, -7.831, 24.101, 114.127, 37.082, 20.502, -14.895, -20.502, 14.895, 70.534, 97.082, 25.342, 0, -25.342, 0, 0, 120, 20.502, 14.895, -20.502, -14.895, -70.534, 97.082, 7.831, 24.101, -7.831, -24.101, -114.127, 37.082, -7.831, 24.101, 7.831, -24.101, -114.127, -37.082, -20.502, 14.895, 20.502, -14.895, -70.534, -97.082)
+"points": PackedVector2Array(-25.342, 0, 25.342, 0, 0, -120, -137.64076, 22.736885, 137.64076, -22.736885, 195.19995, -103.2, 163.72574, -59.95836, -163.72574, 59.95836, 616.7999, 44, 73.84625, -80.00073, -73.84625, 80.00073, 305.6001, 121.99999, 168.43582, -113.31352, -168.43582, 113.31352, 612.7999, 316.8, 0, 0, 0, 0, 444.26392, 480.765, 198.307, 436.4127, -198.307, -436.4127, -26.400024, 432, 117.32872, -17.969719, -117.32872, 17.969719, -243.19995, 263.19995, -145.68665, 233.68333, 145.68665, -233.68333, 377.59998, 632.8, 355.69714, 35.881104, -355.69714, -35.881104, 717.2001, 663.99994, -22.036951, 48.547142, 22.036951, -48.547142, -264, -54)
 }
-point_count = 10
+point_count = 11
 
 [sub_resource type="Curve2D" id="Curve2D_b"]
-resource_local_to_scene = true
 _data = {
 "points": PackedVector2Array(-25.342, 0, 25.342, 0, 0, -120, -20.502, -14.895, 20.502, 14.895, 70.534, -97.082, -7.831, -24.101, 7.831, 24.101, 114.127, -37.082, 7.831, -24.101, -7.831, 24.101, 114.127, 37.082, 20.502, -14.895, -20.502, 14.895, 70.534, 97.082, 25.342, 0, -25.342, 0, 0, 120, 20.502, 14.895, -20.502, -14.895, -70.534, 97.082, 7.831, 24.101, -7.831, -24.101, -114.127, 37.082, -7.831, 24.101, 7.831, -24.101, -114.127, -37.082, -20.502, 14.895, 20.502, -14.895, -70.534, -97.082)
 }
 point_count = 10
 
 [sub_resource type="Curve2D" id="Curve2D_c"]
-resource_local_to_scene = true
 _data = {
 "points": PackedVector2Array(-25.342, 0, 25.342, 0, 0, -120, -20.502, -14.895, 20.502, 14.895, 70.534, -97.082, -7.831, -24.101, 7.831, 24.101, 114.127, -37.082, 7.831, -24.101, -7.831, 24.101, 114.127, 37.082, 20.502, -14.895, -20.502, 14.895, 70.534, 97.082, 25.342, 0, -25.342, 0, 0, 120, 20.502, 14.895, -20.502, -14.895, -70.534, 97.082, 7.831, 24.101, -7.831, -24.101, -114.127, 37.082, -7.831, 24.101, 7.831, -24.101, -114.127, -37.082, -20.502, 14.895, 20.502, -14.895, -70.534, -97.082)
 }
 point_count = 10
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_complete"]
+size = Vector2(220, 160)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5xdv5"]
+size = Vector2(361.0005, 9036.75)
 
 [node name="Drift" type="Node2D" unique_id=1080770655]
 script = ExtResource("1_room")
@@ -54,21 +52,21 @@ color = Color(0.690196, 0.878431, 0.917647, 1)
 
 [node name="Updraft" parent="." unique_id=95024445 instance=ExtResource("2_updraft")]
 z_index = 2
-position = Vector2(3528, 2785)
-lift_speed = 400.0
+position = Vector2(3488, 2790)
 
 [node name="WindRight" parent="." unique_id=625048384 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(4249, 786)
+position = Vector2(5627, 304)
 scale = Vector2(2.643618, 2.2104135)
-strength = 764.0
+strength = 1007.0
+curve = 0.0
 on_duration = 1.4
 off_duration = 1.8
 zone_size = Vector2(340, 200)
 
 [node name="WindUp" parent="." unique_id=1057585122 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(3109, -515)
+position = Vector2(6967, 575)
 rotation = -1.570796
 scale = Vector2(2.6436212, 2.2104154)
 on_duration = 1.0
@@ -76,12 +74,72 @@ off_duration = 2.3
 start_delay = 0.5
 zone_size = Vector2(260, 320)
 
+[node name="WindUp2" parent="." unique_id=858789183 instance=ExtResource("3_wind")]
+z_index = 2
+position = Vector2(245.00024, -1024)
+rotation = -1.570796
+scale = Vector2(2.6436212, 2.2104154)
+strength = 120.0
+curve = 0.1100000000000001
+on_duration = 1.0
+off_duration = 2.3
+start_delay = 0.5
+zone_size = Vector2(260, 320)
+
+[node name="WindUp3" parent="." unique_id=360849610 instance=ExtResource("3_wind")]
+z_index = 2
+position = Vector2(2003, -319)
+rotation = -1.570796
+scale = Vector2(2.6436212, 2.2104154)
+strength = 360.0
+curve = 0.08000000000000007
+on_duration = 2.0
+off_duration = 3.0
+start_delay = 0.5
+zone_size = Vector2(260, 320)
+
+[node name="WindUp4" parent="." unique_id=676034572 instance=ExtResource("3_wind")]
+z_index = 2
+position = Vector2(5475, -638)
+rotation = -1.570796
+scale = Vector2(2.6436212, 2.2104154)
+curve = -0.17000000000000004
+on_duration = 2.0
+off_duration = 5.0
+start_delay = 0.5
+zone_size = Vector2(260, 320)
+
 [node name="WindLeft" parent="." unique_id=883681909 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(3258, 1518)
+position = Vector2(6063.9995, 1753)
 rotation = -3.1415923
 scale = Vector2(2.6436212, 2.2104135)
-strength = 540.0
+strength = 1063.0
+on_duration = 1.2
+off_duration = 1.6
+start_delay = 0.2
+zone_size = Vector2(400, 300)
+
+[node name="WindLeft2" parent="." unique_id=962844555 instance=ExtResource("3_wind")]
+z_index = 2
+position = Vector2(4180.0005, -312)
+rotation = -3.1415923
+scale = Vector2(2.6436212, 2.2104135)
+strength = 1213.0
+curve = -0.09999999999999998
+on_duration = 1.2
+off_duration = 0.5
+start_delay = 0.2
+zone_size = Vector2(400, 300)
+
+[node name="WindLeft3" parent="." unique_id=1315347894 instance=ExtResource("3_wind")]
+z_index = 2
+position = Vector2(3868.9998, 1691.0001)
+rotation = -3.1415923
+scale = Vector2(2.6436212, 2.2104135)
+strength = 1250.0
+curve = -0.29000000000000004
+always_active = true
 on_duration = 1.2
 off_duration = 1.6
 start_delay = 0.2
@@ -89,10 +147,24 @@ zone_size = Vector2(400, 300)
 
 [node name="WindDown" parent="." unique_id=1493769024 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(1051, 1495.0001)
+position = Vector2(3631, 598)
+rotation = 1.570796
+scale = Vector2(2.6436212, 2.2104154)
+strength = 718.0
+curve = -0.07999999999999996
+always_active = true
+on_duration = 0.7
+off_duration = 2.4
+start_delay = 1.0
+zone_size = Vector2(260, 400)
+
+[node name="WindDown2" parent="." unique_id=1610622654 instance=ExtResource("3_wind")]
+z_index = 2
+position = Vector2(3740, -1127)
 rotation = 1.570796
 scale = Vector2(2.6436212, 2.2104154)
 strength = 325.0
+curve = 0.0
 always_active = true
 on_duration = 0.7
 off_duration = 2.4
@@ -101,43 +173,67 @@ zone_size = Vector2(260, 400)
 
 [node name="WindSteady" parent="." unique_id=322785786 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(1513.0001, -430.99997)
+position = Vector2(5899, 955)
 scale = Vector2(2.643618, 2.2104135)
-strength = 200.0
+strength = 312.0
+always_active = true
+zone_size = Vector2(300, 160)
+
+[node name="WindSteady2" parent="." unique_id=2051477290 instance=ExtResource("3_wind")]
+z_index = 2
+position = Vector2(1332, -1785.0001)
+scale = Vector2(2.643618, 2.2104135)
+strength = 742.0
+curve = 0.45999999999999996
 always_active = true
 zone_size = Vector2(300, 160)
 
 [node name="ObjectA" parent="." unique_id=760653982 instance=ExtResource("4_object")]
-position = Vector2(1299, 1065)
-scale = Vector2(2.4928584, 1.9334131)
+position = Vector2(5699, 535)
 breathe_amount = 0.45
 breathe_period = 3.4
 start_ratio = 0.05
 
-[node name="Path2D" parent="ObjectA" index="0"]
+[node name="Path2D" type="Path2D" parent="ObjectA" unique_id=1849203311]
+position = Vector2(-291.59998, 11.600005)
 curve = SubResource("Curve2D_a")
+script = ExtResource("10_path")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="ObjectA/Path2D" unique_id=1849203312]
+position = Vector2(0, -120)
+rotates = false
 
 [node name="ObjectB" parent="." unique_id=623485281 instance=ExtResource("4_object")]
-position = Vector2(3919, 1021)
-scale = Vector2(2.4928584, 1.9334131)
+position = Vector2(5525.0005, -3045)
 speed = 60.0
 breathe_amount = 0.7
 breathe_period = 5.5
 start_ratio = 0.4
 
-[node name="Path2D" parent="ObjectB" index="0"]
+[node name="Path2D" type="Path2D" parent="ObjectB" unique_id=1849203321]
+position = Vector2(-1, 123)
 curve = SubResource("Curve2D_b")
+script = ExtResource("10_path")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="ObjectB/Path2D" unique_id=1849203322]
+position = Vector2(0, -120)
+rotates = false
 
 [node name="ObjectC" parent="." unique_id=2135189073 instance=ExtResource("4_object")]
-position = Vector2(2661, 45)
-scale = Vector2(2.4928584, 1.9334131)
+position = Vector2(507, -2214)
 speed = 100.0
 breathe_amount = 0.35
 breathe_period = 2.6
 start_ratio = 0.75
 
-[node name="Path2D" parent="ObjectC" index="0"]
+[node name="Path2D" type="Path2D" parent="ObjectC" unique_id=1849203331]
+position = Vector2(-1, 123)
 curve = SubResource("Curve2D_c")
+script = ExtResource("10_path")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="ObjectC/Path2D" unique_id=1849203332]
+position = Vector2(0, -120)
+rotates = false
 
 [node name="Platform" type="StaticBody2D" parent="." unique_id=1851131555]
 position = Vector2(280, 1450)

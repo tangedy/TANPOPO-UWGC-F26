@@ -57,7 +57,7 @@ enum Pose { STAND, RUN, MOVE, REACH }
 ## Downward acceleration while falling. Drag is solved from this so the terminal stays exact.
 @export var fall_gravity := 280.0
 ## Downward acceleration while rising, so wind and gusts arc back down.
-@export var gravity := 50.0
+@export var gravity := 100.0
 ## Fastest rise, in pixels per second. Wind and gusts cannot climb faster than this.
 @export var max_up_speed := 1000.0
 @export var glide_speed := 260.0

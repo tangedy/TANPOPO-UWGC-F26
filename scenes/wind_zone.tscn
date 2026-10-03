@@ -11,12 +11,13 @@ resource_local_to_scene = true
 shader = ExtResource("2_lines")
 shader_parameter/wind_color = Color(1, 1, 1, 1)
 shader_parameter/flow_speed = 84.4
-shader_parameter/active = 0.0
+shader_parameter/active = 1.0
 shader_parameter/zone_size = Vector2(1000, 100)
 shader_parameter/rect_size = Vector2(1120, 280)
 shader_parameter/curve = -1.0
 
 [node name="WindZone" type="Area2D" unique_id=858789183]
+position = Vector2(3, 3)
 collision_layer = 0
 collision_mask = 6
 monitorable = false
