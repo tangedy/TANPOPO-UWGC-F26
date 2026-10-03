@@ -119,12 +119,46 @@ func _ready() -> void:
 	velocity = Vector2.ZERO
 	camera.make_current()
 	camera.zoom = Vector2(1.0, 1.0)
-	camera.limit_left = -1500
-	camera.limit_top = -1100
-	camera.limit_right = 3200
-	camera.limit_bottom = 2145
+	_fit_camera_limits()
 	_leap_point = get_parent().get_node_or_null("Platform/LeapPoint") as Node2D
 	_apply_pose(Pose.STAND)
+
+
+func _fit_camera_limits() -> void:
+	var platform := get_parent().get_node_or_null("Platform") as Node2D
+	if platform == null:
+		return
+	var found := false
+	var bounds := Rect2()
+	for child in platform.get_children():
+		var shape_node := child as CollisionShape2D
+		if shape_node == null:
+			continue
+		var rect := shape_node.shape as RectangleShape2D
+		if rect == null:
+			continue
+		var shape_bounds := _global_rect(shape_node, rect)
+		if not found:
+			bounds = shape_bounds
+			found = true
+		else:
+			bounds = bounds.merge(shape_bounds)
+	if not found:
+		return
+	camera.limit_left = int(floor(bounds.position.x))
+	camera.limit_top = int(floor(bounds.position.y))
+	camera.limit_right = int(ceil(bounds.end.x))
+	camera.limit_bottom = int(ceil(bounds.end.y))
+
+
+func _global_rect(shape_node: CollisionShape2D, rect: RectangleShape2D) -> Rect2:
+	var xf := shape_node.global_transform
+	var half := rect.size * 0.5
+	var extents := Vector2(
+		absf(xf.x.x) * half.x + absf(xf.y.x) * half.y,
+		absf(xf.x.y) * half.x + absf(xf.y.y) * half.y
+	)
+	return Rect2(xf.origin - extents, extents * 2.0)
 
 
 func start_run() -> void:
