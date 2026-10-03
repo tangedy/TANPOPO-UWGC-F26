@@ -16,6 +16,7 @@ var _listen_for_chase := false
 @onready var completion_area: Area2D = $Platform/CompletionArea
 @onready var prompt: Label = $UI/Prompt
 @onready var peppermint: Node = $Peppermint
+@onready var music: AudioStreamPlayer = $Music
 
 
 func _enter_tree() -> void:
@@ -23,6 +24,10 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+	if music.stream is AudioStreamWAV:
+		music.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	if not music.playing:
+		music.play()
 	InputSetup.ensure()
 	glow.visible = false
 	completion_area.monitoring = false

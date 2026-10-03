@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://b3dksb1403hhd" path="res://scenes/dandelion.tscn" id="13_arjxv"]
 [ext_resource type="Script" uid="uid://dshw2c2ojvjsq" path="res://scripts/cloud_parallax.gd" id="14_parallax"]
 [ext_resource type="Shader" uid="uid://bx6p2btkr8mum" path="res://shaders/godray.gdshader" id="16_8brjc"]
+[ext_resource type="AudioStream" uid="uid://b55e4imb8hqqj" path="res://Assets/music/drift_day.wav" id="17_day"]
 
 [sub_resource type="Curve2D" id="Curve2D_a"]
 _data = {
@@ -66,6 +67,10 @@ shader_parameter/seed = 10.0
 [node name="Drift" type="Node2D" unique_id=1080770655]
 script = ExtResource("1_room")
 
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("17_day")
+autoplay = true
+
 [node name="Sky" type="CanvasLayer" parent="." unique_id=1900425886]
 layer = -1
 
@@ -97,7 +102,7 @@ z_index = 2
 position = Vector2(5746, -2621)
 scale = Vector2(2.643618, 2.2104135)
 strength = 1007.0
-curve = -0.020000000000000018
+curve = -0.02000000000000001
 off_duration = 5.0
 start_delay = 3.0
 zone_size = Vector2(200, 500)
@@ -107,7 +112,7 @@ z_index = 2
 position = Vector2(6462, -3448.0002)
 scale = Vector2(2.643618, 2.2104135)
 strength = 1007.0
-curve = -0.020000000000000018
+curve = -0.02000000000000001
 off_duration = 5.0
 start_delay = 1.0
 zone_size = Vector2(200, 500)
@@ -117,7 +122,7 @@ z_index = 2
 position = Vector2(1720.9999, -2073)
 scale = Vector2(2.643618, 2.2104135)
 strength = 1007.0
-curve = -0.020000000000000018
+curve = -0.02000000000000001
 on_duration = 1.0
 off_duration = 5.0
 start_delay = 0.6
@@ -128,7 +133,7 @@ z_index = 2
 position = Vector2(2940, -3129)
 scale = Vector2(2.643618, 2.2104135)
 strength = 1007.0
-curve = -0.020000000000000018
+curve = -0.02000000000000001
 on_duration = 1.0
 off_duration = 5.0
 start_delay = 1.2
@@ -161,7 +166,7 @@ position = Vector2(6828, 250)
 rotation = -1.570796
 scale = Vector2(2.6436212, 2.2104154)
 strength = 305.0
-curve = 0.050000000000000044
+curve = 0.05000000000000004
 on_duration = 2.0
 off_duration = 3.0
 start_delay = 1.0
@@ -173,7 +178,7 @@ position = Vector2(6819, 1822)
 rotation = -1.570796
 scale = Vector2(2.6436212, 2.2104154)
 strength = 305.0
-curve = 0.050000000000000044
+curve = 0.05000000000000004
 on_duration = 2.0
 off_duration = 3.0
 zone_size = Vector2(400, 300)
@@ -184,7 +189,7 @@ position = Vector2(6977.0005, -1006)
 rotation = -1.570796
 scale = Vector2(2.6436212, 2.2104154)
 strength = 365.0
-curve = 0.050000000000000044
+curve = 0.05000000000000004
 on_duration = 2.0
 off_duration = 3.0
 start_delay = 2.0
@@ -196,7 +201,7 @@ position = Vector2(6633, -1907)
 rotation = -1.570796
 scale = Vector2(2.6436212, 2.2104154)
 strength = 260.0
-curve = 0.050000000000000044
+curve = 0.05000000000000004
 on_duration = 2.0
 off_duration = 3.0
 start_delay = 2.5
@@ -315,7 +320,7 @@ position = Vector2(3372, -3110.9998)
 rotation = -3.1415923
 scale = Vector2(2.6436212, 2.2104135)
 strength = 1250.0
-curve = -0.040000000000000036
+curve = -0.04000000000000003
 on_duration = 0.18
 off_duration = 5.0
 start_delay = 0.2
@@ -327,7 +332,7 @@ position = Vector2(6125.9995, -3112)
 rotation = -3.1415923
 scale = Vector2(2.6436212, 2.2104135)
 strength = 1250.0
-curve = -0.040000000000000036
+curve = -0.04000000000000003
 off_duration = 5.0
 start_delay = 2.0
 zone_size = Vector2(200, 500)
@@ -338,7 +343,7 @@ position = Vector2(6900, -3065.0002)
 rotation = -3.1415923
 scale = Vector2(2.6436212, 2.2104135)
 strength = 1250.0
-curve = -0.040000000000000036
+curve = -0.04000000000000003
 off_duration = 5.0
 zone_size = Vector2(200, 500)
 
@@ -348,7 +353,7 @@ position = Vector2(4069, -2184)
 rotation = -3.1415923
 scale = Vector2(2.6436212, 2.2104135)
 strength = 1250.0
-curve = -0.040000000000000036
+curve = -0.04000000000000003
 on_duration = 1.0
 off_duration = 5.0
 start_delay = 2.8
@@ -360,7 +365,7 @@ position = Vector2(2584, -2979)
 rotation = -3.1415923
 scale = Vector2(2.6436212, 2.2104135)
 strength = 1250.0
-curve = -0.040000000000000036
+curve = -0.04000000000000003
 on_duration = 1.0
 off_duration = 5.0
 start_delay = 4.0
@@ -372,7 +377,7 @@ position = Vector2(5158, -2198.0002)
 rotation = -3.1415923
 scale = Vector2(2.6436212, 2.2104135)
 strength = 1250.0
-curve = -0.040000000000000036
+curve = -0.04000000000000003
 off_duration = 5.0
 start_delay = 1.0
 zone_size = Vector2(100, 500)
@@ -383,7 +388,7 @@ position = Vector2(4560, -2996.9998)
 rotation = -3.1415923
 scale = Vector2(2.6436212, 2.2104135)
 strength = 1250.0
-curve = -0.040000000000000036
+curve = -0.04000000000000003
 off_duration = 5.0
 start_delay = 3.4
 zone_size = Vector2(100, 500)
@@ -504,14 +509,10 @@ breathe_amount = 0.25
 breathe_period = 3.4
 start_ratio = 0.05
 
-[node name="Path2D" type="Path2D" parent="ObjectA" unique_id=1849203311]
+[node name="Path2D2" type="Path2D" parent="ObjectA" unique_id=1849203311]
 position = Vector2(-291.59998, 11.600005)
 curve = SubResource("Curve2D_a")
 script = ExtResource("10_path")
-
-[node name="PathFollow2D" type="PathFollow2D" parent="ObjectA/Path2D" unique_id=1849203312]
-position = Vector2(0, -120)
-rotates = false
 
 [node name="ObjectB" parent="." unique_id=623485281 instance=ExtResource("4_object")]
 position = Vector2(5525.0005, -3045)
@@ -520,14 +521,11 @@ breathe_amount = 0.7
 breathe_period = 5.5
 start_ratio = 0.4
 
-[node name="Path2D" type="Path2D" parent="ObjectB" unique_id=1849203321]
+[node name="Path2D2" type="Path2D" parent="ObjectB" unique_id=1849203321]
 position = Vector2(53.199802, 98)
 curve = SubResource("Curve2D_b")
 script = ExtResource("10_path")
 
-[node name="PathFollow2D" type="PathFollow2D" parent="ObjectB/Path2D" unique_id=1849203322]
-position = Vector2(60, -243.20007)
-rotates = false
 [node name="ObjectC" parent="." unique_id=2135189073 instance=ExtResource("4_object")]
 position = Vector2(-98.49994, -3040)
 speed = 100.0
@@ -535,14 +533,11 @@ breathe_amount = 0.35
 breathe_period = 2.6
 start_ratio = 0.75
 
-[node name="Path2D" type="Path2D" parent="ObjectC" unique_id=1849203331]
+[node name="Path2D2" type="Path2D" parent="ObjectC" unique_id=1849203331]
 position = Vector2(-1, 123)
 curve = SubResource("Curve2D_c")
 script = ExtResource("10_path")
 
-[node name="PathFollow2D" type="PathFollow2D" parent="ObjectC/Path2D" unique_id=1849203332]
-position = Vector2(-242.19998, -450.4)
-rotates = false
 [node name="Platform" type="StaticBody2D" parent="." unique_id=1851131555]
 position = Vector2(280, 1450)
 collision_mask = 0
