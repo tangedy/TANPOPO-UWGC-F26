@@ -59,7 +59,7 @@ enum Pose { STAND, RUN, MOVE, REACH }
 ## Downward acceleration while rising, so wind and gusts arc back down.
 @export var gravity := 100.0
 ## Fastest rise, in pixels per second. Wind and gusts cannot climb faster than this.
-@export var max_up_speed := 1000.0
+@export var max_up_speed := 320.0
 @export var glide_speed := 260.0
 ## Exponential steer rate while holding left or right. Higher reaches the target sooner.
 @export var glide_accel := 4.0
@@ -180,6 +180,9 @@ func finish() -> void:
 
 
 func add_air_push(accel: Vector2) -> void:
+	# A sideways gust's upward component is the pinch that launches her. Fold it downward.
+	if absf(accel.x) >= absf(accel.y):
+		accel.y = absf(accel.y)
 	_air_push += accel
 
 
@@ -237,6 +240,7 @@ func _physics_process(delta: float) -> void:
 		_sync_pose(delta)
 		return
 	if state == State.WAIT:
+		motion_mode = MOTION_MODE_GROUNDED
 		velocity.x = 0.0
 		velocity.y = _sized(40.0)
 		move_and_slide()
@@ -247,14 +251,19 @@ func _physics_process(delta: float) -> void:
 	else:
 		_glide(delta)
 	_debug_fast_x()
+	var velocity_before_slide := velocity
+	var position_before_slide := global_position
 	_clear_forces()
 	move_and_slide()
+	if state == State.GLIDE:
+		_sink_out_of_pinch(position_before_slide, velocity_before_slide, delta)
 	_sync_pose(delta)
 	_record_trail()
 	_update_followers(delta)
 
 
 func _run_off(delta: float) -> void:
+	motion_mode = MOTION_MODE_GROUNDED
 	floor_snap_length = _sized(12.0)
 	visual.rotation = 0.0
 	_zoom_through_run()
@@ -302,6 +311,7 @@ func _debug_fast_x() -> void:
 
 
 func _glide(delta: float) -> void:
+	motion_mode = MOTION_MODE_FLOATING
 	floor_snap_length = 0.0
 	var can_steer := _control_timer <= 0.0
 	if _control_timer > 0.0:
@@ -326,9 +336,25 @@ func _glide(delta: float) -> void:
 
 	velocity += _air_push * delta
 	_apply_vertical(delta, can_steer)
-	velocity.x = clampf(velocity.x, _sized(-1100.0), _sized(1100.0))
+	velocity.x = clampf(velocity.x, _sized(-900.0), _sized(900.0))
 	velocity.y = clampf(velocity.y, -_sized(max_up_speed), _sized(520.0))
 	_lean_with_speed()
+
+
+## A sideways slide into a corner can convert that speed into a rise. Put the same speed downward.
+func _sink_out_of_pinch(before_pos: Vector2, before_vel: Vector2, delta: float) -> void:
+	if get_slide_collision_count() == 0 or absf(before_vel.x) < _sized(40.0):
+		return
+	var actual_dy := global_position.y - before_pos.y
+	var expected_dy := before_vel.y * delta
+	var extra_up := minf(expected_dy, 0.0) - actual_dy
+	var velocity_up := minf(before_vel.y, 0.0) - velocity.y
+	if extra_up < 1.5 and velocity_up < _sized(30.0):
+		return
+	if extra_up >= 1.5:
+		global_position.y += extra_up * 2.0
+	var kick := extra_up / maxf(delta, 0.001) if extra_up >= 1.5 else 0.0
+	velocity.y = maxf(before_vel.y, 0.0) + maxf(kick, velocity_up)
 
 
 func _apply_vertical(delta: float, allow_dive: bool) -> void:
