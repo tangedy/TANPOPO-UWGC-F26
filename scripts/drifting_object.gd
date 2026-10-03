@@ -57,10 +57,22 @@ func _ready() -> void:
 	hitbox.body_entered.connect(_on_body_entered)
 	follow.rotates = false
 	follow.loop = true
+	_close_loop()
 	if path.curve and path.curve.point_count >= 2:
 		follow.progress_ratio = start_ratio
 	_along = speed
 	_sync_collider_to_sprite()
+
+
+func _close_loop() -> void:
+	var curve := path.curve
+	if curve == null or curve.point_count < 3:
+		return
+	if curve.get_point_position(0).distance_to(curve.get_point_position(curve.point_count - 1)) <= 1.0:
+		return
+	var closed := curve.duplicate()
+	closed.add_point(closed.get_point_position(0), closed.get_point_in(0), Vector2.ZERO)
+	path.curve = closed
 
 
 func add_air_push(accel: Vector2) -> void:

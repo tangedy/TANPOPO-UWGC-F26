@@ -16,6 +16,27 @@ size = Vector2(220, 160)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5xdv5"]
 size = Vector2(167, 5073)
 
+[sub_resource type="Curve2D" id="Curve2D_a"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(-25.342, 0, 25.342, 0, 0, -120, -20.502, -14.895, 20.502, 14.895, 70.534, -97.082, -7.831, -24.101, 7.831, 24.101, 114.127, -37.082, 7.831, -24.101, -7.831, 24.101, 114.127, 37.082, 20.502, -14.895, -20.502, 14.895, 70.534, 97.082, 25.342, 0, -25.342, 0, 0, 120, 20.502, 14.895, -20.502, -14.895, -70.534, 97.082, 7.831, 24.101, -7.831, -24.101, -114.127, 37.082, -7.831, 24.101, 7.831, -24.101, -114.127, -37.082, -20.502, 14.895, 20.502, -14.895, -70.534, -97.082)
+}
+point_count = 10
+
+[sub_resource type="Curve2D" id="Curve2D_b"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(-25.342, 0, 25.342, 0, 0, -120, -20.502, -14.895, 20.502, 14.895, 70.534, -97.082, -7.831, -24.101, 7.831, 24.101, 114.127, -37.082, 7.831, -24.101, -7.831, 24.101, 114.127, 37.082, 20.502, -14.895, -20.502, 14.895, 70.534, 97.082, 25.342, 0, -25.342, 0, 0, 120, 20.502, 14.895, -20.502, -14.895, -70.534, 97.082, 7.831, 24.101, -7.831, -24.101, -114.127, 37.082, -7.831, 24.101, 7.831, -24.101, -114.127, -37.082, -20.502, 14.895, 20.502, -14.895, -70.534, -97.082)
+}
+point_count = 10
+
+[sub_resource type="Curve2D" id="Curve2D_c"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(-25.342, 0, 25.342, 0, 0, -120, -20.502, -14.895, 20.502, 14.895, 70.534, -97.082, -7.831, -24.101, 7.831, 24.101, 114.127, -37.082, 7.831, -24.101, -7.831, 24.101, 114.127, 37.082, 20.502, -14.895, -20.502, 14.895, 70.534, 97.082, 25.342, 0, -25.342, 0, 0, 120, 20.502, 14.895, -20.502, -14.895, -70.534, 97.082, 7.831, 24.101, -7.831, -24.101, -114.127, 37.082, -7.831, 24.101, 7.831, -24.101, -114.127, -37.082, -20.502, 14.895, 20.502, -14.895, -70.534, -97.082)
+}
+point_count = 10
+
 [node name="Drift" type="Node2D" unique_id=1080770655]
 script = ExtResource("1_room")
 
@@ -93,6 +114,9 @@ breathe_amount = 0.45
 breathe_period = 3.4
 start_ratio = 0.05
 
+[node name="Path2D" parent="ObjectA" index="0"]
+curve = SubResource("Curve2D_a")
+
 [node name="ObjectB" parent="." unique_id=623485281 instance=ExtResource("4_object")]
 position = Vector2(1518.9999, 1468)
 speed = 60.0
@@ -100,12 +124,18 @@ breathe_amount = 0.7
 breathe_period = 5.5
 start_ratio = 0.4
 
+[node name="Path2D" parent="ObjectB" index="0"]
+curve = SubResource("Curve2D_b")
+
 [node name="ObjectC" parent="." unique_id=2135189073 instance=ExtResource("4_object")]
 position = Vector2(1641, 1083)
 speed = 100.0
 breathe_amount = 0.35
 breathe_period = 2.6
 start_ratio = 0.75
+
+[node name="Path2D" parent="ObjectC" index="0"]
+curve = SubResource("Curve2D_c")
 
 [node name="Platform" type="StaticBody2D" parent="." unique_id=1851131555]
 position = Vector2(280, 1450)
