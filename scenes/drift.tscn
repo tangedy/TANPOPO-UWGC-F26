@@ -580,6 +580,7 @@ texture = ExtResource("7_clouds")
 [node name="ForegroundCloudsLayer" type="Node2D" parent="Platform" unique_id=1122071185]
 script = ExtResource("14_parallax")
 scroll_scale = Vector2(1.45, 1.45)
+fade_when_covering = true
 
 [node name="ForegroundClouds" type="Sprite2D" parent="Platform/ForegroundCloudsLayer" unique_id=949056660]
 z_index = 1
