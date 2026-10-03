@@ -99,6 +99,8 @@ var _run_cursor := 0.0
 var _run_frame := 0
 var _lifted := false
 var _run_start_x := 0.0
+## Matches the node's scale so speeds and distances stay in proportion to her size.
+var _size_scale := 1.0
 
 @onready var camera: Camera2D = $Camera2D
 @onready var visual: Sprite2D = $Visual
@@ -112,7 +114,8 @@ func _ready() -> void:
 	InputSetup.ensure()
 	collision_layer = 2
 	collision_mask = 1
-	floor_snap_length = 12.0
+	_size_scale = maxf(absf(scale.x), 0.001)
+	floor_snap_length = _sized(12.0)
 	velocity = Vector2.ZERO
 	camera.make_current()
 	camera.zoom = Vector2(1.0, 1.0)
@@ -124,7 +127,7 @@ func start_run() -> void:
 	if state != State.WAIT:
 		return
 	state = State.RUN_OFF
-	velocity.x = 40.0
+	velocity.x = _sized(40.0)
 	_run_cursor = 0.0
 	_run_frame = 0
 	_run_start_x = global_position.x
@@ -153,11 +156,24 @@ func add_lift(direction: Vector2, speed: float, accel: float) -> void:
 
 
 func air_push_scale() -> float:
-	return 1.0
+	return _size_scale
 
 
 func body_rect() -> Rect2:
-	return Rect2(global_position + Vector2(-14, -48), Vector2(28, 48))
+	var shape_node := get_node_or_null("CollisionShape2D") as CollisionShape2D
+	var rect_shape: RectangleShape2D = null
+	if shape_node != null:
+		rect_shape = shape_node.shape as RectangleShape2D
+	if rect_shape == null:
+		var fallback := Vector2(28, 48) * _size_scale
+		return Rect2(global_position + Vector2(-14, -48) * _size_scale, fallback)
+	var xf := shape_node.global_transform
+	var half := rect_shape.size * 0.5
+	var extents := Vector2(
+		absf(xf.x.x) * half.x + absf(xf.y.x) * half.y,
+		absf(xf.x.y) * half.x + absf(xf.y.y) * half.y
+	)
+	return Rect2(xf.origin - extents, extents * 2.0)
 
 
 func apply_gust(direction: Vector2, speed: float) -> void:
@@ -165,7 +181,7 @@ func apply_gust(direction: Vector2, speed: float) -> void:
 		return
 	_gust_pending = true
 	_gust_dir = direction.normalized()
-	_gust_speed = speed
+	_gust_speed = _sized(speed)
 
 
 func attach_follower(node: Node2D) -> void:
@@ -184,7 +200,7 @@ func _physics_process(delta: float) -> void:
 		return
 	if state == State.WAIT:
 		velocity.x = 0.0
-		velocity.y = 40.0
+		velocity.y = _sized(40.0)
 		move_and_slide()
 		_sync_pose(delta)
 		return
@@ -200,17 +216,18 @@ func _physics_process(delta: float) -> void:
 
 
 func _run_off(delta: float) -> void:
-	floor_snap_length = 12.0
+	floor_snap_length = _sized(12.0)
 	visual.rotation = 0.0
 	_zoom_through_run()
 	if _leap_point and global_position.x >= _leap_point.global_position.x:
 		_leap()
 		return
-	var gap := run_max_speed - velocity.x
+	var top_speed := _sized(run_max_speed)
+	var gap := top_speed - velocity.x
 	if gap > 0.0:
 		var rate := run_accel / maxf(run_max_speed - 40.0, 1.0)
 		velocity.x += gap * (1.0 - exp(-rate * delta))
-	velocity.y = 240.0
+	velocity.y = _sized(240.0)
 
 
 func _leap() -> void:
@@ -218,7 +235,7 @@ func _leap() -> void:
 	_lifted = true
 	floor_snap_length = 0.0
 	_control_timer = leap_drift_time
-	velocity.y = -leap_speed
+	velocity.y = -_sized(leap_speed)
 	camera.zoom = Vector2(0.5, 0.5)
 
 
@@ -241,7 +258,7 @@ func _glide(delta: float) -> void:
 		_control_timer = maxf(_control_timer - delta, 0.0)
 	else:
 		var axis := Input.get_axis("left", "right")
-		var target_x := axis * glide_speed
+		var target_x := axis * _sized(glide_speed)
 		var rate := glide_accel
 		if axis == 0.0 or absf(target_x) < absf(velocity.x):
 			rate = glide_coast
@@ -259,20 +276,20 @@ func _glide(delta: float) -> void:
 
 	velocity += _air_push * delta
 	_apply_vertical(delta, can_steer)
-	velocity.x = clampf(velocity.x, -1100.0, 1100.0)
-	velocity.y = clampf(velocity.y, -max_up_speed, 520.0)
+	velocity.x = clampf(velocity.x, _sized(-1100.0), _sized(1100.0))
+	velocity.y = clampf(velocity.y, -_sized(max_up_speed), _sized(520.0))
 	_lean_with_speed()
 
 
 func _apply_vertical(delta: float, allow_dive: bool) -> void:
 	var dive := allow_dive and Input.is_action_pressed("down")
 	if velocity.y < 0.0:
-		velocity.y += gravity * delta
+		velocity.y += _sized(gravity) * delta
 		return
-	var base := dive_speed if dive else fall_speed
+	var base := _sized(dive_speed if dive else fall_speed)
 	var terminal := maxf(base + absf(velocity.x) * sink_per_horizontal, 1.0)
-	var drag := fall_gravity / terminal
-	var accel := fall_gravity - drag * velocity.y
+	var drag := _sized(fall_gravity) / terminal
+	var accel := _sized(fall_gravity) - drag * velocity.y
 	velocity.y += accel * delta
 
 
@@ -296,7 +313,7 @@ func _sync_pose(delta: float) -> void:
 			facing = reach
 		elif _lifted:
 			pose = Pose.MOVE
-			if absf(velocity.x) >= reach_speed:
+			if absf(velocity.x) >= _sized(reach_speed):
 				facing = 1 if velocity.x > 0.0 else -1
 			else:
 				facing = _facing
@@ -337,7 +354,7 @@ func _run_anchor(index: int) -> Vector2:
 
 
 func _reach_facing() -> int:
-	var best := reach_range + 1.0
+	var best := _sized(reach_range) + 1.0
 	var facing := 0
 	for node in get_tree().get_nodes_in_group("seed"):
 		if not is_instance_valid(node) or node.get("collected") == true:
@@ -346,10 +363,10 @@ func _reach_facing() -> int:
 			continue
 		var to_seed: Vector2 = node.seed_position() - _body_center()
 		var dist := to_seed.length()
-		if dist > reach_range or dist >= best or absf(to_seed.x) < 4.0:
+		if dist > _sized(reach_range) or dist >= best or absf(to_seed.x) < _sized(4.0):
 			continue
 		var toward := 1 if to_seed.x > 0.0 else -1
-		if absf(velocity.x) < reach_speed or signf(velocity.x) != float(toward):
+		if absf(velocity.x) < _sized(reach_speed) or signf(velocity.x) != float(toward):
 			continue
 		best = dist
 		facing = toward
@@ -398,7 +415,7 @@ func _apply_pose(pose: Pose) -> void:
 
 
 func _lean_with_speed() -> void:
-	var speed_ref := maxf(glide_speed, 1.0)
+	var speed_ref := maxf(_sized(glide_speed), 1.0)
 	var amount := clampf(velocity.x / speed_ref, -1.0, 1.0)
 	visual.rotation = amount * deg_to_rad(max_lean)
 
@@ -414,8 +431,12 @@ func _body_center() -> Vector2:
 	return to_global(Vector2(0, -sprite_height * 0.82))
 
 
+func _sized(amount: float) -> float:
+	return amount * _size_scale
+
+
 func _follow_distance(index: int) -> float:
-	return 22.0 + follow_spacing * float(index)
+	return _sized(22.0 + follow_spacing * float(index))
 
 
 func _record_trail() -> void:
@@ -426,16 +447,16 @@ func _record_trail() -> void:
 	# The last point stays on the body so followers move every frame.
 	# A new point is kept once the body is a couple of pixels past the previous one.
 	if _trail.size() == 1:
-		if _trail[0].distance_to(point) >= 2.0:
+		if _trail[0].distance_to(point) >= _sized(2.0):
 			_trail.append(point)
 		else:
 			_trail[0] = point
 	else:
 		var committed: Vector2 = _trail[_trail.size() - 2]
 		_trail[_trail.size() - 1] = point
-		if committed.distance_to(point) >= 2.0:
+		if committed.distance_to(point) >= _sized(2.0):
 			_trail.append(point)
-	var keep := _follow_distance(maxi(followers.size(), 1)) + follow_spacing + 40.0
+	var keep := _follow_distance(maxi(followers.size(), 1)) + _sized(follow_spacing + 40.0)
 	_trim_trail(keep)
 
 
@@ -473,9 +494,10 @@ func _ensure_trail_length(need: float) -> void:
 	var cursor := _trail[0]
 	var guard := 0
 	while have < need and guard < 400:
-		cursor += dir * 6.0
+		var step := _sized(6.0)
+		cursor += dir * step
 		_trail.insert(0, cursor)
-		have += 6.0
+		have += step
 		guard += 1
 
 
