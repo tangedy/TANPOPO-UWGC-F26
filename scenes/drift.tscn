@@ -144,7 +144,7 @@ polygon = PackedVector2Array(-110, -80, 110, -80, 110, 80, -110, 80)
 position = Vector2(100, -550)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform" unique_id=723870272]
-position = Vector2(-1893, -1664)
+position = Vector2(-1983, -1664)
 shape = SubResource("RectangleShape2D_5xdv5")
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="Platform" unique_id=2012618602]
@@ -164,7 +164,7 @@ texture = ExtResource("8_grandma")
 
 [node name="Peppermint" parent="." unique_id=262609286 instance=ExtResource("5_peppermint")]
 z_index = -1
-position = Vector2(-490.99976, 899)
+position = Vector2(-488.00003, 899)
 scale = Vector2(2.5, 2.5)
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=2053258978]
