@@ -104,6 +104,7 @@ var _size_scale := 1.0
 
 @onready var camera: Camera2D = $Camera2D
 @onready var visual: Sprite2D = $Visual
+@onready var seed_parti: GPUParticles2D = $SeedParti
 
 
 func _enter_tree() -> void:
@@ -122,6 +123,7 @@ func _ready() -> void:
 	_fit_camera_limits()
 	_leap_point = get_parent().get_node_or_null("Platform/LeapPoint") as Node2D
 	_apply_pose(Pose.STAND)
+	_set_seed_parti(false)
 
 
 func _fit_camera_limits() -> void:
@@ -192,6 +194,7 @@ func finish() -> void:
 	velocity = Vector2.ZERO
 	visual.rotation = 0.0
 	_apply_pose(Pose.STAND)
+	_set_seed_parti(false)
 
 
 func add_air_push(accel: Vector2) -> void:
@@ -291,6 +294,17 @@ func _leap() -> void:
 	_control_timer = leap_drift_time
 	velocity.y = -_sized(leap_speed)
 	camera.zoom = Vector2(0.5, 0.5)
+	_set_seed_parti(true)
+
+
+func _set_seed_parti(on: bool) -> void:
+	if seed_parti == null:
+		return
+	seed_parti.preprocess = 0.0
+	seed_parti.visible = on
+	seed_parti.emitting = on
+	if on:
+		seed_parti.restart()
 
 
 func _zoom_through_run() -> void:

@@ -11,21 +11,11 @@
 [ext_resource type="Texture2D" uid="uid://b5ot21jb3anjd" path="res://Assets/images/clouds_rough.png" id="7_clouds"]
 [ext_resource type="Texture2D" uid="uid://c6wmgpoa2fhc1" path="res://Assets/images/grandma_stand_rough.png" id="8_grandma"]
 [ext_resource type="PackedScene" uid="uid://t0yrhsy5mo5e" path="res://scenes/grass.tscn" id="9_wgtfl"]
-[ext_resource type="PackedScene" uid="uid://b6skvnu5lj85b" path="res://scenes/flower.tscn" id="10_svi47"]
 [ext_resource type="Script" uid="uid://mydps3xxhia8" path="res://scripts/path_debug.gd" id="10_path"]
+[ext_resource type="PackedScene" uid="uid://b6skvnu5lj85b" path="res://scenes/flower.tscn" id="10_svi47"]
 [ext_resource type="PackedScene" uid="uid://b3dksb1403hhd" path="res://scenes/dandelion.tscn" id="13_arjxv"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bok0l"]
-shader = ExtResource("6_bok0l")
-shader_parameter/wave_speed = 1.5
-shader_parameter/wave_freq = 10.0
-shader_parameter/wave_width = 0.2
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_complete"]
-size = Vector2(220, 160)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_5xdv5"]
-size = Vector2(361.0005, 9036.75)
+[ext_resource type="Script" uid="uid://dshw2c2ojvjsq" path="res://scripts/cloud_parallax.gd" id="14_parallax"]
+[ext_resource type="Shader" uid="uid://bx6p2btkr8mum" path="res://shaders/godray.gdshader" id="16_8brjc"]
 
 [sub_resource type="Curve2D" id="Curve2D_a"]
 _data = {
@@ -44,6 +34,34 @@ _data = {
 "points": PackedVector2Array(-25.342, 0, 25.342, 0, 0, -120, -20.502, -14.895, 20.502, 14.895, 70.534, -97.082, -7.831, -24.101, 7.831, 24.101, 114.127, -37.082, 7.831, -24.101, -7.831, 24.101, 114.127, 37.082, 20.502, -14.895, -20.502, 14.895, 70.534, 97.082, 25.342, 0, -25.342, 0, 0, 120, 20.502, 14.895, -20.502, -14.895, -70.534, 97.082, 7.831, 24.101, -7.831, -24.101, -114.127, 37.082, -7.831, 24.101, 7.831, -24.101, -114.127, -37.082, -20.502, 14.895, 20.502, -14.895, -70.534, -97.082)
 }
 point_count = 10
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bok0l"]
+shader = ExtResource("6_bok0l")
+shader_parameter/wave_speed = 1.5
+shader_parameter/wave_freq = 10.0
+shader_parameter/wave_width = 0.2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_complete"]
+size = Vector2(220, 160)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5xdv5"]
+size = Vector2(361.0005, 9036.75)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5xdv5"]
+shader = ExtResource("16_8brjc")
+shader_parameter/angle = -0.22
+shader_parameter/position = -0.2
+shader_parameter/spread = 1.0
+shader_parameter/cutoff = 0.15800005500500003
+shader_parameter/falloff = 0.0
+shader_parameter/edge_fade = 0.15
+shader_parameter/speed = 0.92
+shader_parameter/ray1_density = 8.0
+shader_parameter/ray2_density = 30.0
+shader_parameter/ray2_intensity = 0.0
+shader_parameter/color = Color(1, 1, 1, 0.6)
+shader_parameter/hdr = false
+shader_parameter/seed = 10.0
 
 [node name="Drift" type="Node2D" unique_id=1080770655]
 script = ExtResource("1_room")
@@ -194,7 +212,7 @@ z_index = 2
 position = Vector2(1332, -1785.0001)
 scale = Vector2(2.643618, 2.2104135)
 strength = 742.0
-curve = 0.45999999999999996
+curve = 0.46
 always_active = true
 zone_size = Vector2(300, 160)
 
@@ -204,14 +222,10 @@ breathe_amount = 0.45
 breathe_period = 3.4
 start_ratio = 0.05
 
-[node name="Path2D" type="Path2D" parent="ObjectA" unique_id=1849203311]
+[node name="Path2D2" type="Path2D" parent="ObjectA" unique_id=1849203311]
 position = Vector2(-291.59998, 11.600005)
 curve = SubResource("Curve2D_a")
 script = ExtResource("10_path")
-
-[node name="PathFollow2D" type="PathFollow2D" parent="ObjectA/Path2D" unique_id=1849203312]
-position = Vector2(0, -120)
-rotates = false
 
 [node name="ObjectB" parent="." unique_id=623485281 instance=ExtResource("4_object")]
 position = Vector2(5525.0005, -3045)
@@ -220,14 +234,10 @@ breathe_amount = 0.7
 breathe_period = 5.5
 start_ratio = 0.4
 
-[node name="Path2D" type="Path2D" parent="ObjectB" unique_id=1849203321]
+[node name="Path2D2" type="Path2D" parent="ObjectB" unique_id=1849203321]
 position = Vector2(-1, 123)
 curve = SubResource("Curve2D_b")
 script = ExtResource("10_path")
-
-[node name="PathFollow2D" type="PathFollow2D" parent="ObjectB/Path2D" unique_id=1849203322]
-position = Vector2(0, -120)
-rotates = false
 
 [node name="ObjectC" parent="." unique_id=2135189073 instance=ExtResource("4_object")]
 position = Vector2(507, -2214)
@@ -236,14 +246,10 @@ breathe_amount = 0.35
 breathe_period = 2.6
 start_ratio = 0.75
 
-[node name="Path2D" type="Path2D" parent="ObjectC" unique_id=1849203331]
+[node name="Path2D2" type="Path2D" parent="ObjectC" unique_id=1849203331]
 position = Vector2(-1, 123)
 curve = SubResource("Curve2D_c")
 script = ExtResource("10_path")
-
-[node name="PathFollow2D" type="PathFollow2D" parent="ObjectC/Path2D" unique_id=1849203332]
-position = Vector2(0, -120)
-rotates = false
 
 [node name="Platform" type="StaticBody2D" parent="." unique_id=1851131555]
 position = Vector2(280, 1450)
@@ -260,14 +266,18 @@ position = Vector2(-2748, -198)
 scale = Vector2(-1, 1)
 texture = ExtResource("6_cliff")
 
-[node name="BGClouds" type="Sprite2D" parent="Platform" unique_id=706455837]
+[node name="BGCloudsLayer" type="Node2D" parent="Platform" unique_id=667529225]
+script = ExtResource("14_parallax")
+scroll_scale = Vector2(0.35, 0.35)
+
+[node name="BGClouds" type="Sprite2D" parent="Platform/BGCloudsLayer" unique_id=706455837]
 z_index = -10
 material = SubResource("ShaderMaterial_bok0l")
 position = Vector2(2896, -688)
 scale = Vector2(2.012581, 1.8432039)
 texture = ExtResource("7_clouds")
 
-[node name="BGClouds2" type="Sprite2D" parent="Platform" unique_id=1416871081]
+[node name="BGClouds2" type="Sprite2D" parent="Platform/BGCloudsLayer" unique_id=1416871081]
 modulate = Color(1, 1, 1, 0.41568628)
 z_index = -10
 material = SubResource("ShaderMaterial_bok0l")
@@ -275,14 +285,18 @@ position = Vector2(2085.0002, -537.99994)
 scale = Vector2(-2.3, 1.843)
 texture = ExtResource("7_clouds")
 
-[node name="ForegroundClouds" type="Sprite2D" parent="Platform" unique_id=949056660]
+[node name="ForegroundCloudsLayer" type="Node2D" parent="Platform" unique_id=1122071185]
+script = ExtResource("14_parallax")
+scroll_scale = Vector2(1.45, 1.45)
+
+[node name="ForegroundClouds" type="Sprite2D" parent="Platform/ForegroundCloudsLayer" unique_id=949056660]
 z_index = 1
 material = SubResource("ShaderMaterial_bok0l")
 position = Vector2(-816.99994, 1026)
 scale = Vector2(2.1288342, 1.8432039)
 texture = ExtResource("7_2r5rs")
 
-[node name="ForegroundClouds2" type="Sprite2D" parent="Platform" unique_id=316306333]
+[node name="ForegroundClouds2" type="Sprite2D" parent="Platform/ForegroundCloudsLayer" unique_id=316306333]
 z_index = 1
 material = SubResource("ShaderMaterial_bok0l")
 position = Vector2(6226.9995, 1782)
@@ -290,7 +304,7 @@ rotation = -5.9725165
 scale = Vector2(-2, 2)
 texture = ExtResource("7_2r5rs")
 
-[node name="ForegroundClouds3" type="Sprite2D" parent="Platform" unique_id=1215963296]
+[node name="ForegroundClouds3" type="Sprite2D" parent="Platform/ForegroundCloudsLayer" unique_id=1215963296]
 z_index = 1
 material = SubResource("ShaderMaterial_bok0l")
 position = Vector2(2738, 1690)
@@ -342,7 +356,7 @@ texture = ExtResource("8_grandma")
 
 [node name="Peppermint" parent="." unique_id=262609286 instance=ExtResource("5_peppermint")]
 z_index = -5
-position = Vector2(-488.00003, 899)
+position = Vector2(-628, 899)
 scale = Vector2(2.5, 2.5)
 
 [node name="Foliage" type="Node2D" parent="." unique_id=1666564183]
@@ -430,6 +444,20 @@ scale = Vector2(0.75, 0.75)
 position = Vector2(-83, 958)
 scale = Vector2(0.75, 0.75)
 
+[node name="Godray" type="ColorRect" parent="." unique_id=186856081]
+material = SubResource("ShaderMaterial_5xdv5")
+offset_left = -2255.0
+offset_top = -4271.0
+offset_right = 7796.963
+offset_bottom = 2726.0
+
+[node name="Godray2" type="ColorRect" parent="." unique_id=1454043615]
+material = SubResource("ShaderMaterial_5xdv5")
+offset_left = -5726.0
+offset_top = -2790.0
+offset_right = 665.4795
+offset_bottom = 1659.0
+
 [node name="UI" type="CanvasLayer" parent="." unique_id=2053258978]
 
 [node name="Prompt" type="Label" parent="UI" unique_id=1619767728]
@@ -442,7 +470,7 @@ offset_top = -96.0
 offset_bottom = -28.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(0.95, 0.9, 0.82, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 22
 text = "Press E to chase the memory"
 horizontal_alignment = 1
