@@ -15,10 +15,11 @@ const MOVE_B_TEX := preload("res://Assets/images/peppermint/moving_B_right.png")
 const REACH_A_TEX := preload("res://Assets/images/peppermint/reaching_A_right.png")
 const REACH_B_TEX := preload("res://Assets/images/peppermint/reaching_B_right.png")
 
-## Run-cycle playback, in frames per second.
-const RUN_FPS := 7.0
+## Run-cycle playback eases from this rate to the fast rate over the first loop.
+const RUN_FPS_START := 4.0
+const RUN_FPS_END := 7.0
 ## How many times the run cycle plays on the way to the ledge.
-const RUN_CYCLES := 1.5
+const RUN_CYCLES := 2.5
 
 ## Drawn height of each image, in pixels. Each anchor is your extra shift on top of that.
 @export var sprite_height := 156.0
@@ -66,8 +67,9 @@ enum Pose { STAND, RUN, MOVE, REACH }
 @export var glide_coast := 2.5
 ## How far the body leans at full glide speed, in degrees.
 @export var max_lean := 12.0
-@export var run_accel := 280.0
-@export var run_max_speed := 360.0
+## Initial run acceleration, in pixels per second squared. It eases out as she nears run speed.
+@export var run_accel := 1800.0
+@export var run_max_speed := 430.0
 ## Small hop off the platform, in pixels per second upward.
 @export var leap_speed := 80.0
 ## Seconds of carried run speed before left/right control turns on.
@@ -93,7 +95,7 @@ var _pose := Pose.STAND
 var _facing := 1
 var _frame := 0
 var _frame_clock := 0.0
-var _run_time := 0.0
+var _run_cursor := 0.0
 var _run_frame := 0
 var _lifted := false
 
@@ -121,7 +123,7 @@ func start_run() -> void:
 		return
 	state = State.RUN_OFF
 	velocity.x = 40.0
-	_run_time = 0.0
+	_run_cursor = 0.0
 	_run_frame = 0
 	_apply_pose(Pose.RUN)
 
@@ -197,11 +199,13 @@ func _physics_process(delta: float) -> void:
 func _run_off(delta: float) -> void:
 	floor_snap_length = 12.0
 	visual.rotation = 0.0
-	_run_time += delta
 	if _leap_point and global_position.x >= _leap_point.global_position.x:
 		_leap()
 		return
-	velocity.x = minf(velocity.x + run_accel * delta, run_max_speed)
+	var gap := run_max_speed - velocity.x
+	if gap > 0.0:
+		var rate := run_accel / maxf(run_max_speed - 40.0, 1.0)
+		velocity.x += gap * (1.0 - exp(-rate * delta))
 	velocity.y = 240.0
 
 
@@ -261,7 +265,10 @@ func _sync_pose(delta: float) -> void:
 	if state == State.RUN_OFF:
 		pose = Pose.RUN
 		facing = 1
-		var shown := mini(int(_run_time * RUN_FPS), _run_steps() - 1)
+		var limit := float(_run_steps())
+		if _run_cursor < limit:
+			_run_cursor = minf(_run_cursor + _run_fps() * delta, limit)
+		var shown := mini(int(_run_cursor), _run_steps() - 1)
 		_run_frame = shown % RUN_FRAMES.size()
 	elif state == State.GLIDE:
 		if _lifted or velocity.y < 0.0:
@@ -290,6 +297,12 @@ func _sync_pose(delta: float) -> void:
 	if facing != 0:
 		_facing = facing
 	_apply_pose(pose)
+
+
+func _run_fps() -> float:
+	var through := clampf(_run_cursor / float(RUN_FRAMES.size()), 0.0, 1.0)
+	var eased := through * through * (3.0 - 2.0 * through)
+	return lerpf(RUN_FPS_START, RUN_FPS_END, eased)
 
 
 func _run_steps() -> int:
