@@ -13,7 +13,7 @@
 size = Vector2(220, 160)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5xdv5"]
-size = Vector2(167, 5073)
+size = Vector2(361.0005, 9036.75)
 
 [sub_resource type="Curve2D" id="Curve2D_a"]
 resource_local_to_scene = true
@@ -53,13 +53,13 @@ color = Color(0.690196, 0.878431, 0.917647, 1)
 
 [node name="Updraft" parent="." unique_id=95024445 instance=ExtResource("2_updraft")]
 z_index = 2
-position = Vector2(2741, 2395)
+position = Vector2(3528, 2785)
 lift_speed = 400.0
 
 [node name="WindRight" parent="." unique_id=625048384 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(1849.0001, 1233)
-scale = Vector2(1.0604767, 1.1432701)
+position = Vector2(4249, 786)
+scale = Vector2(2.643618, 2.2104135)
 strength = 764.0
 on_duration = 1.4
 off_duration = 1.8
@@ -67,10 +67,9 @@ zone_size = Vector2(340, 200)
 
 [node name="WindUp" parent="." unique_id=1057585122 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(1669.0001, 882)
+position = Vector2(3109, -515)
 rotation = -1.570796
-scale = Vector2(1.0604779, 1.1432711)
-strength = 515.0
+scale = Vector2(2.6436212, 2.2104154)
 on_duration = 1.0
 off_duration = 2.3
 start_delay = 0.5
@@ -78,9 +77,9 @@ zone_size = Vector2(260, 320)
 
 [node name="WindLeft" parent="." unique_id=883681909 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(1323, 1414)
+position = Vector2(3258, 1518)
 rotation = -3.1415923
-scale = Vector2(1.0604779, 1.1432701)
+scale = Vector2(2.6436212, 2.2104135)
 strength = 540.0
 on_duration = 1.2
 off_duration = 1.6
@@ -89,9 +88,9 @@ zone_size = Vector2(400, 300)
 
 [node name="WindDown" parent="." unique_id=1493769024 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(739, 1354.9999)
+position = Vector2(1051, 1495.0001)
 rotation = 1.570796
-scale = Vector2(1.0604779, 1.1432711)
+scale = Vector2(2.6436212, 2.2104154)
 strength = 325.0
 always_active = true
 on_duration = 0.7
@@ -101,14 +100,15 @@ zone_size = Vector2(260, 400)
 
 [node name="WindSteady" parent="." unique_id=322785786 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(978.00006, 941)
-scale = Vector2(1.0604767, 1.1432701)
+position = Vector2(1513.0001, -430.99997)
+scale = Vector2(2.643618, 2.2104135)
 strength = 200.0
 always_active = true
 zone_size = Vector2(300, 160)
 
 [node name="ObjectA" parent="." unique_id=760653982 instance=ExtResource("4_object")]
-position = Vector2(739, 1123)
+position = Vector2(1299, 1065)
+scale = Vector2(2.4928584, 1.9334131)
 breathe_amount = 0.45
 breathe_period = 3.4
 start_ratio = 0.05
@@ -117,7 +117,8 @@ start_ratio = 0.05
 curve = SubResource("Curve2D_a")
 
 [node name="ObjectB" parent="." unique_id=623485281 instance=ExtResource("4_object")]
-position = Vector2(1518.9999, 1468)
+position = Vector2(3919, 1021)
+scale = Vector2(2.4928584, 1.9334131)
 speed = 60.0
 breathe_amount = 0.7
 breathe_period = 5.5
@@ -127,7 +128,8 @@ start_ratio = 0.4
 curve = SubResource("Curve2D_b")
 
 [node name="ObjectC" parent="." unique_id=2135189073 instance=ExtResource("4_object")]
-position = Vector2(1641, 1083)
+position = Vector2(2661, 45)
+scale = Vector2(2.4928584, 1.9334131)
 speed = 100.0
 breathe_amount = 0.35
 breathe_period = 2.6
@@ -146,8 +148,8 @@ texture = ExtResource("6_cliff")
 
 [node name="Clouds" type="Sprite2D" parent="Platform" unique_id=706455837]
 z_index = 1
-position = Vector2(1781, -373)
-scale = Vector2(1.4139069, 1.4139066)
+position = Vector2(2896, -688)
+scale = Vector2(1.8688432, 1.8432039)
 texture = ExtResource("7_clouds")
 metadata/_edit_lock_ = true
 
@@ -174,16 +176,16 @@ polygon = PackedVector2Array(-110, -80, 110, -80, 110, 80, -110, 80)
 position = Vector2(100, -550)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Platform" unique_id=723870272]
-position = Vector2(-1983, -1664)
+position = Vector2(-1997, -2281)
 shape = SubResource("RectangleShape2D_5xdv5")
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="Platform" unique_id=2012618602]
-position = Vector2(524.5, -2234)
+position = Vector2(2664.625, -5765.5)
 rotation = 1.5707964
 shape = SubResource("RectangleShape2D_5xdv5")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Platform" unique_id=725885607]
-position = Vector2(3086, -1234)
+position = Vector2(7328, -2017)
 shape = SubResource("RectangleShape2D_5xdv5")
 
 [node name="Grandma" type="Sprite2D" parent="." unique_id=625137024]
