@@ -449,7 +449,6 @@ func _apply_pose(pose: Pose) -> void:
 			anchor = reaching_b_anchor
 	visual.texture = tex
 	visual.centered = true
-	visual.material = null
 	# Fit every pose to the idle canvas height so taller flight frames stay the same size.
 	var fitted := sprite_height / maxf(STAND_TEX.get_height(), 1.0)
 	if pose == Pose.MOVE or pose == Pose.REACH:

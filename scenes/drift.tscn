@@ -5,11 +5,20 @@
 [ext_resource type="PackedScene" uid="uid://uel7xvwc5jvp" path="res://scenes/wind_zone.tscn" id="3_wind"]
 [ext_resource type="PackedScene" uid="uid://bbxbxebcdr7d0" path="res://scenes/drifting_object.tscn" id="4_object"]
 [ext_resource type="PackedScene" uid="uid://c5bm054jrtsb4" path="res://scenes/peppermint.tscn" id="5_peppermint"]
+[ext_resource type="Shader" uid="uid://ci17e24q8o3qt" path="res://drift.gdshader" id="6_bok0l"]
 [ext_resource type="Texture2D" uid="uid://d1qsrkeullnks" path="res://Assets/images/cliff_rough.png" id="6_cliff"]
+[ext_resource type="Texture2D" uid="uid://b2blolc73eixo" path="res://Assets/images/smallercloud.png" id="7_2r5rs"]
 [ext_resource type="Texture2D" uid="uid://b5ot21jb3anjd" path="res://Assets/images/clouds_rough.png" id="7_clouds"]
 [ext_resource type="Texture2D" uid="uid://c6wmgpoa2fhc1" path="res://Assets/images/grandma_stand_rough.png" id="8_grandma"]
 [ext_resource type="PackedScene" uid="uid://t0yrhsy5mo5e" path="res://scenes/grass.tscn" id="9_wgtfl"]
 [ext_resource type="PackedScene" uid="uid://b6skvnu5lj85b" path="res://scenes/flower.tscn" id="10_svi47"]
+[ext_resource type="PackedScene" uid="uid://b3dksb1403hhd" path="res://scenes/dandelion.tscn" id="13_arjxv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bok0l"]
+shader = ExtResource("6_bok0l")
+shader_parameter/wave_speed = 1.5
+shader_parameter/wave_freq = 10.0
+shader_parameter/wave_width = 0.2
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_complete"]
 size = Vector2(220, 160)
@@ -115,15 +124,24 @@ position = Vector2(280, 1450)
 collision_mask = 0
 
 [node name="Cliff" type="Sprite2D" parent="Platform" unique_id=1488769419]
+z_index = 1
 position = Vector2(-841.5, -198)
 texture = ExtResource("6_cliff")
 
 [node name="Clouds" type="Sprite2D" parent="Platform" unique_id=706455837]
-z_index = 1
+z_index = -10
+material = SubResource("ShaderMaterial_bok0l")
 position = Vector2(2896, -688)
 scale = Vector2(1.8688432, 1.8432039)
 texture = ExtResource("7_clouds")
 metadata/_edit_lock_ = true
+
+[node name="Clouds2" type="Sprite2D" parent="Platform" unique_id=949056660]
+z_index = 1
+material = SubResource("ShaderMaterial_bok0l")
+position = Vector2(-976, 1026)
+scale = Vector2(1.8688432, 1.8432039)
+texture = ExtResource("7_2r5rs")
 
 [node name="FloorCollider" type="CollisionPolygon2D" parent="Platform" unique_id=628338554]
 polygon = PackedVector2Array(-1800, -550, 102, -548, 0, -455, -100, -335, -200, -191, -612, 1402, -1870, 1375)
@@ -223,6 +241,24 @@ position = Vector2(253, 878)
 
 [node name="Flower5" parent="Foliage" unique_id=220503637 instance=ExtResource("10_svi47")]
 position = Vector2(-413, 878)
+
+[node name="dandelion" parent="Foliage" unique_id=29236780 instance=ExtResource("13_arjxv")]
+position = Vector2(-1202, 872)
+
+[node name="dandelion2" parent="Foliage" unique_id=251063300 instance=ExtResource("13_arjxv")]
+position = Vector2(-685, 958)
+
+[node name="dandelion3" parent="Foliage" unique_id=277063130 instance=ExtResource("13_arjxv")]
+position = Vector2(-1042, 958)
+scale = Vector2(0.75, 0.75)
+
+[node name="dandelion4" parent="Foliage" unique_id=2126820212 instance=ExtResource("13_arjxv")]
+position = Vector2(-1514, 878)
+scale = Vector2(0.75, 0.75)
+
+[node name="dandelion5" parent="Foliage" unique_id=499089416 instance=ExtResource("13_arjxv")]
+position = Vector2(-83, 958)
+scale = Vector2(0.75, 0.75)
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=2053258978]
 

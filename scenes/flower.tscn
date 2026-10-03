@@ -2,13 +2,15 @@
 
 [ext_resource type="Shader" uid="uid://dexmydrykhi36" path="res://shaders/grass.gdshader" id="1_yoh7s"]
 [ext_resource type="Texture2D" uid="uid://bgveu5fhpkby1" path="res://Assets/images/drift_flower.png" id="2_agc10"]
+[ext_resource type="Script" path="res://scripts/foliage.gd" id="3_foliage"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rqhtc"]
+resource_local_to_scene = true
 shader = ExtResource("1_yoh7s")
-shader_parameter/speed = 1.0
+shader_parameter/speed = 1.05
 shader_parameter/minStrength = 0.05
-shader_parameter/maxStrength = 0.01
-shader_parameter/strengthScale = 200.0
+shader_parameter/maxStrength = 0.025
+shader_parameter/strengthScale = 215.0
 shader_parameter/interval = 3.5
 shader_parameter/detail = 1.0
 shader_parameter/distortion = 0.0
@@ -16,6 +18,7 @@ shader_parameter/heightOffset = 0.0
 shader_parameter/offset = 0.0
 
 [node name="Flower" type="Node2D" unique_id=1246220896]
+script = ExtResource("3_foliage")
 
 [node name="DriftGrass" type="Sprite2D" parent="." unique_id=973184158]
 material = SubResource("ShaderMaterial_rqhtc")

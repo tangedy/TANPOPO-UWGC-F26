@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://b3dksb1403hhd"]
+
+[ext_resource type="Shader" uid="uid://dexmydrykhi36" path="res://shaders/grass.gdshader" id="1_55qyy"]
+[ext_resource type="Texture2D" uid="uid://crsek7kykbsq" path="res://Assets/images/drift_dandelion.png" id="2_gf78e"]
+[ext_resource type="Script" path="res://scripts/foliage.gd" id="3_foliage"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ugs8c"]
+resource_local_to_scene = true
+shader = ExtResource("1_55qyy")
+shader_parameter/speed = 1.05
+shader_parameter/minStrength = 0.05
+shader_parameter/maxStrength = 0.025
+shader_parameter/strengthScale = 215.0
+shader_parameter/interval = 3.5
+shader_parameter/detail = 1.0
+shader_parameter/distortion = 0.0
+shader_parameter/heightOffset = 0.0
+shader_parameter/offset = 0.0
+
+[node name="dandelion" type="Node2D" unique_id=29236780]
+script = ExtResource("3_foliage")
+
+[node name="DriftGrass" type="Sprite2D" parent="." unique_id=1463485945]
+material = SubResource("ShaderMaterial_ugs8c")
+texture = ExtResource("2_gf78e")
+offset = Vector2(-40, -170)
