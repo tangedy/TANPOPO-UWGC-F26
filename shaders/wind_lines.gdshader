@@ -8,6 +8,9 @@ shader_type canvas_item;
 uniform vec4 wind_color : source_color = vec4(1.0, 1.0, 1.0, 1.0);
 uniform float flow_speed = 80.0;
 uniform float active : hint_range(0.0, 1.0) = 1.0;
+// 1.0 while turning on/steady (fill), 0.0 while turning off (empty). Both
+// sweep along the flow axis from the end back to the start.
+uniform float fill_mode : hint_range(0.0, 1.0) = 1.0;
 uniform vec2 zone_size = vec2(260.0, 180.0);
 uniform vec2 rect_size = vec2(380.0, 320.0);
 // How much the flow bows. 0 = straight. Matches wind_zone.gd `curve`.
@@ -68,7 +71,20 @@ void fragment() {
 	}
 
 	streaks = clamp(streaks, 0.0, 1.0);
-	// active only fades the whole layer in/out; the streaks keep moving.
-	float alpha = streaks * fade * active;
+
+	// Directional reveal along the flow axis: ax = 0 at the start, 1 at the end.
+	// A wide edge makes the front a broad gradient, so lines fade smoothly
+	// in/out as it sweeps instead of popping on/off.
+	float ax = clamp(-p.x / max(zone_size.x, 1.0) + 0.5, 0.0, 1.0);
+	float e = 0.55;
+	// Turning on: fill the visible band from the end (ax=1) back to the start.
+	float front = mix(1.0 + e, -e, active);
+	float m_fill = smoothstep(front - e, front + e, ax);
+	// Turning off: empty the band from the end back to the start too.
+	float ef = mix(-e, 1.0 + e, active);
+	float m_empty = smoothstep(ef + e, ef - e, ax);
+	float reveal = mix(m_empty, m_fill, fill_mode);
+
+	float alpha = streaks * fade * reveal;
 	COLOR = vec4(wind_color.rgb, alpha);
 }

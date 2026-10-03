@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://b1rd5pawnsc3n0"]
+
+[ext_resource type="Script" path="res://scripts/bird.gd" id="1_bird"]
+[ext_resource type="Texture2D" uid="uid://bm72wuaf60k2k" path="res://Assets/images/bird1.png" id="2_b1"]
+[ext_resource type="Texture2D" uid="uid://drxtwahj5j88j" path="res://Assets/images/bird2.png" id="3_b2"]
+[ext_resource type="Texture2D" uid="uid://5nuf8g3mt5sn" path="res://Assets/images/bird3.png" id="4_b3"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bird"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_b1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_b2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_b3")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 8.0
+}]
+
+[node name="Bird" type="Node2D"]
+z_index = -9
+script = ExtResource("1_bird")
+
+[node name="Anim" type="AnimatedSprite2D" parent="."]
+modulate = Color(0.88, 0.92, 1, 0.8)
+scale = Vector2(0.45, 0.45)
+sprite_frames = SubResource("SpriteFrames_bird")
+animation = &"fly"
+autoplay = "fly"

@@ -2,21 +2,45 @@
 
 [ext_resource type="Script" uid="uid://cjdvgfeldo2vk" path="res://scripts/drift_room.gd" id="1_room"]
 [ext_resource type="PackedScene" uid="uid://btc1tedokuue7" path="res://scenes/updraft_zone.tscn" id="2_updraft"]
+[ext_resource type="AudioStream" uid="uid://csbu7j3r200it" path="res://Assets/sfx/fluff.wav" id="3_jd5w8"]
 [ext_resource type="PackedScene" uid="uid://uel7xvwc5jvp" path="res://scenes/wind_zone.tscn" id="3_wind"]
+[ext_resource type="AudioStream" uid="uid://226tuyi3psv6" path="res://Assets/sfx/freesound_community-poof-of-smoke-87381.mp3" id="4_d527q"]
 [ext_resource type="PackedScene" uid="uid://bbxbxebcdr7d0" path="res://scenes/drifting_object.tscn" id="4_object"]
+[ext_resource type="AudioStream" uid="uid://d32volynrc4lg" path="res://Assets/sfx/freesound_community-nature-ambience_cyprus_troodos_mountains_mount_olympus_omni_mics-19736.mp3" id="4_y6epy"]
+[ext_resource type="AudioStream" uid="uid://cym3i3f13ugcd" path="res://Assets/sfx/joentnt-walk-on-grass-1-291984.mp3" id="5_mg2cb"]
 [ext_resource type="PackedScene" uid="uid://c5bm054jrtsb4" path="res://scenes/peppermint.tscn" id="5_peppermint"]
 [ext_resource type="Shader" uid="uid://ci17e24q8o3qt" path="res://drift.gdshader" id="6_bok0l"]
 [ext_resource type="Texture2D" uid="uid://d1qsrkeullnks" path="res://Assets/images/cliff_rough.png" id="6_cliff"]
+[ext_resource type="AudioStream" uid="uid://d3uyxexew22cy" path="res://Assets/sfx/jump.mp3" id="6_m70us"]
 [ext_resource type="Texture2D" uid="uid://b2blolc73eixo" path="res://Assets/images/smallercloud.png" id="7_2r5rs"]
 [ext_resource type="Texture2D" uid="uid://b5ot21jb3anjd" path="res://Assets/images/clouds_rough.png" id="7_clouds"]
 [ext_resource type="Texture2D" uid="uid://c6wmgpoa2fhc1" path="res://Assets/images/grandma_stand_rough.png" id="8_grandma"]
+[ext_resource type="AudioStream" uid="uid://dycsjsjo3xbe8" path="res://Assets/sfx/soundreality-wind-blowing-457954.mp3" id="8_mds2f"]
+[ext_resource type="Script" uid="uid://b4akt728jpi0v" path="res://scripts/bird_spawner.gd" id="9_birds"]
 [ext_resource type="PackedScene" uid="uid://t0yrhsy5mo5e" path="res://scenes/grass.tscn" id="9_wgtfl"]
 [ext_resource type="Script" uid="uid://mydps3xxhia8" path="res://scripts/path_debug.gd" id="10_path"]
 [ext_resource type="PackedScene" uid="uid://b6skvnu5lj85b" path="res://scenes/flower.tscn" id="10_svi47"]
 [ext_resource type="PackedScene" uid="uid://b3dksb1403hhd" path="res://scenes/dandelion.tscn" id="13_arjxv"]
 [ext_resource type="Script" uid="uid://dshw2c2ojvjsq" path="res://scripts/cloud_parallax.gd" id="14_parallax"]
+[ext_resource type="Script" uid="uid://dy68agsji2vxn" path="res://scripts/moon.gd" id="15_moon"]
 [ext_resource type="Shader" uid="uid://bx6p2btkr8mum" path="res://shaders/godray.gdshader" id="16_8brjc"]
 [ext_resource type="AudioStream" uid="uid://b55e4imb8hqqj" path="res://Assets/music/drift_day.wav" id="17_day"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5xdv5"]
+shader = ExtResource("16_8brjc")
+shader_parameter/angle = -0.22
+shader_parameter/position = -0.2
+shader_parameter/spread = 1.0
+shader_parameter/cutoff = 0.15800005500500003
+shader_parameter/falloff = 0.0
+shader_parameter/edge_fade = 0.15
+shader_parameter/speed = 0.92
+shader_parameter/ray1_density = 8.0
+shader_parameter/ray2_density = 30.0
+shader_parameter/ray2_intensity = 0.526000024985
+shader_parameter/color = Color(1, 1, 1, 0.6)
+shader_parameter/hdr = false
+shader_parameter/seed = 10.0
 
 [sub_resource type="Curve2D" id="Curve2D_a"]
 _data = {
@@ -48,28 +72,61 @@ size = Vector2(220, 160)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5xdv5"]
 size = Vector2(361.0005, 9036.75)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5xdv5"]
-shader = ExtResource("16_8brjc")
-shader_parameter/angle = -0.22
-shader_parameter/position = -0.2
-shader_parameter/spread = 1.0
-shader_parameter/cutoff = 0.15800005500500003
-shader_parameter/falloff = 0.0
-shader_parameter/edge_fade = 0.15
-shader_parameter/speed = 0.92
-shader_parameter/ray1_density = 8.0
-shader_parameter/ray2_density = 30.0
-shader_parameter/ray2_intensity = 0.0
-shader_parameter/color = Color(1, 1, 1, 0.6)
-shader_parameter/hdr = false
-shader_parameter/seed = 10.0
-
 [node name="Drift" type="Node2D" unique_id=1080770655]
 script = ExtResource("1_room")
+time_of_day = 1
 
-[node name="Music" type="AudioStreamPlayer" parent="."]
+[node name="Godray" type="ColorRect" parent="." unique_id=186856081]
+visible = false
+material = SubResource("ShaderMaterial_5xdv5")
+offset_left = -2255.0
+offset_top = -4271.0
+offset_right = 7796.963
+offset_bottom = 2726.0
+
+[node name="Godray2" type="ColorRect" parent="." unique_id=1454043615]
+visible = false
+material = SubResource("ShaderMaterial_5xdv5")
+offset_left = -5726.0
+offset_top = -2790.0
+offset_right = 665.4795
+offset_bottom = 1659.0
+
+[node name="DayNight" type="CanvasModulate" parent="." unique_id=1200038771]
+
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=512153943]
 stream = ExtResource("17_day")
+volume_db = -5.0
 autoplay = true
+
+[node name="Fluff" type="AudioStreamPlayer2D" parent="Music" unique_id=1116471865]
+stream = ExtResource("3_jd5w8")
+volume_db = 20.0
+pitch_scale = 5.0
+
+[node name="Poof" type="AudioStreamPlayer2D" parent="Music" unique_id=1147598475]
+stream = ExtResource("4_d527q")
+volume_db = 10.0
+
+[node name="Walk" type="AudioStreamPlayer2D" parent="Music" unique_id=1183289257]
+stream = ExtResource("5_mg2cb")
+pitch_scale = 1.5
+
+[node name="Jump" type="AudioStreamPlayer2D" parent="Music" unique_id=206302727]
+stream = ExtResource("6_m70us")
+volume_db = -5.0
+pitch_scale = 3.0
+
+[node name="Ambience" type="AudioStreamPlayer2D" parent="Music" unique_id=297378585]
+stream = ExtResource("4_y6epy")
+volume_db = 24.0
+autoplay = true
+
+[node name="WindWhoosh" type="AudioStreamPlayer2D" parent="Music" unique_id=1074361425]
+stream = ExtResource("8_mds2f")
+volume_db = 18.0
+pitch_scale = 0.75
+attenuation = 0.0
 
 [node name="Sky" type="CanvasLayer" parent="." unique_id=1900425886]
 layer = -1
@@ -86,6 +143,7 @@ color = Color(0.690196, 0.878431, 0.917647, 1)
 [node name="Updraft" parent="." unique_id=95024445 instance=ExtResource("2_updraft")]
 z_index = 2
 position = Vector2(3488, 2790)
+lift_speed = 600.0
 
 [node name="WindRight" parent="." unique_id=625048384 instance=ExtResource("3_wind")]
 z_index = 2
@@ -544,12 +602,12 @@ collision_mask = 0
 
 [node name="Cliff" type="Sprite2D" parent="Platform" unique_id=1488769419]
 z_index = 1
-position = Vector2(-841.5, -198)
+position = Vector2(-841.5, 387.5)
 texture = ExtResource("6_cliff")
 
 [node name="Cliff2" type="Sprite2D" parent="Platform" unique_id=134169415]
 z_index = 1
-position = Vector2(-2748, -198)
+position = Vector2(-2748, 387.5)
 scale = Vector2(-1, 1)
 texture = ExtResource("6_cliff")
 
@@ -571,6 +629,12 @@ material = SubResource("ShaderMaterial_bok0l")
 position = Vector2(2085.0002, -537.99994)
 scale = Vector2(-2.3, 1.843)
 texture = ExtResource("7_clouds")
+
+[node name="Moon" type="Node2D" parent="Platform/BGCloudsLayer" unique_id=1882401933]
+visible = false
+z_index = -8
+position = Vector2(1500, -1280)
+script = ExtResource("15_moon")
 
 [node name="ForegroundCloudsLayer" type="Node2D" parent="Platform" unique_id=1122071185]
 script = ExtResource("14_parallax")
@@ -732,19 +796,27 @@ scale = Vector2(0.75, 0.75)
 position = Vector2(-83, 958)
 scale = Vector2(0.75, 0.75)
 
-[node name="Godray" type="ColorRect" parent="." unique_id=186856081]
-material = SubResource("ShaderMaterial_5xdv5")
-offset_left = -2255.0
-offset_top = -4271.0
-offset_right = 7796.963
-offset_bottom = 2726.0
+[node name="BirdSpawner" type="Node2D" parent="." unique_id=1770055013]
+position = Vector2(1700, 1200)
+script = ExtResource("9_birds")
 
-[node name="Godray2" type="ColorRect" parent="." unique_id=1454043615]
-material = SubResource("ShaderMaterial_5xdv5")
-offset_left = -5726.0
-offset_top = -2790.0
-offset_right = 665.4795
-offset_bottom = 1659.0
+[node name="ForegroundBirdSpawner" type="Node2D" parent="." unique_id=1770055014]
+position = Vector2(1700, 350)
+script = ExtResource("9_birds")
+area_size = Vector2(3400, 700)
+scroll_scale = Vector2(1.45, 1.45)
+spawn_interval_min = 8.0
+spawn_interval_max = 16.0
+move_speed_min = 70.0
+move_speed_max = 120.0
+flock_size_min = 1
+flock_size_max = 2
+flock_spread = Vector2(80, 30)
+scale_min = 0.75
+scale_max = 1.15
+bird_z = 2
+tint = Color(1, 1, 1, 0.95)
+initial_flocks = 2
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=2053258978]
 

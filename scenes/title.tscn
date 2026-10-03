@@ -1,0 +1,209 @@
+[gd_scene format=3 uid="uid://we505pdojeog"]
+
+[ext_resource type="Script" uid="uid://glm1f3308j66" path="res://scripts/title.gd" id="1_title"]
+[ext_resource type="AudioStream" uid="uid://b4bjo868npxgi" path="res://Assets/music/etherealskything.wav" id="2_music"]
+[ext_resource type="Shader" uid="uid://ci17e24q8o3qt" path="res://drift.gdshader" id="4_b3w7a"]
+[ext_resource type="Texture2D" uid="uid://b2blolc73eixo" path="res://Assets/images/smallercloud.png" id="5_4rr2b"]
+[ext_resource type="Shader" uid="uid://dexmydrykhi36" path="res://shaders/grass.gdshader" id="5_ia1n6"]
+[ext_resource type="Texture2D" uid="uid://crsek7kykbsq" path="res://Assets/images/drift_dandelion.png" id="6_hiwto"]
+[ext_resource type="Shader" uid="uid://cgrcibi8s81fo" path="res://shaders/white_key.gdshader" id="7_w65of"]
+[ext_resource type="Texture2D" uid="uid://dsropeicsb4jk" path="res://Assets/images/drift_seed_parti.png" id="8_ygloa"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yql1r"]
+shader = ExtResource("4_b3w7a")
+shader_parameter/wave_speed = 1.5
+shader_parameter/wave_freq = 10.0
+shader_parameter/wave_width = 0.2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6civk"]
+resource_local_to_scene = true
+shader = ExtResource("5_ia1n6")
+shader_parameter/speed = 1.05
+shader_parameter/minStrength = 0.05
+shader_parameter/maxStrength = 0.025
+shader_parameter/strengthScale = 215.0
+shader_parameter/interval = 3.5
+shader_parameter/detail = 1.0
+shader_parameter/distortion = 0.0
+shader_parameter/heightOffset = 0.0
+shader_parameter/offset = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7af2g"]
+shader = ExtResource("7_w65of")
+shader_parameter/cutoff = 0.96
+
+[sub_resource type="Gradient" id="Gradient_81wt4"]
+offsets = PackedFloat32Array(0, 0.26630434, 0.7880435, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_kcc3o"]
+gradient = SubResource("Gradient_81wt4")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6rcc6"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(100, 100, 1)
+angle_min = -25.0
+angle_max = 25.0
+direction = Vector3(0.12, -1, 0)
+spread = 16.0
+initial_velocity_min = 6.0
+initial_velocity_max = 16.0
+angular_velocity_min = -4.0
+angular_velocity_max = 4.0
+gravity = Vector3(3, -75, 0)
+damping_min = 0.2
+damping_max = 0.8
+scale_min = 0.39999998
+scale_max = 0.79999995
+color = Color(0.35, 0.32, 0.28, 1)
+color_ramp = SubResource("GradientTexture1D_kcc3o")
+turbulence_enabled = true
+turbulence_noise_strength = 0.25
+turbulence_noise_scale = 1.6
+turbulence_noise_speed = Vector3(0.08, -0.12, 0)
+turbulence_noise_speed_random = 0.15
+turbulence_influence_min = 0.02
+turbulence_influence_max = 0.08
+turbulence_initial_displacement_max = 6.0
+
+[node name="Title" type="Control" unique_id=128748312]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_title")
+
+[node name="Center" type="CenterContainer" parent="." unique_id=1308336471]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = 165.0
+offset_right = -2.0
+offset_bottom = 165.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Buttons" type="VBoxContainer" parent="Center" unique_id=373362619]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Play" type="Button" parent="Center/Buttons" unique_id=347049855]
+custom_minimum_size = Vector2(220, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Play"
+
+[node name="Exit" type="Button" parent="Center/Buttons" unique_id=2011497846]
+custom_minimum_size = Vector2(220, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Exit"
+
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=981419695]
+stream = ExtResource("2_music")
+volume_db = -4.0
+
+[node name="Stuff" type="Node2D" parent="." unique_id=390860331]
+
+[node name="ForegroundClouds" type="Sprite2D" parent="Stuff" unique_id=139801921]
+z_index = -2
+material = SubResource("ShaderMaterial_yql1r")
+position = Vector2(452, 840)
+scale = Vector2(0.88548076, 0.76667386)
+texture = ExtResource("5_4rr2b")
+
+[node name="DriftGrass" type="Sprite2D" parent="Stuff" unique_id=1281944875]
+material = SubResource("ShaderMaterial_6civk")
+position = Vector2(395, 788)
+texture = ExtResource("6_hiwto")
+offset = Vector2(-40, -170)
+
+[node name="SeedParti" type="GPUParticles2D" parent="Stuff/DriftGrass" unique_id=2072575853]
+z_index = 1
+material = SubResource("ShaderMaterial_7af2g")
+position = Vector2(-40, -286)
+amount = 6
+texture = ExtResource("8_ygloa")
+lifetime = 10.0
+preprocess = 6.0
+randomness = 0.6
+visibility_rect = Rect2(-180, -520, 420, 620)
+process_material = SubResource("ParticleProcessMaterial_6rcc6")
+
+[node name="DriftGrass2" type="Sprite2D" parent="Stuff" unique_id=590210875]
+material = SubResource("ShaderMaterial_6civk")
+position = Vector2(898, 846)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_hiwto")
+offset = Vector2(-40, -170)
+
+[node name="SeedParti" type="GPUParticles2D" parent="Stuff/DriftGrass2" unique_id=1071966950]
+z_index = 1
+material = SubResource("ShaderMaterial_7af2g")
+position = Vector2(-40, -286)
+amount = 6
+texture = ExtResource("8_ygloa")
+lifetime = 10.0
+preprocess = 6.0
+randomness = 0.6
+visibility_rect = Rect2(-180, -520, 420, 620)
+process_material = SubResource("ParticleProcessMaterial_6rcc6")
+
+[node name="DriftGrass3" type="Sprite2D" parent="Stuff" unique_id=920649274]
+material = SubResource("ShaderMaterial_6civk")
+position = Vector2(100, 820.00006)
+scale = Vector2(-0.75, 0.75)
+texture = ExtResource("6_hiwto")
+offset = Vector2(-40, -170)
+
+[node name="SeedParti" type="GPUParticles2D" parent="Stuff/DriftGrass3" unique_id=320198513]
+z_index = 1
+material = SubResource("ShaderMaterial_7af2g")
+position = Vector2(-40, -286)
+amount = 6
+texture = ExtResource("8_ygloa")
+lifetime = 10.0
+preprocess = 6.0
+randomness = 0.6
+visibility_rect = Rect2(-180, -520, 420, 620)
+process_material = SubResource("ParticleProcessMaterial_6rcc6")
+
+[node name="DriftGrass4" type="Sprite2D" parent="Stuff" unique_id=907674452]
+material = SubResource("ShaderMaterial_6civk")
+position = Vector2(1141, 813.00006)
+scale = Vector2(-0.75, 0.75)
+texture = ExtResource("6_hiwto")
+offset = Vector2(-40, -170)
+
+[node name="SeedParti" type="GPUParticles2D" parent="Stuff/DriftGrass4" unique_id=852437264]
+z_index = 1
+material = SubResource("ShaderMaterial_7af2g")
+position = Vector2(-40, -286)
+amount = 6
+texture = ExtResource("8_ygloa")
+lifetime = 10.0
+preprocess = 6.0
+randomness = 0.6
+visibility_rect = Rect2(-180, -520, 420, 620)
+process_material = SubResource("ParticleProcessMaterial_6rcc6")
+
+[node name="BG" type="Node2D" parent="." unique_id=1826476653]
+z_index = -6
+
+[node name="Background" type="ColorRect" parent="BG" unique_id=584192152]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -34.0
+offset_top = -40.0
+offset_right = 1342.0
+offset_bottom = 775.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.690196, 0.878431, 0.917647, 1)

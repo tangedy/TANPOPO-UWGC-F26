@@ -145,8 +145,10 @@ func _update_visual(delta: float) -> void:
 	if mat == null:
 		return
 	var target := 1.0 if is_blowing() else 0.0
-	_active_blend = move_toward(_active_blend, target, delta * 14.0)
+	_active_blend = move_toward(_active_blend, target, delta * 1.5)
 	mat.set_shader_parameter("active", _active_blend)
+	# Direction of the sweep: fill when heading on, empty when heading off.
+	mat.set_shader_parameter("fill_mode", target)
 	mat.set_shader_parameter("curve", curve)
 	var flow := lerpf(52.0, 160.0, clampf(strength / 800.0, 0.0, 1.0))
 	mat.set_shader_parameter("flow_speed", flow)

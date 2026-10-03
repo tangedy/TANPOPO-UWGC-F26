@@ -20,6 +20,19 @@ const RUN_FPS_START := 4.0
 const RUN_FPS_END := 7.0
 ## How many times the run cycle plays on the way to the ledge.
 const RUN_CYCLES := 2.5
+## After the run, that last pose holds, squashes, then eases into moving or reaching.
+## The hop plays first. Squash starts once the rise has mostly crested, or after this long.
+const LAUNCH_RISE := 0.42
+const LAUNCH_HOLD := 0.08
+const LAUNCH_SQUISH := 0.1
+const LAUNCH_RELEASE := 0.1
+const LAUNCH_SQUASH_X := 1.14
+const LAUNCH_SQUASH_Y := 0.76
+## Takeoff squash, separate from the squash into the flight pose.
+const JUMP_SQUISH := 0.06
+const JUMP_UNSQUISH := 0.09
+## Lean used for the hop. Glide lean comes back once the hop crests.
+const LEAP_LEAN := 4.0
 
 ## Drawn height of the idle sprite, in pixels. Flight frames share that scale. Anchors shift on top.
 @export var sprite_height := 156.0
@@ -71,7 +84,9 @@ enum Pose { STAND, RUN, MOVE, REACH }
 @export var run_accel := 1800.0
 @export var run_max_speed := 430.0
 ## Small hop off the platform, in pixels per second upward.
-@export var leap_speed := 120.0
+@export var leap_speed := 340.0
+## Downward acceleration during the hop, so it crests quickly.
+@export var leap_gravity := 620.0
 ## Seconds of carried run speed before left/right control turns on.
 @export var leap_drift_time := 1.0
 ## Distance between the traveler and each collected object.
@@ -99,6 +114,14 @@ var _frame := 0
 var _frame_clock := 0.0
 var _run_cursor := 0.0
 var _run_frame := 0
+var _launch_blend := false
+var _launch_time := 0.0
+var _launch_rise := 0.0
+var _launch_release := 0.0
+var _jump_squish := 0.0
+var _leap_hop := false
+var _step_frame := -1
+var _whoosh_level := 0.0
 var _lifted := false
 var _run_start_x := 0.0
 ## Matches the node's scale so speeds and distances stay in proportion to her size.
@@ -187,6 +210,13 @@ func start_run() -> void:
 	velocity.x = _sized(40.0)
 	_run_cursor = 0.0
 	_run_frame = 0
+	_launch_blend = false
+	_launch_time = 0.0
+	_launch_rise = 0.0
+	_launch_release = 0.0
+	_jump_squish = 0.0
+	_leap_hop = false
+	_step_frame = -1
 	_run_start_x = global_position.x
 	_apply_pose(Pose.RUN)
 
@@ -258,6 +288,7 @@ func _physics_process(delta: float) -> void:
 	if state == State.FINISHED:
 		velocity = Vector2.ZERO
 		_sync_pose(delta)
+		_update_wind_whoosh(delta)
 		return
 	if state == State.WAIT:
 		motion_mode = MOTION_MODE_GROUNDED
@@ -265,6 +296,7 @@ func _physics_process(delta: float) -> void:
 		velocity.y = _sized(40.0)
 		move_and_slide()
 		_sync_pose(delta)
+		_update_wind_whoosh(delta)
 		return
 	if state == State.RUN_OFF:
 		_run_off(delta)
@@ -278,6 +310,7 @@ func _physics_process(delta: float) -> void:
 	if state == State.GLIDE:
 		_sink_out_of_pinch(position_before_slide, velocity_before_slide, delta)
 	_sync_pose(delta)
+	_update_wind_whoosh(delta)
 	_record_trail()
 	_update_followers(delta)
 
@@ -304,6 +337,9 @@ func _leap() -> void:
 	floor_snap_length = 0.0
 	_control_timer = leap_drift_time
 	velocity.y = -_sized(leap_speed)
+	_leap_hop = true
+	_jump_squish = 0.0001
+	_play_sfx("Jump")
 	camera.zoom = Vector2(0.5, 0.5)
 	_set_seed_parti(true)
 
@@ -391,8 +427,12 @@ func _sink_out_of_pinch(before_pos: Vector2, before_vel: Vector2, delta: float) 
 func _apply_vertical(delta: float, allow_dive: bool) -> void:
 	var dive := allow_dive and Input.is_action_pressed("down")
 	if velocity.y < 0.0:
-		velocity.y += _sized(gravity) * delta
+		var pull := leap_gravity if _leap_hop else gravity
+		velocity.y += _sized(pull) * delta
+		if _leap_hop and velocity.y >= 0.0:
+			_leap_hop = false
 		return
+	_leap_hop = false
 	var base := _sized(dive_speed if dive else fall_speed)
 	var terminal := maxf(base + absf(velocity.x) * sink_per_horizontal, 1.0)
 	var drag := _sized(fall_gravity) / terminal
@@ -411,6 +451,7 @@ func _sync_pose(delta: float) -> void:
 			_run_cursor = minf(_run_cursor + _run_fps() * delta, limit)
 		var shown := mini(int(_run_cursor), _run_steps() - 1)
 		_run_frame = shown % RUN_FRAMES.size()
+		_play_run_step()
 	elif state == State.GLIDE:
 		if _lifted or velocity.y < 0.0:
 			_lifted = true
@@ -427,6 +468,27 @@ func _sync_pose(delta: float) -> void:
 		else:
 			pose = Pose.RUN
 			facing = 1
+	var flight := pose == Pose.MOVE or pose == Pose.REACH
+	if _launch_blend and state != State.GLIDE:
+		_launch_blend = false
+		_launch_release = 0.0
+	if _launch_blend:
+		_launch_time += delta
+		if _launch_time >= LAUNCH_HOLD + LAUNCH_SQUISH:
+			_launch_blend = false
+			_launch_release = LAUNCH_RELEASE
+			_play_flight_sfx()
+		else:
+			pose = Pose.RUN
+	elif flight and _pose == Pose.RUN and state == State.GLIDE:
+		_launch_rise += delta
+		var still_rising := velocity.y < -_sized(30.0) and _launch_rise < LAUNCH_RISE
+		if still_rising:
+			pose = Pose.RUN
+		else:
+			_launch_blend = true
+			_launch_time = 0.0
+			pose = Pose.RUN
 	if pose == Pose.MOVE or pose == Pose.REACH:
 		_frame_clock += delta
 		if _frame_clock >= frame_time:
@@ -438,6 +500,7 @@ func _sync_pose(delta: float) -> void:
 	if facing != 0:
 		_facing = facing
 	_apply_pose(pose)
+	_apply_launch_squish(delta)
 
 
 func _run_fps() -> float:
@@ -520,10 +583,108 @@ func _apply_pose(pose: Pose) -> void:
 	visual.position = pos
 
 
+func _smooth(u: float) -> float:
+	return u * u * (3.0 - 2.0 * u)
+
+
+func _apply_launch_squish(delta: float) -> void:
+	var amount := 0.0
+	if _launch_blend:
+		var into := _launch_time - LAUNCH_HOLD
+		if into > 0.0:
+			amount = _smooth(clampf(into / LAUNCH_SQUISH, 0.0, 1.0))
+	elif _launch_release > 0.0:
+		amount = _smooth(clampf(_launch_release / LAUNCH_RELEASE, 0.0, 1.0))
+		_launch_release = maxf(_launch_release - delta, 0.0)
+	amount = maxf(amount, _jump_squish_amount(delta))
+	if amount <= 0.0 or visual.texture == null:
+		return
+	var prev_h := visual.texture.get_height() * visual.scale.y
+	visual.scale = Vector2(
+		visual.scale.x * lerpf(1.0, LAUNCH_SQUASH_X, amount),
+		visual.scale.y * lerpf(1.0, LAUNCH_SQUASH_Y, amount)
+	)
+	var new_h := visual.texture.get_height() * visual.scale.y
+	visual.position.y += (prev_h - new_h) * 0.5
+
+
+func _jump_squish_amount(delta: float) -> float:
+	if _jump_squish <= 0.0:
+		return 0.0
+	_jump_squish += delta
+	var total := JUMP_SQUISH + JUMP_UNSQUISH
+	if _jump_squish >= total:
+		_jump_squish = 0.0
+		return 0.0
+	if _jump_squish <= JUMP_SQUISH:
+		return _smooth(_jump_squish / JUMP_SQUISH)
+	var u := 1.0 - (_jump_squish - JUMP_SQUISH) / JUMP_UNSQUISH
+	return _smooth(clampf(u, 0.0, 1.0))
+
+
 func _lean_with_speed() -> void:
 	var speed_ref := maxf(_sized(glide_speed), 1.0)
 	var amount := clampf(velocity.x / speed_ref, -1.0, 1.0)
-	visual.rotation = amount * deg_to_rad(max_lean)
+	var lean := LEAP_LEAN if _leap_hop else max_lean
+	visual.rotation = amount * deg_to_rad(lean)
+
+
+func _play_run_step() -> void:
+	if _run_frame == _step_frame:
+		return
+	_step_frame = _run_frame
+	# run_3 and run_6 are the airborne frames of the cycle.
+	if _run_frame == 2 or _run_frame == 5:
+		return
+	_play_sfx("Walk", randf_range(1.5, 2.0))
+
+
+func _update_wind_whoosh(delta: float) -> void:
+	var player := _sfx_player("WindWhoosh")
+	if player == null:
+		return
+	var flying := state == State.GLIDE and (_pose == Pose.MOVE or _pose == Pose.REACH)
+	var target := 0.0
+	if flying:
+		var cap := Vector2(_sized(900.0), _sized(520.0)).length()
+		target = clampf(velocity.length() / maxf(cap, 1.0), 0.0, 1.0)
+	var blend := 1.0 - exp(-3.5 * delta)
+	_whoosh_level = lerpf(_whoosh_level, target, blend)
+	if _whoosh_level <= 0.001 and not flying:
+		_whoosh_level = 0.0
+		if player.playing:
+			player.stop()
+		return
+	player.global_position = global_position
+	player.pitch_scale = lerpf(0.75, 1.0, _whoosh_level)
+	if _whoosh_level <= 0.0001:
+		player.volume_db = -80.0
+	else:
+		player.volume_db = linear_to_db(_whoosh_level) + 18.0
+	if not player.playing:
+		player.play()
+
+
+func _play_flight_sfx() -> void:
+	_play_sfx("Fluff")
+	_play_sfx("Poof")
+
+
+func _play_sfx(node_name: String, pitch: float = -1.0) -> void:
+	var player := _sfx_player(node_name)
+	if player == null:
+		return
+	player.global_position = global_position
+	if pitch >= 0.0:
+		player.pitch_scale = pitch
+	player.play()
+
+
+func _sfx_player(node_name: String) -> AudioStreamPlayer2D:
+	var room := get_parent()
+	if room == null:
+		return null
+	return room.get_node_or_null("Music/" + node_name) as AudioStreamPlayer2D
 
 
 func _clear_forces() -> void:

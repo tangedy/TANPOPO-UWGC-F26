@@ -3,20 +3,49 @@ extends Node2D
 signal returned
 
 const InputSetup = preload("res://scripts/input_setup.gd")
+const DAY_MUSIC := preload("res://Assets/music/drift_day.wav")
+const NIGHT_MUSIC := preload("res://Assets/music/drift_night.wav")
+
+enum TimeOfDay { DAY, SUNSET, NIGHT }
 
 @export var required_collectibles := 3
+@export var time_of_day: TimeOfDay = TimeOfDay.DAY:
+	set(value):
+		time_of_day = value
+		if is_inside_tree():
+			_apply_time_of_day()
+
+const _SKY := {
+	TimeOfDay.DAY: Color(0.690196, 0.878431, 0.917647, 1),
+	TimeOfDay.SUNSET: Color(0.93, 0.48, 0.36, 1),
+	TimeOfDay.NIGHT: Color(0.05, 0.07, 0.16, 1),
+}
+const _TINT := {
+	TimeOfDay.DAY: Color(1, 1, 1, 1),
+	TimeOfDay.SUNSET: Color(1.0, 0.72, 0.52, 1),
+	TimeOfDay.NIGHT: Color(0.38, 0.42, 0.68, 1),
+}
+const _TIME_LABELS := {
+	TimeOfDay.DAY: "Day",
+	TimeOfDay.SUNSET: "Sunset",
+	TimeOfDay.NIGHT: "Night",
+}
 
 var collected := 0
 
 var _ending := false
 var _chase := false
 var _listen_for_chase := false
+var _time_button: Button
 
 @onready var glow: CanvasItem = $Platform/CompletionArea/Glow
 @onready var completion_area: Area2D = $Platform/CompletionArea
 @onready var prompt: Label = $UI/Prompt
 @onready var peppermint: Node = $Peppermint
 @onready var music: AudioStreamPlayer = $Music
+@onready var sky: ColorRect = $Sky/ColorRect
+@onready var day_night: CanvasModulate = $DayNight
+@onready var moon: Node2D = $Platform/BGCloudsLayer/Moon
 
 
 func _enter_tree() -> void:
@@ -24,10 +53,8 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
-	if music.stream is AudioStreamWAV:
-		music.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
-	if not music.playing:
-		music.play()
+	_build_time_toggle()
+	_apply_time_of_day()
 	InputSetup.ensure()
 	glow.visible = false
 	completion_area.monitoring = false
@@ -52,6 +79,70 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _listen_for_chase and event.is_action_pressed("chase"):
 		_chase = true
 		get_viewport().set_input_as_handled()
+
+
+func _build_time_toggle() -> void:
+	var button := Button.new()
+	button.name = "TimeToggle"
+	button.position = Vector2(16, 16)
+	button.custom_minimum_size = Vector2(120, 36)
+	$UI.add_child(button)
+	button.pressed.connect(_cycle_time)
+	_time_button = button
+	_refresh_time_button()
+
+
+func _cycle_time() -> void:
+	time_of_day = ((int(time_of_day) + 1) % 3) as TimeOfDay
+
+
+func _refresh_time_button() -> void:
+	if _time_button:
+		_time_button.text = _TIME_LABELS[time_of_day]
+
+
+func _apply_time_of_day() -> void:
+	if sky:
+		sky.color = _SKY[time_of_day]
+	if day_night:
+		day_night.color = _TINT[time_of_day]
+	if moon:
+		moon.visible = time_of_day == TimeOfDay.NIGHT
+		# Cancel the night tint so the disc stays bright white.
+		var tint: Color = _TINT[time_of_day]
+		moon.modulate = Color(
+			1.05 / maxf(tint.r, 0.05),
+			1.02 / maxf(tint.g, 0.05),
+			0.98 / maxf(tint.b, 0.05),
+			1.0
+		)
+	_refresh_time_button()
+	match time_of_day:
+		TimeOfDay.DAY:
+			_play_music(DAY_MUSIC)
+		TimeOfDay.NIGHT:
+			_play_music(NIGHT_MUSIC)
+		_:
+			_play_music(null)
+
+
+func _play_music(stream: AudioStream) -> void:
+	if music == null:
+		return
+	if stream == null:
+		music.stop()
+		return
+	if music.stream == stream and music.playing:
+		return
+	music.stream = stream
+	if stream is AudioStreamWAV:
+		var wav := stream as AudioStreamWAV
+		var frames := int(wav.get_length() * wav.mix_rate)
+		wav.loop_begin = 0
+		if frames > 1:
+			wav.loop_end = frames
+		wav.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	music.play()
 
 
 func _opening() -> void:
