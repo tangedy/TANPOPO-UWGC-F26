@@ -33,6 +33,7 @@ color = Color(0.690196, 0.878431, 0.917647, 1)
 [node name="Updraft" parent="." unique_id=95024445 instance=ExtResource("2_updraft")]
 z_index = 2
 position = Vector2(2741, 2395)
+lift_speed = 400.0
 
 [node name="WindRight" parent="." unique_id=625048384 instance=ExtResource("3_wind")]
 z_index = 2
@@ -110,9 +111,8 @@ position = Vector2(280, 1450)
 collision_mask = 0
 
 [node name="Cliff" type="Sprite2D" parent="Platform" unique_id=1488769419]
-position = Vector2(-841.5, -408)
+position = Vector2(-841.5, -198)
 texture = ExtResource("6_cliff")
-metadata/_edit_lock_ = true
 
 [node name="Clouds" type="Sprite2D" parent="Platform" unique_id=706455837]
 z_index = 1
