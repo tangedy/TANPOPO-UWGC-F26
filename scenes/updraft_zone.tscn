@@ -3,14 +3,13 @@
 [ext_resource type="Script" uid="uid://bi3rs3hq5bkge" path="res://scripts/updraft_zone.gd" id="1_updraft"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tlenm"]
-size = Vector2(4600, 700)
+size = Vector2(6000, 700)
 
 [node name="UpdraftZone" type="Area2D" unique_id=1304608146]
 collision_layer = 0
 collision_mask = 6
 monitorable = false
 script = ExtResource("1_updraft")
-lift_speed = 1000.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=219817647]
 shape = SubResource("RectangleShape2D_tlenm")
