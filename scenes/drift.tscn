@@ -9,33 +9,13 @@
 [ext_resource type="Texture2D" uid="uid://b5ot21jb3anjd" path="res://Assets/images/clouds_rough.png" id="7_clouds"]
 [ext_resource type="Texture2D" uid="uid://c6wmgpoa2fhc1" path="res://Assets/images/grandma_stand_rough.png" id="8_grandma"]
 [ext_resource type="PackedScene" uid="uid://t0yrhsy5mo5e" path="res://scenes/grass.tscn" id="9_wgtfl"]
+[ext_resource type="PackedScene" uid="uid://b6skvnu5lj85b" path="res://scenes/flower.tscn" id="10_svi47"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_complete"]
 size = Vector2(220, 160)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5xdv5"]
 size = Vector2(167, 5073)
-
-[sub_resource type="Curve2D" id="Curve2D_a"]
-resource_local_to_scene = true
-_data = {
-"points": PackedVector2Array(-25.342, 0, 25.342, 0, 0, -120, -20.502, -14.895, 20.502, 14.895, 70.534, -97.082, -7.831, -24.101, 7.831, 24.101, 114.127, -37.082, 7.831, -24.101, -7.831, 24.101, 114.127, 37.082, 20.502, -14.895, -20.502, 14.895, 70.534, 97.082, 25.342, 0, -25.342, 0, 0, 120, 20.502, 14.895, -20.502, -14.895, -70.534, 97.082, 7.831, 24.101, -7.831, -24.101, -114.127, 37.082, -7.831, 24.101, 7.831, -24.101, -114.127, -37.082, -20.502, 14.895, 20.502, -14.895, -70.534, -97.082)
-}
-point_count = 10
-
-[sub_resource type="Curve2D" id="Curve2D_b"]
-resource_local_to_scene = true
-_data = {
-"points": PackedVector2Array(-25.342, 0, 25.342, 0, 0, -120, -20.502, -14.895, 20.502, 14.895, 70.534, -97.082, -7.831, -24.101, 7.831, 24.101, 114.127, -37.082, 7.831, -24.101, -7.831, 24.101, 114.127, 37.082, 20.502, -14.895, -20.502, 14.895, 70.534, 97.082, 25.342, 0, -25.342, 0, 0, 120, 20.502, 14.895, -20.502, -14.895, -70.534, 97.082, 7.831, 24.101, -7.831, -24.101, -114.127, 37.082, -7.831, 24.101, 7.831, -24.101, -114.127, -37.082, -20.502, 14.895, 20.502, -14.895, -70.534, -97.082)
-}
-point_count = 10
-
-[sub_resource type="Curve2D" id="Curve2D_c"]
-resource_local_to_scene = true
-_data = {
-"points": PackedVector2Array(-25.342, 0, 25.342, 0, 0, -120, -20.502, -14.895, 20.502, 14.895, 70.534, -97.082, -7.831, -24.101, 7.831, 24.101, 114.127, -37.082, 7.831, -24.101, -7.831, 24.101, 114.127, 37.082, 20.502, -14.895, -20.502, 14.895, 70.534, 97.082, 25.342, 0, -25.342, 0, 0, 120, 20.502, 14.895, -20.502, -14.895, -70.534, 97.082, 7.831, 24.101, -7.831, -24.101, -114.127, 37.082, -7.831, 24.101, 7.831, -24.101, -114.127, -37.082, -20.502, 14.895, 20.502, -14.895, -70.534, -97.082)
-}
-point_count = 10
 
 [node name="Drift" type="Node2D" unique_id=1080770655]
 script = ExtResource("1_room")
@@ -114,9 +94,6 @@ breathe_amount = 0.45
 breathe_period = 3.4
 start_ratio = 0.05
 
-[node name="Path2D" parent="ObjectA" index="0"]
-curve = SubResource("Curve2D_a")
-
 [node name="ObjectB" parent="." unique_id=623485281 instance=ExtResource("4_object")]
 position = Vector2(1518.9999, 1468)
 speed = 60.0
@@ -124,18 +101,12 @@ breathe_amount = 0.7
 breathe_period = 5.5
 start_ratio = 0.4
 
-[node name="Path2D" parent="ObjectB" index="0"]
-curve = SubResource("Curve2D_b")
-
 [node name="ObjectC" parent="." unique_id=2135189073 instance=ExtResource("4_object")]
 position = Vector2(1641, 1083)
 speed = 100.0
 breathe_amount = 0.35
 breathe_period = 2.6
 start_ratio = 0.75
-
-[node name="Path2D" parent="ObjectC" index="0"]
-curve = SubResource("Curve2D_c")
 
 [node name="Platform" type="StaticBody2D" parent="." unique_id=1851131555]
 position = Vector2(280, 1450)
@@ -188,27 +159,68 @@ position = Vector2(3086, -1234)
 shape = SubResource("RectangleShape2D_5xdv5")
 
 [node name="Grandma" type="Sprite2D" parent="." unique_id=625137024]
+visible = false
 z_index = 4
 position = Vector2(-633.00006, 822)
 scale = Vector2(0.1853, 0.1853)
 texture = ExtResource("8_grandma")
 
 [node name="Peppermint" parent="." unique_id=262609286 instance=ExtResource("5_peppermint")]
-z_index = -1
+z_index = -5
 position = Vector2(-488.00003, 899)
 scale = Vector2(2.5, 2.5)
 
 [node name="Foliage" type="Node2D" parent="." unique_id=1666564183]
-z_index = -4
 
 [node name="Grass" parent="Foliage" unique_id=1211563343 instance=ExtResource("9_wgtfl")]
 position = Vector2(-1059, 879)
 
 [node name="Grass2" parent="Foliage" unique_id=1109854014 instance=ExtResource("9_wgtfl")]
 position = Vector2(-1450, 884)
+scale = Vector2(-1, 1)
+
+[node name="Grass4" parent="Foliage" unique_id=610818830 instance=ExtResource("9_wgtfl")]
+position = Vector2(-1286, 884)
+
+[node name="Grass5" parent="Foliage" unique_id=1218322351 instance=ExtResource("9_wgtfl")]
+position = Vector2(-885, 884)
+scale = Vector2(-1, 1)
+
+[node name="Grass6" parent="Foliage" unique_id=113173234 instance=ExtResource("9_wgtfl")]
+position = Vector2(-561, 884)
+
+[node name="Grass7" parent="Foliage" unique_id=1581894543 instance=ExtResource("9_wgtfl")]
+position = Vector2(-531, 884)
+scale = Vector2(-1, 1)
+
+[node name="Grass8" parent="Foliage" unique_id=1603499934 instance=ExtResource("9_wgtfl")]
+position = Vector2(-308, 884)
+scale = Vector2(-1, 1)
+
+[node name="Grass9" parent="Foliage" unique_id=1270815722 instance=ExtResource("9_wgtfl")]
+position = Vector2(-136, 884)
+
+[node name="Grass10" parent="Foliage" unique_id=1121246606 instance=ExtResource("9_wgtfl")]
+position = Vector2(322, 884)
 
 [node name="Grass3" parent="Foliage" unique_id=1364408392 instance=ExtResource("9_wgtfl")]
 position = Vector2(209, 884)
+scale = Vector2(-1, 1)
+
+[node name="Flower" parent="Foliage" unique_id=1246220896 instance=ExtResource("10_svi47")]
+position = Vector2(-1419, 878)
+
+[node name="Flower2" parent="Foliage" unique_id=2117425683 instance=ExtResource("10_svi47")]
+position = Vector2(-853, 878)
+
+[node name="Flower3" parent="Foliage" unique_id=1308831469 instance=ExtResource("10_svi47")]
+position = Vector2(-209, 878)
+
+[node name="Flower4" parent="Foliage" unique_id=1943765424 instance=ExtResource("10_svi47")]
+position = Vector2(253, 878)
+
+[node name="Flower5" parent="Foliage" unique_id=220503637 instance=ExtResource("10_svi47")]
+position = Vector2(-413, 878)
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=2053258978]
 
