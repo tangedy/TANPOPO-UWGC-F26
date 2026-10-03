@@ -76,6 +76,8 @@ enum Pose { STAND, RUN, MOVE, REACH }
 @export var leap_drift_time := 1.0
 ## Distance between the traveler and each collected object.
 @export var follow_spacing := 46.0
+## Follow keepout radius around the body center, before adding the seed's own size.
+@export var follow_keepout_radius := 40.0
 
 var state := State.WAIT
 var followers: Array[Node2D] = []
@@ -248,8 +250,8 @@ func attach_follower(node: Node2D) -> void:
 		return
 	followers.append(node)
 	node.z_index = 4
-	_ensure_trail_length(_follow_distance(followers.size() - 1) + 8.0)
-	node.global_position = _point_behind(_follow_distance(followers.size() - 1))
+	_ensure_trail_length(_trail_need())
+	node.global_position = _clear_follow_point(_follow_distance(followers.size() - 1), node)
 
 
 func _physics_process(delta: float) -> void:
@@ -535,12 +537,117 @@ func _body_center() -> Vector2:
 	return to_global(Vector2(0, -sprite_height * 0.82))
 
 
+func _follow_keepout_center() -> Vector2:
+	return body_rect().get_center()
+
+
 func _sized(amount: float) -> float:
 	return amount * _size_scale
 
 
 func _follow_distance(index: int) -> float:
 	return _sized(22.0 + follow_spacing * float(index))
+
+
+func _trail_need() -> float:
+	var radius := _sized(follow_keepout_radius)
+	if not followers.is_empty() and is_instance_valid(followers[0]):
+		radius = _follow_keepout_radius(followers[0])
+	return _follow_distance(maxi(followers.size(), 1)) + _sized(follow_spacing + 40.0) + radius * 2.0
+
+
+func _follower_shape(follower: Node2D) -> CollisionShape2D:
+	for child in follower.get_children():
+		var shape_node := child as CollisionShape2D
+		if shape_node != null:
+			return shape_node
+	return null
+
+
+func _follower_half_extents(follower: Node2D) -> Vector2:
+	var shape_node := _follower_shape(follower)
+	if shape_node == null:
+		return Vector2(_sized(16.0), _sized(20.0))
+	var rect := shape_node.shape as RectangleShape2D
+	if rect == null:
+		return Vector2(_sized(16.0), _sized(20.0))
+	var xf := shape_node.global_transform
+	var half := rect.size * 0.5
+	return Vector2(
+		absf(xf.x.x) * half.x + absf(xf.y.x) * half.y,
+		absf(xf.x.y) * half.x + absf(xf.y.y) * half.y
+	)
+
+
+func _follower_collision_offset(follower: Node2D) -> Vector2:
+	var shape_node := _follower_shape(follower)
+	if shape_node == null:
+		return Vector2.ZERO
+	return shape_node.global_position - follower.global_position
+
+
+func _follow_keepout_radius(follower: Node2D) -> float:
+	var half := _follower_half_extents(follower)
+	var seed_r := maxf(half.x, half.y)
+	return _sized(follow_keepout_radius) + seed_r + _follower_collision_offset(follower).length()
+
+
+func _push_out_of_circle(point: Vector2, center: Vector2, radius: float) -> Vector2:
+	var offset := point - center
+	var dist := offset.length()
+	if dist >= radius:
+		return point
+	if dist < 0.0001:
+		return center + Vector2.LEFT * radius
+	return center + offset * (radius / dist)
+
+
+func _segment_cuts_circle(from: Vector2, to: Vector2, center: Vector2, radius: float) -> bool:
+	var ab := to - from
+	var ac := center - from
+	var ab_len_sq := ab.length_squared()
+	if ab_len_sq < 0.0001:
+		return from.distance_to(center) < radius
+	var t := clampf(ac.dot(ab) / ab_len_sq, 0.0, 1.0)
+	return (from + ab * t).distance_to(center) < radius - 0.5
+
+
+func _move_around_keepout(from: Vector2, to: Vector2, center: Vector2, radius: float, max_step: float, blend: float) -> Vector2:
+	from = _push_out_of_circle(from, center, radius)
+	to = _push_out_of_circle(to, center, radius)
+	if not _segment_cuts_circle(from, to, center, radius):
+		var desired := from.lerp(to, blend)
+		var delta := desired - from
+		if delta.length() > max_step:
+			desired = from + delta.normalized() * max_step
+		return desired
+	var v0 := from - center
+	var v1 := to - center
+	var r0 := maxf(v0.length(), radius)
+	var r1 := maxf(v1.length(), radius)
+	var a0 := v0.angle() if v0.length_squared() > 0.0001 else 0.0
+	var a1 := v1.angle() if v1.length_squared() > 0.0001 else 0.0
+	var ang := wrapf(a1 - a0, -PI, PI)
+	var path_len := absf(ang) * (r0 + r1) * 0.5 + absf(r1 - r0)
+	if path_len <= 0.0001:
+		return to
+	var t := clampf(minf(path_len * blend, max_step) / path_len, 0.0, 1.0)
+	return center + Vector2.from_angle(a0 + ang * t) * lerpf(r0, r1, t)
+
+
+func _clear_follow_point(distance: float, follower: Node2D) -> Vector2:
+	var center := _follow_keepout_center()
+	var radius := _follow_keepout_radius(follower)
+	_ensure_trail_length(distance + radius * 2.0)
+	var point := _point_behind(distance)
+	var extra := 0.0
+	var step := _sized(4.0)
+	var guard := 0
+	while point.distance_to(center) < radius and guard < 200:
+		extra += step
+		point = _point_behind(distance + extra)
+		guard += 1
+	return _push_out_of_circle(point, center, radius)
 
 
 func _record_trail() -> void:
@@ -560,8 +667,7 @@ func _record_trail() -> void:
 		_trail[_trail.size() - 1] = point
 		if committed.distance_to(point) >= _sized(2.0):
 			_trail.append(point)
-	var keep := _follow_distance(maxi(followers.size(), 1)) + _sized(follow_spacing + 40.0)
-	_trim_trail(keep)
+	_trim_trail(_trail_need())
 
 
 func _trim_trail(max_distance: float) -> void:
@@ -630,9 +736,25 @@ func _point_behind(distance: float) -> Vector2:
 
 func _update_followers(delta: float) -> void:
 	var blend := 1.0 - exp(-14.0 * delta)
+	var max_step := maxf(velocity.length(), _sized(80.0)) * delta
+	var occupied := 0.0
+	var center := _follow_keepout_center()
 	for i in followers.size():
 		var follower := followers[i]
 		if not is_instance_valid(follower):
 			continue
-		var target := _point_behind(_follow_distance(i))
-		follower.global_position = follower.global_position.lerp(target, blend)
+		var dist := maxf(_follow_distance(i), occupied)
+		var target := _clear_follow_point(dist, follower)
+		var used := dist
+		var behind := _point_behind(dist)
+		if target.distance_squared_to(behind) > 0.01:
+			used = dist + target.distance_to(behind)
+		occupied = used + _sized(follow_spacing)
+		follower.global_position = _move_around_keepout(
+			follower.global_position,
+			target,
+			center,
+			_follow_keepout_radius(follower),
+			max_step,
+			blend
+		)
