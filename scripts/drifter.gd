@@ -116,6 +116,10 @@ func _ready() -> void:
 	velocity = Vector2.ZERO
 	camera.make_current()
 	camera.zoom = Vector2(1.0, 1.0)
+	camera.limit_left = -1500
+	camera.limit_top = -1100
+	camera.limit_right = 3200
+	camera.limit_bottom = 2145
 	_leap_point = get_parent().get_node_or_null("Platform/LeapPoint") as Node2D
 	_apply_pose(Pose.STAND)
 
@@ -192,6 +196,7 @@ func _physics_process(delta: float) -> void:
 		_run_off(delta)
 	else:
 		_glide(delta)
+	_debug_fast_x()
 	_clear_forces()
 	move_and_slide()
 	_sync_pose(delta)
@@ -232,6 +237,17 @@ func _zoom_through_run() -> void:
 	var eased := t * t * (3.0 - 2.0 * t)
 	var zoom := lerpf(1.0, 0.5, eased)
 	camera.zoom = Vector2(zoom, zoom)
+
+
+func _debug_fast_x() -> void:
+	if not Input.is_physical_key_pressed(KEY_O):
+		return
+	var dir := Input.get_axis("left", "right")
+	if dir == 0.0:
+		dir = signf(velocity.x)
+	if dir == 0.0:
+		dir = 1.0
+	velocity.x = dir * 4000.0
 
 
 func _glide(delta: float) -> void:
