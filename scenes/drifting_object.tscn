@@ -1,39 +1,23 @@
 [gd_scene format=3 uid="uid://bbxbxebcdr7d0"]
 
 [ext_resource type="Script" uid="uid://ggecoreu42qh" path="res://scripts/drifting_object.gd" id="1_object"]
-[ext_resource type="Script" uid="uid://mydps3xxhia8" path="res://scripts/path_debug.gd" id="2_path"]
 [ext_resource type="Texture2D" uid="uid://6tnd2n1unebp" path="res://Assets/images/seed_rough.png" id="3_seed"]
 [ext_resource type="Shader" uid="uid://cgrcibi8s81fo" path="res://shaders/white_key.gdshader" id="4_shader"]
-
-[sub_resource type="Curve2D" id="Curve2D_default"]
-resource_local_to_scene = true
-_data = {
-"points": PackedVector2Array(-25.342, 0, 25.342, 0, 0, -120, -20.502, -14.895, 20.502, 14.895, 70.534, -97.082, -7.831, -24.101, 7.831, 24.101, 114.127, -37.082, 7.831, -24.101, -7.831, 24.101, 114.127, 37.082, 20.502, -14.895, -20.502, 14.895, 70.534, 97.082, 25.342, 0, -25.342, 0, 0, 120, 20.502, 14.895, -20.502, -14.895, -70.534, 97.082, 7.831, 24.101, -7.831, -24.101, -114.127, 37.082, -7.831, 24.101, 7.831, -24.101, -114.127, -37.082, -20.502, 14.895, 20.502, -14.895, -70.534, -97.082)
-}
-point_count = 10
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_hit"]
-size = Vector2(112, 157)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_paper"]
 shader = ExtResource("4_shader")
 shader_parameter/cutoff = 0.988
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hit"]
+size = Vector2(112, 157)
+
 [node name="DriftingObject" type="Node2D" unique_id=1938813151]
 z_index = 3
+scale = Vector2(2.5, 2.5)
 script = ExtResource("1_object")
 
-[node name="Path2D" type="Path2D" parent="." unique_id=2121147867]
-position = Vector2(-42, 6)
-curve = SubResource("Curve2D_default")
-script = ExtResource("2_path")
-
-[node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=1223913724]
-position = Vector2(147, 43)
-rotates = false
-
 [node name="Body" type="Area2D" parent="." unique_id=895138882]
-position = Vector2(105, 49)
+position = Vector2(-0.99999994, 2.9999998)
 collision_layer = 4
 collision_mask = 2
 

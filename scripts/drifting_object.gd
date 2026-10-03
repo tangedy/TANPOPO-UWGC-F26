@@ -34,8 +34,8 @@ var _player: Node2D
 ## Drawn seed bounds inside the texture, measured from the sprite center.
 const SEED_ART_OFFSET := Vector2(0.5, 4.0)
 
-@onready var path: Path2D = $Path2D
-@onready var follow: PathFollow2D = $Path2D/PathFollow2D
+@onready var path: Path2D = get_node_or_null("Path2D") as Path2D
+@onready var follow: PathFollow2D = get_node_or_null("Path2D/PathFollow2D") as PathFollow2D
 @onready var hitbox: Area2D = $Body
 @onready var visual: Sprite2D = $Body/Visual
 @onready var collect_shape: CollisionShape2D = $Body/CollisionShape2D
@@ -55,6 +55,8 @@ func _ready() -> void:
 	hitbox.monitoring = true
 	hitbox.monitorable = true
 	hitbox.body_entered.connect(_on_body_entered)
+	if path == null or follow == null:
+		return
 	follow.rotates = false
 	follow.loop = true
 	_close_loop()
@@ -65,6 +67,8 @@ func _ready() -> void:
 
 
 func _close_loop() -> void:
+	if path == null:
+		return
 	var curve := path.curve
 	if curve == null or curve.point_count < 3:
 		return
@@ -102,7 +106,7 @@ func _process(_delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint() or collected:
 		return
-	if path.curve == null or path.curve.point_count < 2:
+	if path == null or follow == null or path.curve == null or path.curve.point_count < 2:
 		return
 	_time += delta
 	_advance_along_path(delta)
