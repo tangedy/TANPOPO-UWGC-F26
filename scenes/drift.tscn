@@ -12,6 +12,9 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_complete"]
 size = Vector2(220, 160)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5xdv5"]
+size = Vector2(167, 5073)
+
 [node name="Drift" type="Node2D" unique_id=1080770655]
 script = ExtResource("1_room")
 
@@ -141,6 +144,19 @@ polygon = PackedVector2Array(-110, -80, 110, -80, 110, 80, -110, 80)
 [node name="LeapPoint" type="Marker2D" parent="Platform" unique_id=1079848070]
 position = Vector2(100, -550)
 
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platform" unique_id=723870272]
+position = Vector2(-1893, -1664)
+shape = SubResource("RectangleShape2D_5xdv5")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Platform" unique_id=2012618602]
+position = Vector2(524.5, -2234)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_5xdv5")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Platform" unique_id=725885607]
+position = Vector2(3086, -1234)
+shape = SubResource("RectangleShape2D_5xdv5")
+
 [node name="Grandma" type="Sprite2D" parent="." unique_id=625137024]
 z_index = 4
 position = Vector2(-633.00006, 822)
@@ -148,7 +164,9 @@ scale = Vector2(0.1853, 0.1853)
 texture = ExtResource("8_grandma")
 
 [node name="Peppermint" parent="." unique_id=262609286 instance=ExtResource("5_peppermint")]
-position = Vector2(-515, 899)
+z_index = -1
+position = Vector2(-490.99976, 899)
+scale = Vector2(1.6, 1.6)
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=2053258978]
 

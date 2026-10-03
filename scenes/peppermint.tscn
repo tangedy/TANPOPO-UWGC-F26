@@ -23,4 +23,3 @@ texture = ExtResource("2_stand")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1095772272]
 position = Vector2(90, -80)
-position_smoothing_enabled = true
