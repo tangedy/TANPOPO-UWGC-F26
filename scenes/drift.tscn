@@ -128,19 +128,48 @@ z_index = 1
 position = Vector2(-841.5, -198)
 texture = ExtResource("6_cliff")
 
-[node name="Clouds" type="Sprite2D" parent="Platform" unique_id=706455837]
+[node name="Cliff2" type="Sprite2D" parent="Platform" unique_id=134169415]
+z_index = 1
+position = Vector2(-2748, -198)
+scale = Vector2(-1, 1)
+texture = ExtResource("6_cliff")
+
+[node name="BGClouds" type="Sprite2D" parent="Platform" unique_id=706455837]
 z_index = -10
 material = SubResource("ShaderMaterial_bok0l")
 position = Vector2(2896, -688)
-scale = Vector2(1.8688432, 1.8432039)
+scale = Vector2(2.012581, 1.8432039)
 texture = ExtResource("7_clouds")
-metadata/_edit_lock_ = true
 
-[node name="Clouds2" type="Sprite2D" parent="Platform" unique_id=949056660]
+[node name="BGClouds2" type="Sprite2D" parent="Platform" unique_id=1416871081]
+modulate = Color(1, 1, 1, 0.41568628)
+z_index = -10
+material = SubResource("ShaderMaterial_bok0l")
+position = Vector2(2085.0002, -537.99994)
+scale = Vector2(-2.3, 1.843)
+texture = ExtResource("7_clouds")
+
+[node name="ForegroundClouds" type="Sprite2D" parent="Platform" unique_id=949056660]
 z_index = 1
 material = SubResource("ShaderMaterial_bok0l")
-position = Vector2(-976, 1026)
-scale = Vector2(1.8688432, 1.8432039)
+position = Vector2(-816.99994, 1026)
+scale = Vector2(2.1288342, 1.8432039)
+texture = ExtResource("7_2r5rs")
+
+[node name="ForegroundClouds2" type="Sprite2D" parent="Platform" unique_id=316306333]
+z_index = 1
+material = SubResource("ShaderMaterial_bok0l")
+position = Vector2(6226.9995, 1782)
+rotation = -5.9725165
+scale = Vector2(-2, 2)
+texture = ExtResource("7_2r5rs")
+
+[node name="ForegroundClouds3" type="Sprite2D" parent="Platform" unique_id=1215963296]
+z_index = 1
+material = SubResource("ShaderMaterial_bok0l")
+position = Vector2(2738, 1690)
+rotation = -2.1711895
+scale = Vector2(-2, 2)
 texture = ExtResource("7_2r5rs")
 
 [node name="FloorCollider" type="CollisionPolygon2D" parent="Platform" unique_id=628338554]
@@ -194,53 +223,68 @@ scale = Vector2(2.5, 2.5)
 
 [node name="Grass" parent="Foliage" unique_id=1211563343 instance=ExtResource("9_wgtfl")]
 position = Vector2(-1059, 879)
+script = null
 
 [node name="Grass2" parent="Foliage" unique_id=1109854014 instance=ExtResource("9_wgtfl")]
 position = Vector2(-1450, 884)
 scale = Vector2(-1, 1)
+script = null
 
 [node name="Grass4" parent="Foliage" unique_id=610818830 instance=ExtResource("9_wgtfl")]
 position = Vector2(-1286, 884)
+script = null
 
 [node name="Grass5" parent="Foliage" unique_id=1218322351 instance=ExtResource("9_wgtfl")]
 position = Vector2(-885, 884)
 scale = Vector2(-1, 1)
+script = null
 
 [node name="Grass6" parent="Foliage" unique_id=113173234 instance=ExtResource("9_wgtfl")]
 position = Vector2(-561, 884)
+script = null
 
 [node name="Grass7" parent="Foliage" unique_id=1581894543 instance=ExtResource("9_wgtfl")]
 position = Vector2(-531, 884)
 scale = Vector2(-1, 1)
+script = null
 
 [node name="Grass8" parent="Foliage" unique_id=1603499934 instance=ExtResource("9_wgtfl")]
 position = Vector2(-308, 884)
 scale = Vector2(-1, 1)
+script = null
 
 [node name="Grass9" parent="Foliage" unique_id=1270815722 instance=ExtResource("9_wgtfl")]
 position = Vector2(-136, 884)
+script = null
 
 [node name="Grass10" parent="Foliage" unique_id=1121246606 instance=ExtResource("9_wgtfl")]
 position = Vector2(322, 884)
+script = null
 
 [node name="Grass3" parent="Foliage" unique_id=1364408392 instance=ExtResource("9_wgtfl")]
 position = Vector2(209, 884)
 scale = Vector2(-1, 1)
+script = null
 
 [node name="Flower" parent="Foliage" unique_id=1246220896 instance=ExtResource("10_svi47")]
 position = Vector2(-1419, 878)
+script = null
 
 [node name="Flower2" parent="Foliage" unique_id=2117425683 instance=ExtResource("10_svi47")]
 position = Vector2(-853, 878)
+script = null
 
 [node name="Flower3" parent="Foliage" unique_id=1308831469 instance=ExtResource("10_svi47")]
 position = Vector2(-209, 878)
+script = null
 
 [node name="Flower4" parent="Foliage" unique_id=1943765424 instance=ExtResource("10_svi47")]
 position = Vector2(253, 878)
+script = null
 
 [node name="Flower5" parent="Foliage" unique_id=220503637 instance=ExtResource("10_svi47")]
 position = Vector2(-413, 878)
+script = null
 
 [node name="dandelion" parent="Foliage" unique_id=29236780 instance=ExtResource("13_arjxv")]
 position = Vector2(-1202, 872)

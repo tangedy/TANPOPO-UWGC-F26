@@ -128,8 +128,8 @@ func _fit_camera_limits() -> void:
 	var platform := get_parent().get_node_or_null("Platform") as Node2D
 	if platform == null:
 		return
-	var found := false
-	var bounds := Rect2()
+	var vertical: Array[Rect2] = []
+	var horizontal: Array[Rect2] = []
 	for child in platform.get_children():
 		var shape_node := child as CollisionShape2D
 		if shape_node == null:
@@ -138,17 +138,32 @@ func _fit_camera_limits() -> void:
 		if rect == null:
 			continue
 		var shape_bounds := _global_rect(shape_node, rect)
-		if not found:
-			bounds = shape_bounds
-			found = true
+		if shape_bounds.size.y > shape_bounds.size.x:
+			vertical.append(shape_bounds)
 		else:
-			bounds = bounds.merge(shape_bounds)
-	if not found:
+			horizontal.append(shape_bounds)
+	if vertical.size() < 2:
 		return
-	camera.limit_left = int(floor(bounds.position.x))
-	camera.limit_top = int(floor(bounds.position.y))
-	camera.limit_right = int(ceil(bounds.end.x))
-	camera.limit_bottom = int(ceil(bounds.end.y))
+	vertical.sort_custom(func(a: Rect2, b: Rect2) -> bool: return a.position.x < b.position.x)
+	var left_wall: Rect2 = vertical[0]
+	var right_wall: Rect2 = vertical[vertical.size() - 1]
+	# Inner faces. Side walls stick past the ceiling, so a merged box opens the limits.
+	var limit_left := left_wall.end.x
+	var limit_right := right_wall.position.x
+	var limit_top := maxf(left_wall.position.y, right_wall.position.y)
+	var limit_bottom := minf(left_wall.end.y, right_wall.end.y)
+	var mid_y := (limit_top + limit_bottom) * 0.5
+	for bar in horizontal:
+		if bar.get_center().y < mid_y:
+			limit_top = maxf(limit_top, bar.end.y)
+		else:
+			limit_bottom = minf(limit_bottom, bar.position.y)
+	if limit_right <= limit_left or limit_bottom <= limit_top:
+		return
+	camera.limit_left = int(floor(limit_left))
+	camera.limit_top = int(floor(limit_top))
+	camera.limit_right = int(ceil(limit_right))
+	camera.limit_bottom = int(ceil(limit_bottom))
 
 
 func _global_rect(shape_node: CollisionShape2D, rect: RectangleShape2D) -> Rect2:

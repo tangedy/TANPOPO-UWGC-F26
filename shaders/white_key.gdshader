@@ -7,5 +7,6 @@ void fragment() {
 	if (min(color.r, min(color.g, color.b)) >= cutoff) {
 		color.a = 0.0;
 	}
-	COLOR = color;
+	// Keep particle color-ramp / alpha-curve (vertex COLOR).
+	COLOR = color * COLOR;
 }

@@ -2,7 +2,9 @@
 
 [ext_resource type="Shader" uid="uid://dexmydrykhi36" path="res://shaders/grass.gdshader" id="1_55qyy"]
 [ext_resource type="Texture2D" uid="uid://crsek7kykbsq" path="res://Assets/images/drift_dandelion.png" id="2_gf78e"]
-[ext_resource type="Script" path="res://scripts/foliage.gd" id="3_foliage"]
+[ext_resource type="Script" uid="uid://1uumsynh15es" path="res://scripts/foliage.gd" id="3_foliage"]
+[ext_resource type="Shader" uid="uid://cgrcibi8s81fo" path="res://shaders/white_key.gdshader" id="4_efao5"]
+[ext_resource type="Texture2D" uid="uid://dsropeicsb4jk" path="res://Assets/images/drift_seed_parti.png" id="5_khy8p"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ugs8c"]
 resource_local_to_scene = true
@@ -17,6 +19,45 @@ shader_parameter/distortion = 0.0
 shader_parameter/heightOffset = 0.0
 shader_parameter/offset = 0.0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hj3y6"]
+shader = ExtResource("4_efao5")
+shader_parameter/cutoff = 0.96
+
+[sub_resource type="Gradient" id="Gradient_efao5"]
+offsets = PackedFloat32Array(0, 0.26630434, 0.7880435, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_efao5"]
+gradient = SubResource("Gradient_efao5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ipm0l"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(100, 100, 1)
+angle_min = -25.0
+angle_max = 25.0
+direction = Vector3(0.12, -1, 0)
+spread = 16.0
+initial_velocity_min = 6.0
+initial_velocity_max = 16.0
+angular_velocity_min = -4.0
+angular_velocity_max = 4.0
+gravity = Vector3(3, -75, 0)
+damping_min = 0.2
+damping_max = 0.8
+scale_min = 0.39999998
+scale_max = 0.79999995
+color = Color(0.35, 0.32, 0.28, 1)
+color_ramp = SubResource("GradientTexture1D_efao5")
+turbulence_enabled = true
+turbulence_noise_strength = 0.25
+turbulence_noise_scale = 1.6
+turbulence_noise_speed = Vector3(0.08, -0.12, 0)
+turbulence_noise_speed_random = 0.15
+turbulence_influence_min = 0.02
+turbulence_influence_max = 0.08
+turbulence_initial_displacement_max = 6.0
+
 [node name="dandelion" type="Node2D" unique_id=29236780]
 script = ExtResource("3_foliage")
 
@@ -24,3 +65,15 @@ script = ExtResource("3_foliage")
 material = SubResource("ShaderMaterial_ugs8c")
 texture = ExtResource("2_gf78e")
 offset = Vector2(-40, -170)
+
+[node name="SeedParti" type="GPUParticles2D" parent="DriftGrass" unique_id=819699714]
+z_index = 1
+material = SubResource("ShaderMaterial_hj3y6")
+position = Vector2(-40, -286)
+amount = 6
+texture = ExtResource("5_khy8p")
+lifetime = 10.0
+preprocess = 6.0
+randomness = 0.6
+visibility_rect = Rect2(-180, -520, 420, 620)
+process_material = SubResource("ParticleProcessMaterial_ipm0l")
