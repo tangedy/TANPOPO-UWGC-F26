@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bi3rs3hq5bkge" path="res://scripts/updraft_zone.gd" id="1_updraft"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tlenm"]
-size = Vector2(6000, 700)
+size = Vector2(16000, 700)
 
 [node name="UpdraftZone" type="Area2D" unique_id=1304608146]
 collision_layer = 0
