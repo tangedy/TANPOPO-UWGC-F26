@@ -185,6 +185,8 @@ func _fit_camera_limits() -> void:
 			limit_top = maxf(limit_top, bar.end.y)
 		else:
 			limit_bottom = minf(limit_bottom, bar.position.y)
+	# The side walls run well below the cliff. Keep the view from dropping that far.
+	limit_bottom -= 1100.0
 	if limit_right <= limit_left or limit_bottom <= limit_top:
 		return
 	camera.limit_left = int(floor(limit_left))
