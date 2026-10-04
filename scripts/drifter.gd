@@ -40,7 +40,7 @@ const LEAP_LEAN := 4.0
 ## Seconds each moving or reaching frame stays up.
 @export var frame_time := 0.2
 ## How close a seed must be before she reaches for it, in pixels.
-@export var reach_range := 240.0
+@export var reach_range := 360.0
 ## Sideways speed required before a nearby seed counts as one she is moving toward.
 @export var reach_speed := 20.0
 

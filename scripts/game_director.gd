@@ -43,12 +43,18 @@ const ENDING_FADE_IN := 3.4
 const ENDING_FADE_OUT := 2.8
 const CREDITS_ROLL_SPEED := 42.0
 
-## The three memories collected this stage. Placeholder art for now; swap per stage later.
-const STAGE_MEMORIES: Array[Texture2D] = [
-	preload("res://Assets/images/memories/testmemor.png"),
-	preload("res://Assets/images/memories/testmemor.png"),
-	preload("res://Assets/images/memories/testmemor.png"),
+## Steam rising off the memory sketch, then settling again. Built from the placeholder memory.
+const STEAM_SLIDES: Array[Texture2D] = [
+	preload("res://Assets/images/slideshow/steam_00.png"),
+	preload("res://Assets/images/slideshow/steam_01.png"),
+	preload("res://Assets/images/slideshow/steam_02.png"),
+	preload("res://Assets/images/slideshow/steam_03.png"),
+	preload("res://Assets/images/slideshow/steam_04.png"),
+	preload("res://Assets/images/slideshow/steam_05.png"),
+	preload("res://Assets/images/slideshow/steam_06.png"),
+	preload("res://Assets/images/slideshow/steam_07.png"),
 ]
+const SLIDE_HOLD := 0.22
 
 @onready var world: Node = $World
 @onready var fade: ColorRect = $UI/Fade
@@ -101,10 +107,10 @@ func present_line() -> void:
 	line_box.visible = false
 
 
-## Over the black fade between stages, flash the memories one by one, blurred and
+## Over the black fade between stages, play the memory as a short steam slideshow,
 ## framed by an inky organic border.
 func _flash_memories(token: int) -> void:
-	if STAGE_MEMORIES.is_empty():
+	if STEAM_SLIDES.is_empty():
 		return
 	var layer := CanvasLayer.new()
 	layer.name = "MemoryFlash"
@@ -123,28 +129,29 @@ func _flash_memories(token: int) -> void:
 	rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	rect.modulate.a = 0.0
+	rect.texture = STEAM_SLIDES[0]
 	var mat := ShaderMaterial.new()
 	mat.shader = MEMORY_FRAME
-	mat.set_shader_parameter("blur_amount", 18.0)
+	mat.set_shader_parameter("blur_amount", 6.0)
 	mat.set_shader_parameter("rect_size", Vector2(vp.x - inset * 2.0, vp.y - inset * 2.0))
 	rect.material = mat
 	layer.add_child(rect)
-	for i in STAGE_MEMORIES.size():
+	if _poof:
+		_poof.play()
+	var fade_in := create_tween()
+	fade_in.tween_property(rect, "modulate:a", 1.0, 0.35).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	await fade_in.finished
+	for i in STEAM_SLIDES.size():
 		if token != _play_token or not is_inside_tree():
 			break
-		rect.texture = STAGE_MEMORIES[i]
-		# Vary the border noise so each memory frame looks a little different.
-		mat.set_shader_parameter("seed", float(i) * 7.3)
-		rect.modulate.a = 0.0
-		if _poof:
-			_poof.play()
-		# Fade this memory in, hold, then fade it fully out to black before the next.
-		var tween := create_tween()
-		tween.tween_property(rect, "modulate:a", 1.0, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-		tween.tween_interval(0.75)
-		tween.tween_property(rect, "modulate:a", 0.0, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-		tween.tween_interval(0.25)
-		await tween.finished
+		if i > 0:
+			rect.texture = STEAM_SLIDES[i]
+			mat.set_shader_parameter("seed", float(i) * 1.7)
+		await get_tree().create_timer(SLIDE_HOLD).timeout
+	if token == _play_token and is_inside_tree():
+		var fade_out := create_tween()
+		fade_out.tween_property(rect, "modulate:a", 0.0, 0.45).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+		await fade_out.finished
 	if is_instance_valid(layer):
 		layer.queue_free()
 

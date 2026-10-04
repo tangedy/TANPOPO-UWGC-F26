@@ -1600,6 +1600,7 @@ position = Vector2(-1245.0001, -813.0002)
 breathe_amount = 0.76
 
 [node name="SeedA#Path2D" type="Path2D" parent="Starter/SeedA" index="1" unique_id=-1994967175]
+z_index = -1
 position = Vector2(752.3998, 1262.7998)
 curve = SubResource("Curve2D_seed_a")
 script = ExtResource("3_path")
@@ -1610,6 +1611,7 @@ position = Vector2(6380, -2621)
 breathe_amount = 0.75
 
 [node name="SeedB#Path2D" type="Path2D" parent="Starter/SeedB" index="1" unique_id=-1994967165]
+z_index = -1
 position = Vector2(3.6001952, 53.600094)
 curve = SubResource("Curve2D_seed_b")
 script = ExtResource("3_path")
@@ -1620,6 +1622,7 @@ position = Vector2(5695, -2278)
 breathe_amount = 0.75
 
 [node name="SeedC#Path2D" type="Path2D" parent="Starter/SeedC" index="1" unique_id=-1994967155]
+z_index = -1
 curve = SubResource("Curve2D_seed_c")
 script = ExtResource("3_path")
 metadata/_edit_lock_ = true
