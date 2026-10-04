@@ -9,9 +9,6 @@
 shader = ExtResource("4_shader")
 shader_parameter/cutoff = 0.988
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_hit"]
-size = Vector2(112, 157)
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fluff"]
 shader = ExtResource("4_shader")
 shader_parameter/cutoff = 0.96
@@ -50,6 +47,9 @@ turbulence_noise_speed_random = 0.15
 turbulence_influence_min = 0.02
 turbulence_influence_max = 0.08
 turbulence_initial_displacement_max = 6.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hit"]
+size = Vector2(112, 157)
 
 [node name="DriftingObject" type="Node2D" unique_id=1938813151]
 z_index = 3

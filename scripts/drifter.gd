@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 const InputSetup = preload("res://scripts/input_setup.gd")
+const FuzzLine := preload("res://scripts/fuzz_line.gd")
 const STAND_TEX := preload("res://Assets/images/peppermint/standing_idle.png")
 const RUN_FRAMES: Array[Texture2D] = [
 	preload("res://Assets/images/peppermint/run_1.png"),
@@ -130,6 +131,8 @@ var _size_scale := 1.0
 @onready var camera: Camera2D = $Camera2D
 @onready var visual: Sprite2D = $Visual
 @onready var seed_parti: GPUParticles2D = $SeedParti
+
+var _fuzz_line: Node
 
 
 func _enter_tree() -> void:
@@ -356,6 +359,27 @@ func _set_seed_parti(on: bool) -> void:
 	seed_parti.emitting = on
 	if on:
 		seed_parti.restart()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not event is InputEventKey:
+		return
+	var key := event as InputEventKey
+	if not key.pressed or key.echo or key.physical_keycode != KEY_G:
+		return
+	_play_fuzz_hint()
+	get_viewport().set_input_as_handled()
+
+
+func _play_fuzz_hint() -> void:
+	if _fuzz_line == null or not is_instance_valid(_fuzz_line):
+		_fuzz_line = FuzzLine.new()
+		_fuzz_line.name = "FuzzLine"
+		var room := get_parent()
+		if room == null:
+			return
+		room.add_child(_fuzz_line)
+	_fuzz_line.play(self)
 
 
 func _zoom_through_run() -> void:
