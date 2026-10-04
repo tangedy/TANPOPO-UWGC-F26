@@ -19,6 +19,17 @@ extends Node2D
 @export var max_drift_offset := 140.0
 
 var collected := false
+## Which of the nine memories this seed belongs to. Rainbow colors are shuffled once per session.
+@export_range(0, 8, 1) var memory_slot := 0
+var glow_color := Color.WHITE
+
+const SEED_COUNT := 9
+const GLOW_SHADER := preload("res://shaders/seed_glow.gdshader")
+
+static var _hue_order: Array[int] = []
+static var _glow_tex: Texture2D
+
+var _glow: Sprite2D
 
 var _along := 0.0
 var _up_speed := 0.0
@@ -63,6 +74,7 @@ func _ready() -> void:
 	hitbox.monitoring = true
 	hitbox.monitorable = true
 	hitbox.body_entered.connect(_on_body_entered)
+	_apply_rainbow()
 	if path == null or follow == null:
 		return
 	follow.rotates = false
@@ -128,11 +140,61 @@ func air_push_scale() -> float:
 	return 0.1
 
 
+static func rainbow_color(slot: int) -> Color:
+	if _hue_order.is_empty():
+		for i in SEED_COUNT:
+			_hue_order.append(i)
+		_hue_order.shuffle()
+	var hue := float(_hue_order[posmod(slot, SEED_COUNT)]) / float(SEED_COUNT)
+	return Color.from_hsv(hue, 0.42, 1.0)
+
+
+static func glow_texture() -> Texture2D:
+	if _glow_tex:
+		return _glow_tex
+	var image := Image.create(8, 8, false, Image.FORMAT_RGBA8)
+	image.fill(Color.WHITE)
+	_glow_tex = ImageTexture.create_from_image(image)
+	return _glow_tex
+
+
+func _apply_rainbow() -> void:
+	if visual == null or visual.texture == null:
+		return
+	glow_color = rainbow_color(memory_slot)
+	visual.self_modulate = glow_color.lerp(Color.WHITE, 0.78)
+	var art := visual.texture.get_size()
+	_glow = visual.get_node_or_null("RainbowGlow") as Sprite2D
+	if _glow == null:
+		_glow = Sprite2D.new()
+		_glow.name = "RainbowGlow"
+		_glow.z_index = -1
+		_glow.centered = true
+		_glow.texture = glow_texture()
+		visual.add_child(_glow)
+	var mat := ShaderMaterial.new()
+	mat.shader = GLOW_SHADER
+	var halo := glow_color
+	halo.a = 0.16
+	mat.set_shader_parameter("glow_color", halo)
+	_glow.material = mat
+	var diameter := maxf(art.x, art.y) * 0.46
+	_glow.scale = Vector2.ONE * (diameter / _glow.texture.get_size().x)
+	_glow.position = Vector2(0.0, -art.y * 0.22)
+	if seed_parti and seed_parti.process_material is ParticleProcessMaterial and not Engine.is_editor_hint():
+		var parti := (seed_parti.process_material as ParticleProcessMaterial).duplicate() as ParticleProcessMaterial
+		parti.color = Color(0.35, 0.32, 0.28).lerp(glow_color, 0.16)
+		seed_parti.process_material = parti
+
+
 func _process(_delta: float) -> void:
 	if path == null:
 		_bind_path()
 	if Engine.is_editor_hint():
 		_preview()
+		return
+	if _glow:
+		_glow.modulate.a = 0.42 + 0.18 * sin(Time.get_ticks_msec() * 0.004 + float(memory_slot) * 1.7)
 
 
 func _physics_process(delta: float) -> void:
@@ -293,6 +355,8 @@ func _finish_capture() -> void:
 	var room := get_tree().get_first_node_in_group("drift_room")
 	hitbox.reparent(room)
 	_player.attach_follower(hitbox)
+	if path and path.has_method("disperse"):
+		path.disperse()
 	if room and room.has_method("note_collected"):
 		room.note_collected()
 

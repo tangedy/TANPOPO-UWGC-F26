@@ -361,6 +361,7 @@ zone_size = Vector2(250, 400)
 
 [node name="SeedA" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="36" unique_id=-2094967185 instance=ExtResource("2_object")]
 position = Vector2(2341.9995, 1058)
+memory_slot = 3
 
 [node name="SeedA#Path2D" type="Path2D" parent="Starter/SeedA" index="1" unique_id=-2094967175]
 position = Vector2(41.200043, -135.20004)
@@ -369,6 +370,7 @@ script = ExtResource("3_path")
 
 [node name="SeedB" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="37" unique_id=-2094967184 instance=ExtResource("2_object")]
 position = Vector2(-889, -2069.9998)
+memory_slot = 4
 
 [node name="SeedB#Path2D" type="Path2D" parent="Starter/SeedB" index="1" unique_id=-2094967165]
 position = Vector2(22.8, 365.1999)
@@ -377,6 +379,7 @@ script = ExtResource("3_path")
 
 [node name="SeedC" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="38" unique_id=-2094967183 instance=ExtResource("2_object")]
 position = Vector2(4930, -3232)
+memory_slot = 5
 
 [node name="SeedC#Path2D" type="Path2D" parent="Starter/SeedC" index="1" unique_id=-2094967155]
 curve = SubResource("Curve2D_seed_c")

@@ -126,6 +126,7 @@ var _step_frame := -1
 var _whoosh_level := 0.0
 var _lifted := false
 var _run_start_x := 0.0
+var _exit_left := false
 ## Matches the node's scale so speeds and distances stay in proportion to her size.
 var _size_scale := 1.0
 
@@ -251,6 +252,29 @@ func teleport_to_start() -> void:
 	_set_seed_parti(true)
 
 
+## Collected return: stand her on the cliff and run off its left edge.
+func begin_exit_walk(surface_y: float) -> void:
+	if state == State.FINISHED:
+		return
+	global_position.y = surface_y - 8.0
+	velocity = Vector2(-_sized(60.0), _sized(40.0))
+	_exit_left = true
+	state = State.RUN_OFF
+	_facing = -1
+	_run_cursor = 0.0
+	_run_frame = 0
+	_launch_blend = false
+	_launch_time = 0.0
+	_launch_rise = 0.0
+	_launch_release = 0.0
+	_jump_squish = 0.0
+	_leap_hop = false
+	_lifted = false
+	_control_timer = 0.0
+	_set_seed_parti(false)
+	_apply_pose(Pose.RUN)
+
+
 func finish() -> void:
 	state = State.FINISHED
 	velocity = Vector2.ZERO
@@ -368,6 +392,13 @@ func _run_off(delta: float) -> void:
 	motion_mode = MOTION_MODE_GROUNDED
 	floor_snap_length = _sized(12.0)
 	visual.rotation = 0.0
+	if _exit_left:
+		var top_speed := _sized(run_max_speed)
+		if velocity.x > -top_speed:
+			var rate := run_accel / maxf(run_max_speed - 40.0, 1.0)
+			velocity.x -= (top_speed + velocity.x) * (1.0 - exp(-rate * delta))
+		velocity.y = _sized(240.0)
+		return
 	_zoom_through_run()
 	if _leap_point and global_position.x >= _leap_point.global_position.x:
 		_leap()
@@ -532,12 +563,16 @@ func _sync_pose(delta: float) -> void:
 	var facing := 0
 	if state == State.RUN_OFF:
 		pose = Pose.RUN
-		facing = 1
-		var limit := float(_run_steps())
-		if _run_cursor < limit:
-			_run_cursor = minf(_run_cursor + _run_fps() * delta, limit)
-		var shown := mini(int(_run_cursor), _run_steps() - 1)
-		_run_frame = shown % RUN_FRAMES.size()
+		facing = -1 if _exit_left else 1
+		if _exit_left:
+			_run_cursor += _run_fps() * delta
+			_run_frame = int(_run_cursor) % RUN_FRAMES.size()
+		else:
+			var limit := float(_run_steps())
+			if _run_cursor < limit:
+				_run_cursor = minf(_run_cursor + _run_fps() * delta, limit)
+			var shown := mini(int(_run_cursor), _run_steps() - 1)
+			_run_frame = shown % RUN_FRAMES.size()
 		_play_run_step()
 	elif state == State.GLIDE:
 		if _lifted or velocity.y < 0.0:
@@ -633,6 +668,10 @@ func _reach_facing() -> int:
 func _apply_pose(pose: Pose) -> void:
 	if visual == null:
 		return
+	var was_flying := _pose == Pose.MOVE or _pose == Pose.REACH
+	if was_flying and pose == Pose.RUN:
+		_jump_squish = 0.0001
+		_play_sfx("Jump")
 	_pose = pose
 	var tex: Texture2D = STAND_TEX
 	var anchor := standing_anchor

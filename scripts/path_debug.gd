@@ -11,23 +11,51 @@ const TRAIL_SHADER := preload("res://shaders/path_trail.gdshader")
 @export var flow_speed := 240.0
 ## Streaks placed evenly around the loop.
 @export_range(1, 6, 1) var trail_count := 3
+## Seed paths close the gap between the last point and the first. A guide trail stays open.
+@export var close_loop := true
+@export var line_width := 12.0
+
+const DISPERSE_TIME := 2.6
 
 var _bound_curve: Curve2D
 var _line: Line2D
 var _material: ShaderMaterial
 var _length := 0.0
 var _white: Texture2D
+var _dispersing := false
+var _disperse_time := 0.0
 
 
 func _enter_tree() -> void:
-	z_index = -1
+	if close_loop:
+		z_index = -1
 	_bind_curve()
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if curve != _bound_curve:
 		_bind_curve()
+	if _dispersing:
+		_tick_disperse(delta)
 	_apply_uniforms()
+
+
+## The collected seed's wind simply fades away, from the end back to the start.
+func disperse() -> void:
+	if _dispersing or Engine.is_editor_hint():
+		return
+	_dispersing = true
+	_disperse_time = 0.0
+
+
+func _tick_disperse(delta: float) -> void:
+	_disperse_time += delta
+	var t := clampf(_disperse_time / DISPERSE_TIME, 0.0, 1.0)
+	var eased := t * t * (3.0 - 2.0 * t)
+	if _material:
+		_material.set_shader_parameter("wipe", eased)
+	if t >= 1.0 and _line:
+		_line.visible = false
 
 
 func _bind_curve() -> void:
@@ -60,6 +88,8 @@ func _apply_uniforms() -> void:
 	_material.set_shader_parameter("portion", span / _length)
 	_material.set_shader_parameter("flow", flow_speed / _length)
 	_material.set_shader_parameter("trail_alpha", trail_alpha)
+	if not _dispersing:
+		_material.set_shader_parameter("wipe", 0.0)
 
 
 func _ensure_line() -> Line2D:
@@ -72,7 +102,7 @@ func _ensure_line() -> Line2D:
 	_line.material = _material
 	_line.texture = _white_texture()
 	_line.texture_mode = Line2D.LINE_TEXTURE_STRETCH
-	_line.width = 12.0
+	_line.width = line_width
 	_line.joint_mode = Line2D.LINE_JOINT_ROUND
 	_line.begin_cap_mode = Line2D.LINE_CAP_NONE
 	_line.end_cap_mode = Line2D.LINE_CAP_NONE
@@ -98,7 +128,7 @@ func _trail_points() -> PackedVector2Array:
 		return PackedVector2Array()
 	var last := curve.point_count - 1
 	var gap := curve.get_point_position(last).distance_to(curve.get_point_position(0))
-	if gap > 1.0:
+	if close_loop and gap > 1.0:
 		var from := curve.get_point_position(last)
 		var to := curve.get_point_position(0)
 		var control_a := from + curve.get_point_out(last)
