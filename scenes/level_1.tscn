@@ -307,37 +307,28 @@ speed = 400.0
 breathe_amount = 0.8
 
 [node name="SeedA#Path2D" type="Path2D" parent="Starter/SeedA" index="1" unique_id=2100000121]
+z_index = -1
 position = Vector2(-314, 20.799997)
 curve = SubResource("Curve2D_seed_a")
 script = ExtResource("3_path")
-trail_alpha = null
-trail_length = null
-flow_speed = null
-trail_count = null
 
 [node name="SeedB" parent="Starter" index="38" unique_id=2100000112 instance=ExtResource("2_object")]
 position = Vector2(-698.00006, 931.0001)
 speed = 400.0
 
 [node name="SeedB#Path2D" type="Path2D" parent="Starter/SeedB" index="1" unique_id=2100000131]
+z_index = -1
 curve = SubResource("Curve2D_seed_b")
 script = ExtResource("3_path")
-trail_alpha = null
-trail_length = null
-flow_speed = null
-trail_count = null
 
 [node name="SeedC" parent="Starter" index="39" unique_id=2100000113 instance=ExtResource("2_object")]
 position = Vector2(4129.9995, -755)
 speed = 300.0
 
 [node name="SeedC#Path2D" type="Path2D" parent="Starter/SeedC" index="1" unique_id=2100000141]
+z_index = -1
 curve = SubResource("Curve2D_seed_c")
 script = ExtResource("3_path")
-trail_alpha = null
-trail_length = null
-flow_speed = null
-trail_count = null
 
 [node name="Platform" parent="." index="7" unique_id=1851131555]
 metadata/_edit_lock_ = true

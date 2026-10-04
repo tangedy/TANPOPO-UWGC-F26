@@ -258,6 +258,25 @@ func finish() -> void:
 	_set_seed_parti(false)
 
 
+## Ending shot: stay on the cliff in the opening frame and do not follow her.
+func hold_at_start() -> void:
+	state = State.FINISHED
+	velocity = Vector2.ZERO
+	camera.zoom = Vector2.ONE
+	camera.position_smoothing_enabled = false
+	camera.make_current()
+	var center := camera.get_screen_center_position()
+	var half := get_viewport().get_visible_rect().size * 0.5 / camera.zoom
+	camera.limit_left = int(floor(center.x - half.x))
+	camera.limit_top = int(floor(center.y - half.y))
+	camera.limit_right = int(ceil(center.x + half.x))
+	camera.limit_bottom = int(ceil(center.y + half.y))
+	# Camera stays locked; nudge her left so the credits have the sky beside her.
+	global_position.x -= 80.0
+	_apply_pose(Pose.STAND)
+	_set_seed_parti(false)
+
+
 func add_air_push(accel: Vector2, keep_up: bool = false) -> void:
 	# A sideways gust's upward component is the pinch that launches her. Fold it downward.
 	# Up-diagonals pass keep_up so their half-strength lift stays upward.

@@ -281,6 +281,15 @@ func _opening() -> void:
 	_chase = false
 	_listen_for_chase = false
 	prompt.visible = false
+	# Credits ending: stay on the cliff instead of running off it.
+	if get_tree().has_meta("drift_hold_start"):
+		get_tree().remove_meta("drift_hold_start")
+		set_process_unhandled_input(false)
+		for child in $UI.get_children():
+			child.visible = false
+		if peppermint and peppermint.has_method("hold_at_start"):
+			peppermint.hold_at_start()
+		return
 	# Start running immediately so she is already mid-chase while the white fade clears.
 	if peppermint.has_method("start_run"):
 		peppermint.start_run()

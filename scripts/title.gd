@@ -16,6 +16,9 @@ var _leaving := false
 func _ready() -> void:
 	_loop_music()
 	music.play()
+	if get_tree().has_meta("fade_from_black"):
+		get_tree().remove_meta("fade_from_black")
+		_fade_from_black(1.8)
 	for button in [play_button, exit_button]:
 		button.mouse_entered.connect(_on_button_hover)
 		button.mouse_entered.connect(_refresh_buttons)
@@ -92,6 +95,22 @@ func _on_exit() -> void:
 	click_sfx.play()
 	await get_tree().create_timer(0.12).timeout
 	get_tree().quit()
+
+
+func _fade_from_black(duration: float) -> void:
+	var layer := CanvasLayer.new()
+	layer.layer = 100
+	add_child(layer)
+	var rect := ColorRect.new()
+	rect.color = Color.BLACK
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	layer.add_child(rect)
+	var tween := create_tween()
+	tween.tween_property(rect, "modulate:a", 0.0, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	await tween.finished
+	if is_instance_valid(layer):
+		layer.queue_free()
 
 
 func _fade_black(duration: float) -> void:
