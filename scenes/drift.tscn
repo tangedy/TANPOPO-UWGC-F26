@@ -22,7 +22,9 @@
 [ext_resource type="PackedScene" uid="uid://b6skvnu5lj85b" path="res://scenes/flower.tscn" id="10_svi47"]
 [ext_resource type="PackedScene" uid="uid://b3dksb1403hhd" path="res://scenes/dandelion.tscn" id="13_arjxv"]
 [ext_resource type="Script" uid="uid://dshw2c2ojvjsq" path="res://scripts/cloud_parallax.gd" id="14_parallax"]
-[ext_resource type="Script" uid="uid://dy68agsji2vxn" path="res://scripts/moon.gd" id="15_moon"]
+[ext_resource type="Shader" uid="uid://xm8gc7jnw1mt" path="res://shaders/moon_blur.gdshader" id="15_blur"]
+[ext_resource type="Shader" uid="uid://cmsjwg5n7hiaa" path="res://shaders/moon_glow.gdshader" id="15_glow"]
+[ext_resource type="Texture2D" uid="uid://b5jrc36hdebqt" path="res://Assets/images/drift_sun.png" id="15_sun"]
 [ext_resource type="Shader" uid="uid://bx6p2btkr8mum" path="res://shaders/godray.gdshader" id="16_8brjc"]
 [ext_resource type="AudioStream" uid="uid://b55e4imb8hqqj" path="res://Assets/music/drift_day.wav" id="17_day"]
 
@@ -60,11 +62,56 @@ _data = {
 }
 point_count = 10
 
+[sub_resource type="Shader" id="Shader_7gr4c"]
+code = "shader_type canvas_item;
+
+uniform sampler2D flowMap;
+uniform float strength;
+uniform float speed;
+uniform int frames : hint_range(1, 60);
+
+float clock(float time){
+	float fframes = float(frames);
+	return floor(mod(time * speed, fframes)) / fframes;
+}
+
+void fragment(){
+	float c = clock(TIME);
+	vec4 offset = texture(flowMap, vec2(UV.x + c, UV.y + c)) * strength;
+	COLOR = texture(TEXTURE, vec2(UV.x,UV.y) + offset.xy - vec2(0.5,0.5)*strength);
+}
+"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_g78hc"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_o3gkp"]
+noise = SubResource("FastNoiseLite_g78hc")
+seamless = true
+as_normal_map = true
+seamless_blend_skirt = 1.0
+bump_strength = 32.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tg366"]
+shader = SubResource("Shader_7gr4c")
+shader_parameter/flowMap = SubResource("NoiseTexture2D_o3gkp")
+shader_parameter/strength = 0.002
+shader_parameter/speed = 5.0
+shader_parameter/frames = 5
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bok0l"]
 shader = ExtResource("6_bok0l")
 shader_parameter/wave_speed = 1.5
 shader_parameter/wave_freq = 10.0
 shader_parameter/wave_width = 0.2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_moon"]
+shader = ExtResource("15_glow")
+shader_parameter/glow_color = Color(1, 0.97, 0.82, 0.5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_blur"]
+shader = ExtResource("15_blur")
+shader_parameter/disc_scale = 0.98
+shader_parameter/blur = 0.004
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_complete"]
 size = Vector2(220, 160)
@@ -141,7 +188,7 @@ mouse_filter = 2
 color = Color(0.690196, 0.878431, 0.917647, 1)
 
 [node name="Updraft" parent="." unique_id=95024445 instance=ExtResource("2_updraft")]
-z_index = 2
+z_index = -1
 position = Vector2(3488, 2790)
 lift_speed = 600.0
 
@@ -602,11 +649,13 @@ collision_mask = 0
 
 [node name="Cliff" type="Sprite2D" parent="Platform" unique_id=1488769419]
 z_index = 1
+material = SubResource("ShaderMaterial_tg366")
 position = Vector2(-841.5, 387.5)
 texture = ExtResource("6_cliff")
 
 [node name="Cliff2" type="Sprite2D" parent="Platform" unique_id=134169415]
 z_index = 1
+material = SubResource("ShaderMaterial_tg366")
 position = Vector2(-2748, 387.5)
 scale = Vector2(-1, 1)
 texture = ExtResource("6_cliff")
@@ -631,10 +680,21 @@ scale = Vector2(-2.3, 1.843)
 texture = ExtResource("7_clouds")
 
 [node name="Moon" type="Node2D" parent="Platform/BGCloudsLayer" unique_id=1882401933]
-visible = false
 z_index = -8
 position = Vector2(1500, -1280)
-script = ExtResource("15_moon")
+
+[node name="Glow" type="ColorRect" parent="Platform/BGCloudsLayer/Moon" unique_id=367530511]
+material = SubResource("ShaderMaterial_moon")
+offset_left = -520.0
+offset_top = -520.0
+offset_right = 520.0
+offset_bottom = 520.0
+mouse_filter = 2
+
+[node name="Sprite" type="Sprite2D" parent="Platform/BGCloudsLayer/Moon" unique_id=531339684]
+material = SubResource("ShaderMaterial_blur")
+scale = Vector2(0.72, 0.72)
+texture = ExtResource("15_sun")
 
 [node name="ForegroundCloudsLayer" type="Node2D" parent="Platform" unique_id=1122071185]
 script = ExtResource("14_parallax")

@@ -1,9 +1,23 @@
 [gd_scene format=3 uid="uid://btc1tedokuue7"]
 
 [ext_resource type="Script" uid="uid://bi3rs3hq5bkge" path="res://scripts/updraft_zone.gd" id="1_updraft"]
+[ext_resource type="Shader" uid="uid://bnw4rtyv21c71" path="res://shaders/wind_lines.gdshader" id="2_lines"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tlenm"]
 size = Vector2(16000, 700)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_up"]
+resource_local_to_scene = true
+shader = ExtResource("2_lines")
+shader_parameter/wind_color = Color(1, 1, 1, 1)
+shader_parameter/flow_speed = 110.0
+shader_parameter/active = 1.0
+shader_parameter/fill_mode = 1.0
+shader_parameter/zone_size = Vector2(16000, 700)
+shader_parameter/rect_size = Vector2(16096, 860)
+shader_parameter/curve = 0.0
+shader_parameter/upward = 1.0
+shader_parameter/line_gap = 3.5
 
 [node name="UpdraftZone" type="Area2D" unique_id=1304608146]
 collision_layer = 0
@@ -14,4 +28,13 @@ lift_speed = 400.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=219817647]
 shape = SubResource("RectangleShape2D_tlenm")
+metadata/_edit_lock_ = true
+
+[node name="WindVisual" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_up")
+offset_left = -8048.0
+offset_top = -430.0
+offset_right = 8048.0
+offset_bottom = 430.0
+mouse_filter = 2
 metadata/_edit_lock_ = true

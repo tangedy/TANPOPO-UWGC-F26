@@ -63,6 +63,9 @@ func _ready() -> void:
 	completion_area.body_entered.connect(_on_return_body)
 	prompt.visible = false
 	set_process_unhandled_input(true)
+	if get_tree().has_meta("fade_from_black"):
+		get_tree().remove_meta("fade_from_black")
+		_fade_from_black()
 	_opening()
 
 
@@ -143,6 +146,21 @@ func _play_music(stream: AudioStream) -> void:
 			wav.loop_end = frames
 		wav.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	music.play()
+
+
+func _fade_from_black() -> void:
+	var layer := CanvasLayer.new()
+	layer.layer = 100
+	add_child(layer)
+	var rect := ColorRect.new()
+	rect.color = Color.BLACK
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	layer.add_child(rect)
+	var tween := create_tween()
+	tween.tween_property(rect, "modulate:a", 0.0, 0.55).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	await tween.finished
+	layer.queue_free()
 
 
 func _opening() -> void:

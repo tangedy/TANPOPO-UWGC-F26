@@ -8,6 +8,17 @@
 [ext_resource type="Texture2D" uid="uid://crsek7kykbsq" path="res://Assets/images/drift_dandelion.png" id="6_hiwto"]
 [ext_resource type="Shader" uid="uid://cgrcibi8s81fo" path="res://shaders/white_key.gdshader" id="7_w65of"]
 [ext_resource type="Texture2D" uid="uid://dsropeicsb4jk" path="res://Assets/images/drift_seed_parti.png" id="8_ygloa"]
+[ext_resource type="Texture2D" uid="uid://denuwbhybyy2f" path="res://Assets/images/tanpopo_test.png" id="9_hiwto"]
+[ext_resource type="FontFile" uid="uid://dkuc1g4ga4mlk" path="res://Assets/images/CHILDREN-ONE.otf" id="10_font"]
+[ext_resource type="PackedScene" uid="uid://t0yrhsy5mo5e" path="res://scenes/grass.tscn" id="11_7af2g"]
+[ext_resource type="Texture2D" uid="uid://bb21kgo1vtv0y" path="res://Assets/images/drift_arrow.png" id="11_ygloa"]
+[ext_resource type="PackedScene" uid="uid://b6skvnu5lj85b" path="res://scenes/flower.tscn" id="12_6civk"]
+[ext_resource type="AudioStream" uid="uid://cg8fdu0m7ddhc" path="res://Assets/sfx/creatorshome-select-003-337609.mp3" id="14_81wt4"]
+[ext_resource type="AudioStream" uid="uid://b4y3uf52156oa" path="res://Assets/sfx/creatorshome-digital-click-357350.mp3" id="14_kcc3o"]
+[ext_resource type="PackedScene" uid="uid://uel7xvwc5jvp" path="res://scenes/wind_zone.tscn" id="16_6rcc6"]
+[ext_resource type="Shader" uid="uid://bnw4rtyv21c71" path="res://shaders/wind_lines.gdshader" id="17_ah8jo"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_btn"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yql1r"]
 shader = ExtResource("4_b3w7a")
@@ -67,6 +78,38 @@ turbulence_influence_min = 0.02
 turbulence_influence_max = 0.08
 turbulence_initial_displacement_max = 6.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ah8jo"]
+size = Vector2(500, 40)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8magm"]
+resource_local_to_scene = true
+shader = ExtResource("17_ah8jo")
+shader_parameter/wind_color = Color(1, 1, 1, 1)
+shader_parameter/flow_speed = 67.66
+shader_parameter/active = 1.0
+shader_parameter/fill_mode = 1.0
+shader_parameter/zone_size = Vector2(500, 40)
+shader_parameter/rect_size = Vector2(620, 160)
+shader_parameter/curve = -1.0
+shader_parameter/upward = 0.0
+shader_parameter/line_gap = 1.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_blk4q"]
+size = Vector2(500, 20)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fgbvm"]
+resource_local_to_scene = true
+shader = ExtResource("17_ah8jo")
+shader_parameter/wind_color = Color(1, 1, 1, 1)
+shader_parameter/flow_speed = 67.66
+shader_parameter/active = 1.0
+shader_parameter/fill_mode = 1.0
+shader_parameter/zone_size = Vector2(500, 20)
+shader_parameter/rect_size = Vector2(620, 120)
+shader_parameter/curve = -1.0
+shader_parameter/upward = 0.0
+shader_parameter/line_gap = 1.0
+
 [node name="Title" type="Control" unique_id=128748312]
 layout_mode = 3
 anchors_preset = 15
@@ -76,32 +119,54 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_title")
 
-[node name="Center" type="CenterContainer" parent="." unique_id=1308336471]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 3.0
-offset_top = 165.0
-offset_right = -2.0
-offset_bottom = 165.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Buttons" type="VBoxContainer" parent="Center" unique_id=373362619]
-layout_mode = 2
-theme_override_constants/separation = 16
-
-[node name="Play" type="Button" parent="Center/Buttons" unique_id=347049855]
-custom_minimum_size = Vector2(220, 52)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
+[node name="Play" type="Button" parent="." unique_id=347049855]
+custom_minimum_size = Vector2(300, 72)
+layout_mode = 0
+offset_left = 119.0
+offset_top = 414.0
+offset_right = 419.0
+offset_bottom = 486.0
+offset_transform_enabled = true
+offset_transform_scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("10_font")
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_btn")
 text = "Play"
 
-[node name="Exit" type="Button" parent="Center/Buttons" unique_id=2011497846]
-custom_minimum_size = Vector2(220, 52)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
+[node name="Exit" type="Button" parent="." unique_id=2011497846]
+custom_minimum_size = Vector2(300, 72)
+layout_mode = 0
+offset_left = 111.0
+offset_top = 505.0
+offset_right = 411.0
+offset_bottom = 577.0
+offset_transform_enabled = true
+offset_transform_scale = Vector2(2, 2)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("10_font")
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_btn")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_btn")
 text = "Exit"
 
 [node name="Music" type="AudioStreamPlayer" parent="." unique_id=981419695]
@@ -119,7 +184,7 @@ texture = ExtResource("5_4rr2b")
 
 [node name="DriftGrass" type="Sprite2D" parent="Stuff" unique_id=1281944875]
 material = SubResource("ShaderMaterial_6civk")
-position = Vector2(395, 788)
+position = Vector2(885.125, 741)
 texture = ExtResource("6_hiwto")
 offset = Vector2(-40, -170)
 
@@ -137,7 +202,7 @@ process_material = SubResource("ParticleProcessMaterial_6rcc6")
 
 [node name="DriftGrass2" type="Sprite2D" parent="Stuff" unique_id=590210875]
 material = SubResource("ShaderMaterial_6civk")
-position = Vector2(898, 846)
+position = Vector2(1081.5, 804)
 scale = Vector2(-1, 1)
 texture = ExtResource("6_hiwto")
 offset = Vector2(-40, -170)
@@ -156,7 +221,7 @@ process_material = SubResource("ParticleProcessMaterial_6rcc6")
 
 [node name="DriftGrass3" type="Sprite2D" parent="Stuff" unique_id=920649274]
 material = SubResource("ShaderMaterial_6civk")
-position = Vector2(100, 820.00006)
+position = Vector2(590.125, 744.00006)
 scale = Vector2(-0.75, 0.75)
 texture = ExtResource("6_hiwto")
 offset = Vector2(-40, -170)
@@ -173,24 +238,38 @@ randomness = 0.6
 visibility_rect = Rect2(-180, -520, 420, 620)
 process_material = SubResource("ParticleProcessMaterial_6rcc6")
 
-[node name="DriftGrass4" type="Sprite2D" parent="Stuff" unique_id=907674452]
-material = SubResource("ShaderMaterial_6civk")
-position = Vector2(1141, 813.00006)
-scale = Vector2(-0.75, 0.75)
-texture = ExtResource("6_hiwto")
-offset = Vector2(-40, -170)
+[node name="Grass" type="Node2D" parent="Stuff" unique_id=1441059205]
+z_index = 10
 
-[node name="SeedParti" type="GPUParticles2D" parent="Stuff/DriftGrass4" unique_id=852437264]
-z_index = 1
-material = SubResource("ShaderMaterial_7af2g")
-position = Vector2(-40, -286)
-amount = 6
-texture = ExtResource("8_ygloa")
-lifetime = 10.0
-preprocess = 6.0
-randomness = 0.6
-visibility_rect = Rect2(-180, -520, 420, 620)
-process_material = SubResource("ParticleProcessMaterial_6rcc6")
+[node name="Grass2" parent="Stuff/Grass" unique_id=1211563343 instance=ExtResource("11_7af2g")]
+position = Vector2(536, 719)
+
+[node name="Grass3" parent="Stuff/Grass" unique_id=478474200 instance=ExtResource("11_7af2g")]
+position = Vector2(755, 719)
+
+[node name="Grass4" parent="Stuff/Grass" unique_id=1755659598 instance=ExtResource("11_7af2g")]
+position = Vector2(967, 719)
+
+[node name="Grass5" parent="Stuff/Grass" unique_id=2041531135 instance=ExtResource("11_7af2g")]
+position = Vector2(1233, 719)
+
+[node name="Grass6" parent="Stuff/Grass" unique_id=1947247565 instance=ExtResource("11_7af2g")]
+position = Vector2(156, 719)
+
+[node name="Grass7" parent="Stuff/Grass" unique_id=315162036 instance=ExtResource("11_7af2g")]
+position = Vector2(37, 719)
+
+[node name="Flower" parent="Stuff/Grass" unique_id=1246220896 instance=ExtResource("12_6civk")]
+position = Vector2(93, 729)
+
+[node name="Flower3" parent="Stuff/Grass" unique_id=1450429513 instance=ExtResource("12_6civk")]
+position = Vector2(643, 729)
+
+[node name="Flower4" parent="Stuff/Grass" unique_id=1231771282 instance=ExtResource("12_6civk")]
+position = Vector2(462, 729)
+
+[node name="Flower2" parent="Stuff/Grass" unique_id=1968628173 instance=ExtResource("12_6civk")]
+position = Vector2(1010, 728)
 
 [node name="BG" type="Node2D" parent="." unique_id=1826476653]
 z_index = -6
@@ -207,3 +286,64 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.690196, 0.878431, 0.917647, 1)
+
+[node name="TanpopoTest" type="Sprite2D" parent="." unique_id=2141804004]
+material = SubResource("ShaderMaterial_yql1r")
+position = Vector2(497, 262)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("9_hiwto")
+
+[node name="DriftArrow" type="Sprite2D" parent="." unique_id=504630407]
+z_index = 2
+position = Vector2(387, 446)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("11_ygloa")
+
+[node name="click" type="AudioStreamPlayer2D" parent="." unique_id=1230193423]
+stream = ExtResource("14_kcc3o")
+volume_db = -5.0
+
+[node name="hover" type="AudioStreamPlayer2D" parent="." unique_id=1864566372]
+stream = ExtResource("14_81wt4")
+volume_db = -5.0
+
+[node name="WindZone" parent="." unique_id=858789183 instance=ExtResource("16_6rcc6")]
+modulate = Color(1, 1, 1, 0.77254903)
+position = Vector2(681, 244)
+scale = Vector2(3, 3)
+strength = 116.0
+always_active = true
+zone_size = Vector2(500, 40)
+
+[node name="CollisionShape2D" parent="WindZone" index="0" unique_id=2097485913]
+shape = SubResource("RectangleShape2D_ah8jo")
+
+[node name="WindVisual" parent="WindZone" index="1" unique_id=302773827]
+modulate = Color(1, 1, 1, 0.21176471)
+material = SubResource("ShaderMaterial_8magm")
+offset_left = -310.0
+offset_top = -80.0
+offset_right = 310.0
+offset_bottom = 80.0
+
+[node name="WindZone2" parent="." unique_id=1154249496 instance=ExtResource("16_6rcc6")]
+modulate = Color(1, 1, 1, 0.77254903)
+position = Vector2(681, 544)
+scale = Vector2(3, 3)
+strength = 116.0
+always_active = true
+zone_size = Vector2(500, 20)
+
+[node name="CollisionShape2D" parent="WindZone2" index="0" unique_id=2097485913]
+shape = SubResource("RectangleShape2D_blk4q")
+
+[node name="WindVisual" parent="WindZone2" index="1" unique_id=302773827]
+modulate = Color(1, 1, 1, 0.21176471)
+material = SubResource("ShaderMaterial_fgbvm")
+offset_left = -310.0
+offset_top = -60.0
+offset_right = 310.0
+offset_bottom = 60.0
+
+[editable path="WindZone"]
+[editable path="WindZone2"]
