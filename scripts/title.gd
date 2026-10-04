@@ -14,6 +14,7 @@ const ARROW_GAP := -8.0
 var _leaving := false
 
 func _ready() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	_loop_music()
 	music.play()
 	if get_tree().has_meta("fade_from_black"):
@@ -27,6 +28,10 @@ func _ready() -> void:
 	exit_button.pressed.connect(_on_exit)
 	arrow.visible = false
 	_refresh_buttons()
+
+
+func _exit_tree() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 
 
 func _on_button_hover() -> void:

@@ -7,6 +7,7 @@ const CURSOR_HOTSPOT := Vector2(16, 9)
 
 func _ready() -> void:
 	ensure()
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 
 
 static func ensure() -> void:
