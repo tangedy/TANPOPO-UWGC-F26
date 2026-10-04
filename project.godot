@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 InputSetup="*res://scripts/input_setup.gd"
+SceneCurtain="*res://scripts/scene_curtain.gd"
 
 [display]
 
@@ -67,4 +68,4 @@ down={
 [rendering]
 
 rendering_device/driver.windows="d3d12"
-environment/defaults/default_clear_color=Color(0.69388443, 0.74152267, 0.85341835, 1)
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)

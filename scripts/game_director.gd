@@ -1,9 +1,9 @@
 extends Node
 
-const LEVELS: Array[PackedScene] = [
-	preload("res://scenes/level_1.tscn"),
-	preload("res://scenes/level_2.tscn"),
-	preload("res://scenes/level_3.tscn"),
+const LEVEL_PATHS: Array[String] = [
+	"res://scenes/level_1.tscn",
+	"res://scenes/level_2.tscn",
+	"res://scenes/level_3.tscn",
 ]
 const TITLE_SCENE := "res://scenes/title.tscn"
 const FINAL_SCENE := "res://final.tscn"
@@ -102,7 +102,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	var key := event as InputEventKey
 	if not key.pressed or key.echo or key.physical_keycode != KEY_L:
 		return
-	_debug_select((_level + 1) % LEVELS.size())
+	_debug_select((_level + 1) % LEVEL_PATHS.size())
 	get_viewport().set_input_as_handled()
 
 
@@ -214,9 +214,14 @@ func _play_level(from_black: bool) -> void:
 	# Tell the next room to bring its music/ambience up from silence as it loads.
 	if from_black:
 		get_tree().set_meta("drift_fade_audio_in", FADE_IN_TIME)
-	var scene := _swap(LEVELS[_level])
+		RenderingServer.set_default_clear_color(Color.BLACK)
+	var packed := await SceneCurtain.load_packed(LEVEL_PATHS[_level])
+	if token != _play_token or not is_inside_tree() or packed == null:
+		return
+	var scene := _swap(packed)
 	_current_room = scene
 	if from_black:
+		SceneCurtain.fade_out(FADE_IN_TIME)
 		await _fade_to(0.0, FADE_IN_TIME)
 	if token != _play_token or not is_instance_valid(scene):
 		return
@@ -235,6 +240,9 @@ func _advance(token: int) -> void:
 	await _fade_to(1.0, FADE_OUT_TIME)
 	if token != _play_token or not is_inside_tree():
 		return
+	var next := _level + 1
+	if next < LEVEL_PATHS.size() and not ResourceLoader.has_cached(LEVEL_PATHS[next]):
+		ResourceLoader.load_threaded_request(LEVEL_PATHS[next])
 	await get_tree().create_timer(MEMORY_PAUSE_BEFORE).timeout
 	if token != _play_token or not is_inside_tree():
 		return
@@ -245,12 +253,12 @@ func _advance(token: int) -> void:
 	if token != _play_token or not is_inside_tree():
 		return
 	_level += 1
-	if _level >= LEVELS.size():
+	if _level >= LEVEL_PATHS.size():
 		await _fade_to_white(FADE_IN_TIME)
 		if token != _play_token or not is_inside_tree():
 			return
 		get_tree().set_meta("fade_from_white", true)
-		get_tree().change_scene_to_file(FINAL_SCENE)
+		SceneCurtain.change_scene(FINAL_SCENE, Color.WHITE)
 		return
 	await _play_level(true)
 
@@ -260,7 +268,11 @@ func _advance(token: int) -> void:
 func _play_ending(token: int) -> void:
 	get_tree().set_meta("drift_hold_start", true)
 	get_tree().set_meta("drift_fade_audio_in", ENDING_FADE_IN)
-	var scene := _swap(LEVELS[0])
+	RenderingServer.set_default_clear_color(Color.WHITE)
+	var packed := await SceneCurtain.load_packed(LEVEL_PATHS[0])
+	if token != _play_token or not is_inside_tree() or packed == null:
+		return
+	var scene := _swap(packed)
 	_current_room = scene
 	if is_instance_valid(scene):
 		scene.set("time_of_day", 0)
@@ -268,6 +280,7 @@ func _play_ending(token: int) -> void:
 	if token != _play_token or not is_inside_tree():
 		return
 	var credits := _build_credits(scene)
+	SceneCurtain.fade_out(ENDING_FADE_IN)
 	if not await _fade_unless(0.0, ENDING_FADE_IN, token):
 		return
 	await get_tree().create_timer(0.7).timeout
@@ -283,7 +296,7 @@ func _play_ending(token: int) -> void:
 	if not await _fade_unless(1.0, ENDING_FADE_OUT, token):
 		return
 	get_tree().set_meta("fade_from_black", true)
-	get_tree().change_scene_to_file(TITLE_SCENE)
+	SceneCurtain.change_scene(TITLE_SCENE, Color.BLACK)
 
 
 ## Credits use the bench pose. The running girl stays hidden, and the bench sprite stays hidden in play.
@@ -392,7 +405,7 @@ func _fade_unless(target: float, duration: float, token: int) -> bool:
 
 func _debug_select(index: int) -> void:
 	_play_token += 1
-	_level = clampi(index, 0, LEVELS.size() - 1)
+	_level = clampi(index, 0, LEVEL_PATHS.size() - 1)
 	if _fade_tween and _fade_tween.is_valid():
 		_fade_tween.kill()
 	if _credits_tween and _credits_tween.is_valid():
@@ -403,7 +416,15 @@ func _debug_select(index: int) -> void:
 		get_tree().remove_meta("drift_hold_start")
 	fade.modulate.a = 0.0
 	line_box.visible = false
-	var scene := _swap(LEVELS[_level])
+	_open_debug_level()
+
+
+func _open_debug_level() -> void:
+	var token := _play_token
+	var packed := await SceneCurtain.load_packed(LEVEL_PATHS[_level])
+	if token != _play_token or not is_inside_tree() or packed == null:
+		return
+	var scene := _swap(packed)
 	_current_room = scene
 	if is_instance_valid(scene):
 		scene.returned.connect(_on_level_returned, CONNECT_ONE_SHOT)

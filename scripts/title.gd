@@ -90,7 +90,7 @@ func _on_play() -> void:
 	click_sfx.play()
 	await _fade_black(0.45)
 	get_tree().set_meta("fade_from_black", true)
-	get_tree().change_scene_to_file(INTRO)
+	SceneCurtain.change_scene(INTRO, Color.BLACK)
 
 
 func _on_exit() -> void:
@@ -103,6 +103,7 @@ func _on_exit() -> void:
 
 
 func _fade_from_black(duration: float) -> void:
+	SceneCurtain.fade_out(duration)
 	var layer := CanvasLayer.new()
 	layer.layer = 100
 	add_child(layer)

@@ -20,6 +20,7 @@ func _ready() -> void:
 	if _cover == null:
 		return
 	get_tree().remove_meta("fade_from_white")
+	SceneCurtain.fade_out(FADE_TIME)
 	var tween := create_tween()
 	tween.tween_property(_cover, "modulate:a", 0.0, FADE_TIME).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	await tween.finished
@@ -44,7 +45,7 @@ func _go_to_credits() -> void:
 	if not is_inside_tree():
 		return
 	get_tree().set_meta("drift_play_credits", true)
-	get_tree().change_scene_to_file(GAME)
+	SceneCurtain.change_scene(GAME, Color.WHITE)
 
 
 func _make_overlay(color: Color) -> ColorRect:

@@ -535,23 +535,29 @@ autoplay = &"anim"
 [node name="grass" type="AudioStreamPlayer2D" parent="." unique_id=806868439]
 volume_db = 2.0
 pitch_scale = 1.5
+playback_type = 1
 
 [node name="star" type="AudioStreamPlayer2D" parent="." unique_id=1858606988]
 volume_db = 15.0
 pitch_scale = 1.5
+playback_type = 1
 
 [node name="jump" type="AudioStreamPlayer2D" parent="." unique_id=1356159942]
 pitch_scale = 3.0
+playback_type = 1
 
 [node name="ambience" type="AudioStreamPlayer2D" parent="." unique_id=1955187736]
 stream = ExtResource("29_miu2m")
-volume_db = 24.0
+volume_db = 15.0
 autoplay = true
+playback_type = 1
 
 [node name="wind" type="AudioStreamPlayer2D" parent="." unique_id=1843693516]
+playback_type = 1
 
 [node name="music" type="AudioStreamPlayer2D" parent="." unique_id=1038544869]
 stream = ExtResource("30_qc65c")
 volume_db = 5.0
 pitch_scale = 0.8
 autoplay = true
+playback_type = 1

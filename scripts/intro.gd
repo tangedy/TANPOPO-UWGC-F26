@@ -39,10 +39,11 @@ func _process(delta: float) -> void:
 func _go_to_game() -> void:
 	await _fade_white(WHITE_FADE_TIME)
 	get_tree().set_meta("fade_from_white", true)
-	get_tree().change_scene_to_file(GAME)
+	SceneCurtain.change_scene(GAME, Color.WHITE)
 
 
 func _fade_from_black(duration: float) -> void:
+	SceneCurtain.fade_out(duration)
 	var rect := _make_overlay(Color.BLACK)
 	rect.modulate.a = 1.0
 	var tween := create_tween()

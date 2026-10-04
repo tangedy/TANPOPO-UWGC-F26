@@ -44,6 +44,9 @@ var _exit_clocks: Array[float] = []
 var _exit_live: Array[bool] = []
 const _EXIT_STREAK_COUNT := 3
 const _EXIT_STREAK_TIME := 5.2
+## How far right of the cliff lip still counts. She can finish before her body touches the edge.
+const _EXIT_LIP_REACH := 640.0
+const _EXIT_LIP_PAST := 180.0
 
 @onready var glow: CanvasItem = $Platform/CompletionArea/Glow
 @onready var completion_area: Area2D = $Platform/CompletionArea
@@ -208,6 +211,7 @@ func _tween_audio(music_db: float, ambience_db: float, duration: float) -> void:
 
 
 func _fade_from_color(color: Color, duration: float) -> void:
+	SceneCurtain.fade_out(duration)
 	var layer := CanvasLayer.new()
 	layer.layer = 100
 	add_child(layer)
@@ -253,9 +257,9 @@ func _physics_process(_delta: float) -> void:
 	if body == null or lip == Vector2.INF:
 		return
 	var pos := body.global_position
-	var on_the_left := pos.x <= lip.x + 340.0 and pos.x >= lip.x - 120.0
+	var on_the_left := pos.x <= lip.x + _EXIT_LIP_REACH and pos.x >= lip.x - _EXIT_LIP_PAST
 	var dy := pos.y - lip.y
-	var at_the_grass := dy >= -200.0 and dy <= 48.0
+	var at_the_grass := dy >= -280.0 and dy <= 80.0
 	if not on_the_left or not at_the_grass:
 		return
 	_ending = true

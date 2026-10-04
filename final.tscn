@@ -532,22 +532,28 @@ autoplay = &"anim"
 stream = ExtResource("10_iquii")
 volume_db = -80.0
 autoplay = true
+playback_type = 1
 
 [node name="grass" type="AudioStreamPlayer2D" parent="." unique_id=2094072820]
 volume_db = 2.0
 pitch_scale = 1.5
+playback_type = 1
 
 [node name="star" type="AudioStreamPlayer2D" parent="." unique_id=1416114114]
 volume_db = 15.0
 pitch_scale = 1.5
+playback_type = 1
 
 [node name="jump" type="AudioStreamPlayer2D" parent="." unique_id=1217845585]
 pitch_scale = 3.0
+playback_type = 1
 
 [node name="ambience" type="AudioStreamPlayer2D" parent="." unique_id=878914145]
 volume_db = -80.0
 autoplay = true
+playback_type = 1
 
 [node name="wind" type="AudioStreamPlayer2D" parent="." unique_id=1249909030]
 volume_db = -20.0
 pitch_scale = 0.5
+playback_type = 1
