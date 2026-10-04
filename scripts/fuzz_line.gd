@@ -9,7 +9,7 @@ const LEAVES: Array[Texture2D] = [
 	preload("res://Assets/images/leaf_2.png"),
 ]
 const WOOSH := preload("res://Assets/sfx/soundreality-wind-blowing-457954.mp3")
-const TINT := Color(0.42, 0.58, 0.28, 1)
+const TINT := Color(0.88, 0.96, 0.86, 1)
 
 const COUNT := 18
 const SPAWN_WINDOW := 1.5
@@ -191,7 +191,7 @@ class Burst:
 			wisp.freq = randf_range(1.4, 2.8)
 			wisp.base_rot = randf() * TAU
 			wisp.spin_rate = randf_range(-1.4, 1.4)
-			wisp.scale = randf_range(0.08, 0.2)
+			wisp.scale = randf_range(0.04, 0.1)
 			wisp.sprite = Sprite2D.new()
 			wisp.sprite.texture = LEAVES[randi() % LEAVES.size()]
 			wisp.sprite.centered = true
