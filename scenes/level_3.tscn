@@ -32,9 +32,12 @@ time_of_day = 3
 [node name="ColorRect" parent="Sky" parent_id_path=PackedInt32Array(1900425886) index="0" unique_id=661618102]
 metadata/_edit_lock_ = true
 
+[node name="Updraft" parent="." index="5" unique_id=95024445]
+lift_speed = 800.0
+
 [node name="WindRight2" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="0" unique_id=858789183 instance=ExtResource("2_1pn4d")]
 z_index = 2
-position = Vector2(4954, 837)
+position = Vector2(5512, 1395)
 strength = 595.0
 curve = 0.06000000000000005
 always_active = false
@@ -112,19 +115,7 @@ off_duration = 6.0
 start_delay = 4.0
 zone_size = Vector2(500, 500)
 
-[node name="WindDown3" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="7" unique_id=1961267034 instance=ExtResource("2_1pn4d")]
-z_index = 2
-position = Vector2(6028, 1387)
-rotation = 1.570796
-strength = 109.0
-curve = 0.06000000000000005
-always_active = false
-on_duration = 2.0
-off_duration = 6.0
-start_delay = 6.0
-zone_size = Vector2(500, 500)
-
-[node name="WindRight" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="8" unique_id=2000000102]
+[node name="WindRight" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="7" unique_id=2000000102]
 position = Vector2(4954, 1380)
 strength = 595.0
 curve = 0.06000000000000005
@@ -134,7 +125,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindUpRight" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="9" unique_id=2000000103]
+[node name="WindUpRight" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="8" unique_id=2000000103]
 position = Vector2(1766, -606)
 strength = 745.0
 curve = 0.06000000000000005
@@ -144,7 +135,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindUp" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="10" unique_id=2000000104]
+[node name="WindUp" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="9" unique_id=2000000104]
 position = Vector2(4956, 1917)
 strength = 763.0
 curve = 0.06000000000000005
@@ -154,7 +145,7 @@ off_duration = 6.0
 start_delay = 4.0
 zone_size = Vector2(500, 500)
 
-[node name="WindUpLeft" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="11" unique_id=2000000105]
+[node name="WindUpLeft" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="10" unique_id=2000000105]
 position = Vector2(2149, -210.99988)
 strength = 745.0
 curve = 0.06000000000000005
@@ -164,7 +155,7 @@ off_duration = 6.0
 start_delay = 4.0
 zone_size = Vector2(500, 500)
 
-[node name="WindLeft" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="12" unique_id=2000000106]
+[node name="WindLeft" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="11" unique_id=2000000106]
 position = Vector2(5491, 1920)
 strength = 595.0
 curve = 0.06000000000000005
@@ -174,7 +165,7 @@ off_duration = 6.0
 start_delay = 2.0
 zone_size = Vector2(500, 500)
 
-[node name="WindDownLeft" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="13" unique_id=2000000107]
+[node name="WindDownLeft" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="12" unique_id=2000000107]
 position = Vector2(2559, -596)
 strength = 128.0
 curve = 0.06000000000000005
@@ -184,8 +175,8 @@ off_duration = 6.0
 start_delay = 2.0
 zone_size = Vector2(500, 500)
 
-[node name="WindDown" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="14" unique_id=2000000108]
-position = Vector2(5495, 1387)
+[node name="WindDown" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="13" unique_id=2000000108]
+position = Vector2(4937, 842)
 strength = 109.0
 curve = 0.06000000000000005
 always_active = false
@@ -193,7 +184,7 @@ on_duration = 2.0
 off_duration = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindRight12" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="15" unique_id=605060358 instance=ExtResource("2_1pn4d")]
+[node name="WindRight12" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="14" unique_id=605060358 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(6041, -2442)
 strength = 595.0
@@ -203,7 +194,7 @@ on_duration = 2.0
 off_duration = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindUp14" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="16" unique_id=481888650 instance=ExtResource("2_1pn4d")]
+[node name="WindUp14" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="15" unique_id=481888650 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(6590, -2438)
 rotation = -1.570796
@@ -215,7 +206,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindLeft13" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="17" unique_id=477418033 instance=ExtResource("2_1pn4d")]
+[node name="WindLeft13" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="16" unique_id=477418033 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(6582, -2973)
 rotation = -3.1415923
@@ -227,7 +218,7 @@ off_duration = 6.0
 start_delay = 4.0
 zone_size = Vector2(500, 500)
 
-[node name="WindDown13" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="18" unique_id=1077805964 instance=ExtResource("2_1pn4d")]
+[node name="WindDown13" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="17" unique_id=1077805964 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(6035, -2987)
 rotation = 1.570796
@@ -239,7 +230,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindRight13" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="19" unique_id=2043896182 instance=ExtResource("2_1pn4d")]
+[node name="WindRight13" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="18" unique_id=2043896182 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(4961, -2994)
 strength = 595.0
@@ -250,7 +241,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindUp15" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="20" unique_id=715903168 instance=ExtResource("2_1pn4d")]
+[node name="WindUp15" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="19" unique_id=715903168 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(4963, -2457)
 rotation = -1.570796
@@ -262,7 +253,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindLeft14" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="21" unique_id=1797552871 instance=ExtResource("2_1pn4d")]
+[node name="WindLeft14" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="20" unique_id=1797552871 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(5498, -2454)
 rotation = 3.141593
@@ -274,7 +265,7 @@ off_duration = 6.0
 start_delay = 2.0
 zone_size = Vector2(500, 500)
 
-[node name="WindDown14" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="22" unique_id=1330099111 instance=ExtResource("2_1pn4d")]
+[node name="WindDown14" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="21" unique_id=1330099111 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(5502, -2987)
 rotation = 1.570796
@@ -285,7 +276,7 @@ on_duration = 2.0
 off_duration = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindLeft9" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="23" unique_id=1110438568 instance=ExtResource("2_1pn4d")]
+[node name="WindLeft9" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="22" unique_id=1110438568 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(6563, -232)
 rotation = -3.1415923
@@ -297,7 +288,7 @@ off_duration = 6.0
 start_delay = 4.0
 zone_size = Vector2(500, 500)
 
-[node name="WindDown9" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="24" unique_id=756025179 instance=ExtResource("2_1pn4d")]
+[node name="WindDown9" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="23" unique_id=756025179 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(6016, -246)
 rotation = 1.570796
@@ -309,7 +300,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindRight9" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="25" unique_id=1959836197 instance=ExtResource("2_1pn4d")]
+[node name="WindRight9" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="24" unique_id=1959836197 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(4942, -253)
 strength = 595.0
@@ -320,7 +311,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindDown10" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="26" unique_id=696869859 instance=ExtResource("2_1pn4d")]
+[node name="WindDown10" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="25" unique_id=696869859 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(5483, -246)
 rotation = 1.570796
@@ -331,7 +322,7 @@ on_duration = 2.0
 off_duration = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindRight7" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="27" unique_id=1723054954 instance=ExtResource("2_1pn4d")]
+[node name="WindRight7" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="26" unique_id=1723054954 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(1690, 1873)
 strength = 595.0
@@ -341,7 +332,7 @@ on_duration = 2.0
 off_duration = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindUp7" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="28" unique_id=1047607962 instance=ExtResource("2_1pn4d")]
+[node name="WindUp7" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="27" unique_id=1047607962 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(2239, 1877)
 rotation = -1.570796
@@ -353,7 +344,67 @@ off_duration = 6.0
 start_delay = 2.0
 zone_size = Vector2(500, 500)
 
-[node name="WindLeft7" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="29" unique_id=40552646 instance=ExtResource("2_1pn4d")]
+[node name="WindUp28" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="28" unique_id=1617214933 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(1149, 1305)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp26" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="29" unique_id=1783163133 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2797, 1884)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp27" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="30" unique_id=1015515707 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3880, 1904)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp29" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="31" unique_id=116670232 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(1700, 1312)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp30" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="32" unique_id=2007764407 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6046, 1386)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft7" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="33" unique_id=40552646 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(2231, 1342)
 rotation = -3.1415923
@@ -365,19 +416,7 @@ off_duration = 6.0
 start_delay = 4.0
 zone_size = Vector2(500, 500)
 
-[node name="WindDown7" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="30" unique_id=479827729 instance=ExtResource("2_1pn4d")]
-z_index = 2
-position = Vector2(1684, 1328)
-rotation = 1.570796
-strength = 109.0
-curve = 0.06000000000000005
-always_active = false
-on_duration = 2.0
-off_duration = 6.0
-start_delay = 6.0
-zone_size = Vector2(500, 500)
-
-[node name="WindRight8" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="31" unique_id=492862698 instance=ExtResource("2_1pn4d")]
+[node name="WindRight8" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="34" unique_id=492862698 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(610, 1321)
 strength = 595.0
@@ -388,7 +427,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindUp8" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="32" unique_id=1141218292 instance=ExtResource("2_1pn4d")]
+[node name="WindUp8" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="35" unique_id=1141218292 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(612, 1858)
 rotation = -1.570796
@@ -400,7 +439,7 @@ off_duration = 6.0
 start_delay = 4.0
 zone_size = Vector2(500, 500)
 
-[node name="WindLeft8" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="33" unique_id=230464236 instance=ExtResource("2_1pn4d")]
+[node name="WindLeft8" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="36" unique_id=230464236 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(1147, 1861)
 rotation = 3.141593
@@ -412,19 +451,7 @@ off_duration = 6.0
 start_delay = 2.0
 zone_size = Vector2(500, 500)
 
-[node name="WindDown8" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="34" unique_id=1972903311 instance=ExtResource("2_1pn4d")]
-z_index = 2
-position = Vector2(1151, 1328)
-rotation = 1.570796
-strength = 109.0
-curve = 0.06000000000000005
-always_active = false
-on_duration = 2.0
-off_duration = 6.0
-start_delay = 6.0
-zone_size = Vector2(500, 500)
-
-[node name="WindRight25" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="35" unique_id=837812858 instance=ExtResource("2_1pn4d")]
+[node name="WindRight25" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="37" unique_id=837812858 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(2246, -2446)
 strength = 595.0
@@ -434,7 +461,7 @@ on_duration = 2.0
 off_duration = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindDown29" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="36" unique_id=882025184 instance=ExtResource("2_1pn4d")]
+[node name="WindDown29" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="38" unique_id=882025184 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(1701, -2446)
 rotation = 1.570796
@@ -446,7 +473,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindRight26" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="37" unique_id=1347847735 instance=ExtResource("2_1pn4d")]
+[node name="WindRight26" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="39" unique_id=1347847735 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(627, -2453)
 strength = 595.0
@@ -457,7 +484,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindUp24" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="38" unique_id=1334633118 instance=ExtResource("2_1pn4d")]
+[node name="WindUp24" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="40" unique_id=1334633118 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(629, -1916)
 rotation = -1.570796
@@ -469,7 +496,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindLeft26" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="39" unique_id=1376049263 instance=ExtResource("2_1pn4d")]
+[node name="WindLeft26" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="41" unique_id=1376049263 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(1164, -1913)
 rotation = 3.141593
@@ -481,7 +508,7 @@ off_duration = 6.0
 start_delay = 2.0
 zone_size = Vector2(500, 500)
 
-[node name="WindDown30" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="40" unique_id=524903941 instance=ExtResource("2_1pn4d")]
+[node name="WindDown30" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="42" unique_id=524903941 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(1168, -2446)
 rotation = 1.570796
@@ -493,7 +520,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindRight4" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="41" unique_id=1646880393 instance=ExtResource("2_1pn4d")]
+[node name="WindRight4" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="43" unique_id=1646880393 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(6034, 314)
 strength = 595.0
@@ -504,7 +531,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindUp4" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="42" unique_id=1566437767 instance=ExtResource("2_1pn4d")]
+[node name="WindUp4" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="44" unique_id=1566437767 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(6036, 851)
 rotation = -1.570796
@@ -516,7 +543,7 @@ off_duration = 6.0
 start_delay = 4.0
 zone_size = Vector2(500, 500)
 
-[node name="WindLeft4" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="43" unique_id=724119258 instance=ExtResource("2_1pn4d")]
+[node name="WindLeft4" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="45" unique_id=724119258 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(6571, 854)
 rotation = 3.141593
@@ -528,7 +555,7 @@ off_duration = 6.0
 start_delay = 2.0
 zone_size = Vector2(500, 500)
 
-[node name="WindRight5" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="44" unique_id=840353552 instance=ExtResource("2_1pn4d")]
+[node name="WindRight5" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="46" unique_id=840353552 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(2786, 1348)
 strength = 595.0
@@ -538,7 +565,7 @@ on_duration = 2.0
 off_duration = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindUp5" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="45" unique_id=841288037 instance=ExtResource("2_1pn4d")]
+[node name="WindUp5" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="47" unique_id=841288037 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(3335, 1352)
 rotation = -1.570796
@@ -550,7 +577,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindLeft5" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="46" unique_id=1693076984 instance=ExtResource("2_1pn4d")]
+[node name="WindLeft5" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="48" unique_id=1693076984 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(4407, 1912)
 rotation = -3.1415923
@@ -562,34 +589,10 @@ off_duration = 6.0
 start_delay = 4.0
 zone_size = Vector2(500, 500)
 
-[node name="WindDown5" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="47" unique_id=1986953881 instance=ExtResource("2_1pn4d")]
+[node name="WindRight6" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="49" unique_id=1331292981 instance=ExtResource("2_1pn4d")]
 z_index = 2
-position = Vector2(3860, 1898)
-rotation = 1.570796
-strength = 109.0
-curve = 0.06000000000000005
-always_active = false
-on_duration = 2.0
-off_duration = 6.0
-start_delay = 6.0
-zone_size = Vector2(500, 500)
-
-[node name="WindRight6" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="48" unique_id=1331292981 instance=ExtResource("2_1pn4d")]
-z_index = 2
-position = Vector2(2786, 1891)
+position = Vector2(3351, 1877)
 strength = 595.0
-curve = 0.06000000000000005
-always_active = false
-on_duration = 2.0
-off_duration = 6.0
-start_delay = 6.0
-zone_size = Vector2(500, 500)
-
-[node name="WindDown6" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="49" unique_id=1026566905 instance=ExtResource("2_1pn4d")]
-z_index = 2
-position = Vector2(3327, 1898)
-rotation = 1.570796
-strength = 109.0
 curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
@@ -599,7 +602,7 @@ zone_size = Vector2(500, 500)
 
 [node name="WindUp6" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="50" unique_id=378182558 instance=ExtResource("2_1pn4d")]
 z_index = 2
-position = Vector2(3868, 1362)
+position = Vector2(4413, 1382)
 rotation = -1.570796
 strength = 763.0
 curve = 0.06000000000000005
@@ -611,7 +614,7 @@ zone_size = Vector2(500, 500)
 
 [node name="WindLeft6" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="51" unique_id=1773852610 instance=ExtResource("2_1pn4d")]
 z_index = 2
-position = Vector2(4403, 1365)
+position = Vector2(3878, 1359)
 rotation = 3.141593
 strength = 595.0
 curve = 0.06000000000000005
@@ -1425,7 +1428,19 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindDownLeft2" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="121" unique_id=587490907 instance=ExtResource("2_1pn4d")]
+[node name="WindUpLeft5" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="121" unique_id=1907003681 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3699.0002, 565.99994)
+rotation = -2.3561945
+strength = 745.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDownLeft2" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="122" unique_id=587490907 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(2923.0002, -172)
 rotation = 2.3561945
@@ -1437,7 +1452,7 @@ off_duration = 6.0
 start_delay = 4.0
 zone_size = Vector2(500, 500)
 
-[node name="WindUpRight6" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="122" unique_id=491291824 instance=ExtResource("2_1pn4d")]
+[node name="WindUpRight6" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="123" unique_id=491291824 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(2172.9998, -1799)
 rotation = -0.7853982
@@ -1449,7 +1464,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindDownLeft8" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="123" unique_id=1335474077 instance=ExtResource("2_1pn4d")]
+[node name="WindDownLeft8" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="124" unique_id=1335474077 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(1764, -1375)
 rotation = 2.3561945
@@ -1461,7 +1476,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindDownLeft6" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="124" unique_id=2034399951 instance=ExtResource("2_1pn4d")]
+[node name="WindDownLeft6" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="125" unique_id=2034399951 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(3729, -1755)
 rotation = 2.3561945
@@ -1473,7 +1488,7 @@ off_duration = 6.0
 start_delay = 2.0
 zone_size = Vector2(500, 500)
 
-[node name="WindDownLeft7" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="125" unique_id=1151250196 instance=ExtResource("2_1pn4d")]
+[node name="WindDownLeft7" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="126" unique_id=1151250196 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(4093.0002, -1331)
 rotation = 2.3561945
@@ -1485,7 +1500,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindDownRight2" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="126" unique_id=805164545 instance=ExtResource("2_1pn4d")]
+[node name="WindDownRight2" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="127" unique_id=805164545 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(2552, 202.00012)
 rotation = 0.7853982
@@ -1497,7 +1512,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindUpRight4" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="127" unique_id=1107024991 instance=ExtResource("2_1pn4d")]
+[node name="WindUpRight4" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="128" unique_id=1107024991 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(2946, -998.9999)
 rotation = -0.7853982
@@ -1509,7 +1524,7 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindUpRight7" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="128" unique_id=1593447003 instance=ExtResource("2_1pn4d")]
+[node name="WindUpRight7" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="129" unique_id=1593447003 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(2140, 584.9999)
 rotation = -0.7853982
@@ -1521,23 +1536,11 @@ off_duration = 6.0
 start_delay = 6.0
 zone_size = Vector2(500, 500)
 
-[node name="WindUpRight8" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="129" unique_id=1078271859 instance=ExtResource("2_1pn4d")]
+[node name="WindUpRight8" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="130" unique_id=1078271859 instance=ExtResource("2_1pn4d")]
 z_index = 2
 position = Vector2(1754, 182)
 rotation = -0.7853982
 strength = 745.0
-curve = 0.06000000000000005
-always_active = false
-on_duration = 2.0
-off_duration = 6.0
-start_delay = 6.0
-zone_size = Vector2(500, 500)
-
-[node name="WindDownLeft5" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="130" unique_id=1315765489 instance=ExtResource("2_1pn4d")]
-z_index = 2
-position = Vector2(3718, 616.9999)
-rotation = 2.3561945
-strength = 128.0
 curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
