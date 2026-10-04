@@ -1,78 +1,1625 @@
 [gd_scene format=3 uid="uid://b3pysxyp7ecus"]
 
 [ext_resource type="PackedScene" uid="uid://dguw2im0huc5" path="res://scenes/drift.tscn" id="1_drift"]
+[ext_resource type="PackedScene" uid="uid://uel7xvwc5jvp" path="res://scenes/wind_zone.tscn" id="2_1pn4d"]
 [ext_resource type="PackedScene" uid="uid://bbxbxebcdr7d0" path="res://scenes/drifting_object.tscn" id="2_object"]
 [ext_resource type="Script" uid="uid://mydps3xxhia8" path="res://scripts/path_debug.gd" id="3_path"]
 
 [sub_resource type="Curve2D" id="Curve2D_seed_a"]
 resource_local_to_scene = true
 _data = {
-"points": PackedVector2Array(0, -55.228, 0, 55.228, 100, 0, 39.052, -39.052, -39.052, 39.052, 70.711, 70.711, 55.228, 0, -55.228, 0, 0, 100, 39.052, 39.052, -39.052, -39.052, -70.711, 70.711, 0, 55.228, 0, -55.228, -100, 0, -39.052, 39.052, 39.052, -39.052, -70.711, -70.711, -55.228, 0, 55.228, 0, 0, -100, -39.052, -39.052, 39.052, 39.052, 70.711, -70.711)
+"points": PackedVector2Array(158.76907, -71.37401, -158.76907, 71.37401, 2276.7998, -1059.9999, -421.91574, -90.27063, 421.91574, 90.27063, 2249.2, -1497.1998, 406.57605, 47.196007, -406.57605, -47.196007, 1659.5999, -108.799866, 348.44806, 170.15202, -348.44806, -170.15202, 1549.5999, -1587.5999, -697.45215, -505.88007, 697.45215, 505.88007, 133.6, -1068.3999, -117.712006, 479.54807, 117.712006, -479.54807, 6.799988, -1641.9998, -19.41077, -626.8015, 19.41077, 626.8015, 1125.9999, -140.3999, -39.052, -39.052, 39.052, 39.052, 2440.7998, -2243.1997)
 }
 point_count = 8
 
 [sub_resource type="Curve2D" id="Curve2D_seed_b"]
 resource_local_to_scene = true
 _data = {
-"points": PackedVector2Array(-283.04602, -221.3198, 283.04602, 221.3198, 100, 0, -168.15509, -135.92804, 168.15509, 135.92804, -2433.1997, 1822.3999, 1736.0057, -9.816778, -1736.0057, 9.816778, -1476.3999, 729.19995, 71.287506, -46.90935, -71.287506, 46.90935, -84.3999, 1913.5999, -305.7956, -1270.7017, 305.7956, 1270.7017, -1404.3999, 754.39996, -286.08344, 286.08344, 286.08344, -286.08344, -3053.1997, 24, 1946.9551, -10.745169, -1946.9551, 10.745169, -1418.7999, 689.99994, -216.74127, -117.06192, 216.74127, 117.06192, 37.19995, -32.400024)
+"points": PackedVector2Array(-283.04602, -221.3198, 283.04602, 221.3198, 100, 0, 0, 0, 0, 0, -1135.1367, 962.1259, -168.15509, -135.92804, 168.15509, 135.92804, -2433.1997, 1822.3999, 1736.0057, -9.816778, -1736.0057, 9.816778, -1476.3999, 729.19995, 308.3882, -214.16643, -308.3882, 214.16643, -84.3999, 1913.5999, -305.7956, -1270.7017, 305.7956, 1270.7017, -1404.3999, 754.39996, -286.08344, 286.08344, 286.08344, -286.08344, -3053.1997, 24, 1946.9551, -10.745169, -1946.9551, 10.745169, -1418.7999, 689.99994)
 }
 point_count = 8
 
 [sub_resource type="Curve2D" id="Curve2D_seed_c"]
 resource_local_to_scene = true
 _data = {
-"points": PackedVector2Array(0, -55.228, 0, 55.228, 100, 0, 39.052, -39.052, -39.052, 39.052, 70.711, 70.711, 55.228, 0, -55.228, 0, 0, 100, 39.052, 39.052, -39.052, -39.052, -70.711, 70.711, 0, 55.228, 0, -55.228, -100, 0, -39.052, 39.052, 39.052, -39.052, -70.711, -70.711, -55.228, 0, 55.228, 0, 0, -100, -39.052, -39.052, 39.052, 39.052, 70.711, -70.711)
+"points": PackedVector2Array(238.40266, 72.45065, -238.40266, -72.45065, 99.59985, -423.20007, -645.9301, -58.178127, 645.9301, 58.178127, -1598.0001, -159.6001, 215.3537, 11.119841, -215.3537, -11.119841, -1286.4001, 123.19995, 188.49796, -269.34213, -188.49796, 269.34213, -2936.4, -294.40002, 300.51364, -464.25085, -300.51364, 464.25085, -2107.6, -140.40002, -169.94879, 170.04308, 169.94879, -170.04308, 164.3999, 55.19995, 346.37277, -339.29297, -346.37277, 339.29297, -873.2002, -107.20007, -226.52696, 16.63908, 226.52696, -16.63908, 125.999756, -254.40002)
 }
 point_count = 8
 
 [node name="Level 3" unique_id=492314800 instance=ExtResource("1_drift")]
 time_of_day = 3
 
-[node name="WindRight" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="0" unique_id=2000000102]
-position = Vector2(3594, -885)
+[node name="ColorRect" parent="Sky" parent_id_path=PackedInt32Array(1900425886) index="0" unique_id=661618102]
+metadata/_edit_lock_ = true
 
-[node name="WindUpRight" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="1" unique_id=2000000103]
-position = Vector2(3879, -864)
+[node name="WindRight2" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="0" unique_id=858789183 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(4954, 837)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
 
-[node name="WindUp" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="2" unique_id=2000000104]
-position = Vector2(4159, -864)
+[node name="WindUp2" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="1" unique_id=645027339 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(5503, 841)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
 
-[node name="WindUpLeft" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="3" unique_id=2000000105]
-position = Vector2(4439, -864)
+[node name="WindLeft2" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="2" unique_id=1952284084 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(5495, 306)
+rotation = -3.1415923
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
 
-[node name="WindLeft" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="4" unique_id=2000000106]
-position = Vector2(4719, -864)
+[node name="WindDown2" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="3" unique_id=1299999230 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(4948, 292)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
 
-[node name="WindDownLeft" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="5" unique_id=2000000107]
-position = Vector2(4999, -864)
+[node name="WindRight3" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="4" unique_id=1914318003 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6034, 1932)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
 
-[node name="WindDown" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="6" unique_id=2000000108]
-position = Vector2(5279, -864)
+[node name="WindUp3" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="5" unique_id=126558207 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6583, 1936)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
 
-[node name="WindDownRight" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="7" unique_id=2000000109]
-position = Vector2(5559, -864)
+[node name="WindLeft3" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="6" unique_id=978161860 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6575, 1401)
+rotation = -3.1415923
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
 
-[node name="SeedA" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="8" unique_id=-1994967185 instance=ExtResource("2_object")]
-position = Vector2(995.99994, -1354.9999)
+[node name="WindDown3" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="7" unique_id=1961267034 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6028, 1387)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="8" unique_id=2000000102]
+position = Vector2(4954, 1380)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUpRight" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="9" unique_id=2000000103]
+position = Vector2(1766, -606)
+strength = 745.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="10" unique_id=2000000104]
+position = Vector2(4956, 1917)
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUpLeft" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="11" unique_id=2000000105]
+position = Vector2(2149, -210.99988)
+strength = 745.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="12" unique_id=2000000106]
+position = Vector2(5491, 1920)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDownLeft" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="13" unique_id=2000000107]
+position = Vector2(2559, -596)
+strength = 128.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="14" unique_id=2000000108]
+position = Vector2(5495, 1387)
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight12" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="15" unique_id=605060358 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6041, -2442)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp14" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="16" unique_id=481888650 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6590, -2438)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft13" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="17" unique_id=477418033 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6582, -2973)
+rotation = -3.1415923
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown13" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="18" unique_id=1077805964 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6035, -2987)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight13" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="19" unique_id=2043896182 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(4961, -2994)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp15" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="20" unique_id=715903168 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(4963, -2457)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft14" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="21" unique_id=1797552871 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(5498, -2454)
+rotation = 3.141593
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown14" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="22" unique_id=1330099111 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(5502, -2987)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft9" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="23" unique_id=1110438568 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6563, -232)
+rotation = -3.1415923
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown9" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="24" unique_id=756025179 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6016, -246)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight9" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="25" unique_id=1959836197 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(4942, -253)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown10" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="26" unique_id=696869859 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(5483, -246)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight7" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="27" unique_id=1723054954 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(1690, 1873)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp7" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="28" unique_id=1047607962 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2239, 1877)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft7" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="29" unique_id=40552646 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2231, 1342)
+rotation = -3.1415923
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown7" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="30" unique_id=479827729 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(1684, 1328)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight8" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="31" unique_id=492862698 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(610, 1321)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp8" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="32" unique_id=1141218292 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(612, 1858)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft8" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="33" unique_id=230464236 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(1147, 1861)
+rotation = 3.141593
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown8" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="34" unique_id=1972903311 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(1151, 1328)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight25" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="35" unique_id=837812858 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2246, -2446)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown29" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="36" unique_id=882025184 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(1701, -2446)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight26" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="37" unique_id=1347847735 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(627, -2453)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp24" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="38" unique_id=1334633118 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(629, -1916)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft26" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="39" unique_id=1376049263 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(1164, -1913)
+rotation = 3.141593
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown30" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="40" unique_id=524903941 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(1168, -2446)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight4" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="41" unique_id=1646880393 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6034, 314)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp4" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="42" unique_id=1566437767 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6036, 851)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft4" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="43" unique_id=724119258 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6571, 854)
+rotation = 3.141593
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight5" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="44" unique_id=840353552 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2786, 1348)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp5" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="45" unique_id=841288037 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3335, 1352)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft5" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="46" unique_id=1693076984 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(4407, 1912)
+rotation = -3.1415923
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown5" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="47" unique_id=1986953881 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3860, 1898)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight6" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="48" unique_id=1331292981 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2786, 1891)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown6" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="49" unique_id=1026566905 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3327, 1898)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp6" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="50" unique_id=378182558 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3868, 1362)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft6" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="51" unique_id=1773852610 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(4403, 1365)
+rotation = 3.141593
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight14" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="52" unique_id=1548458069 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3844, -2981)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp16" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="53" unique_id=1949327558 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(4393, -2977)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft15" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="54" unique_id=866837891 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(4385, -3512)
+rotation = -3.1415923
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown15" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="55" unique_id=1010544152 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3838, -3526)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight15" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="56" unique_id=1378387914 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2764, -3533)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp17" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="57" unique_id=907620804 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2766, -2996)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft16" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="58" unique_id=655901186 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3301, -2993)
+rotation = 3.141593
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown16" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="59" unique_id=500360821 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3305, -3526)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight16" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="60" unique_id=58229422 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(-500, -3040)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp18" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="61" unique_id=1285913725 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(49, -3036)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft17" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="62" unique_id=294236070 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(41, -3571)
+rotation = -3.1415923
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown17" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="63" unique_id=1269926652 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(-506, -3585)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight17" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="64" unique_id=903979015 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(-1580, -3592)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp19" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="65" unique_id=1999884380 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(-1578, -3055)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft18" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="66" unique_id=126290087 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(-1043, -3052)
+rotation = 3.141593
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown18" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="67" unique_id=1089468500 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(-1039, -3585)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight18" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="68" unique_id=296423088 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(596, -3565)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp20" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="69" unique_id=1994096392 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(1145, -3561)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft19" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="70" unique_id=1199393346 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2217, -3001)
+rotation = -3.1415923
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown19" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="71" unique_id=1608007945 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(1670, -3015)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight19" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="72" unique_id=598003139 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(596, -3022)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown20" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="73" unique_id=1618877673 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(1137, -3015)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp21" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="74" unique_id=830036372 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(1678, -3551)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft20" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="75" unique_id=215058863 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2213, -3548)
+rotation = 3.141593
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight11" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="76" unique_id=617101269 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6586, -1870)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp11" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="77" unique_id=1097629437 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6588, -1333)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft11" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="78" unique_id=906904602 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6039, -1338)
+rotation = -3.1415923
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp12" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="79" unique_id=1079991509 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(4967, -1898)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown11" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="80" unique_id=1640875062 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(5492, -1352)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown12" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="81" unique_id=1169302814 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(4959, -1352)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown31" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="82" unique_id=928353091 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3864, -2435)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight10" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="83" unique_id=2038219353 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6572, -777)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp9" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="84" unique_id=1761064664 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(4953, -805)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp13" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="85" unique_id=902002614 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(5500, -1888)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp10" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="86" unique_id=651592866 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(5486, -795)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft12" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="87" unique_id=309957959 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6035, -1885)
+rotation = 3.141593
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft10" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="88" unique_id=1365307595 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6021, -792)
+rotation = 3.141593
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft28" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="89" unique_id=1772755364 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(4413, -2437)
+rotation = 3.141593
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft29" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="90" unique_id=1830616198 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(652, -1367)
+rotation = 3.141593
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown4" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="91" unique_id=1447203387 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6575, 321)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight20" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="92" unique_id=1553287491 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(-1541, -1404)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp22" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="93" unique_id=1954374056 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(-992, -1400)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp25" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="94" unique_id=1243969654 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3303, -2455)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft22" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="95" unique_id=2068156519 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(-1000, -1935)
+rotation = -3.1415923
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown22" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="96" unique_id=106231496 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(-1547, -1949)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft23" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="97" unique_id=1875133995 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(80, -840)
+rotation = -3.1415923
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft27" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="98" unique_id=606705580 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2754, -2456)
+rotation = -3.1415923
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown23" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="99" unique_id=2094584073 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(-467, -854)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight22" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="100" unique_id=1522323899 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(-1541, -861)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown25" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="101" unique_id=613929123 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(-1000, -854)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft24" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="102" unique_id=547580329 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(68, -2473)
+rotation = -3.1415923
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown26" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="103" unique_id=1327658509 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(-479, -2487)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight23" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="104" unique_id=521123697 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(-1553, -2494)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown27" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="105" unique_id=2040335110 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(-1012, -2487)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight24" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="106" unique_id=945129086 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(-461, -1927)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUp23" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="107" unique_id=1453046690 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(-459, -1390)
+rotation = -1.570796
+strength = 763.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft25" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="108" unique_id=38433213 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(76, -1387)
+rotation = 3.141593
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown28" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="109" unique_id=237161094 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(80, -1920)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindLeft21" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="110" unique_id=95083767 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(5519, -3544)
+rotation = -3.1415923
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown21" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="111" unique_id=1101482237 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(4972, -3558)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindRight21" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="112" unique_id=1661610541 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6058, -3536)
+strength = 595.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDown24" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="113" unique_id=1551238553 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(6599, -3529)
+rotation = 1.570796
+strength = 109.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDownRight" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="114" unique_id=2000000109]
+position = Vector2(2164, -995)
+strength = 128.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUpRight3" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="115" unique_id=264518689 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3332, -596)
+rotation = -0.7853982
+strength = 745.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUpLeft3" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="116" unique_id=74144804 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3715, -200.99988)
+rotation = -2.3561945
+strength = 745.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDownLeft3" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="117" unique_id=1009158329 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(4125, -586)
+rotation = 2.3561945
+strength = 128.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDownRight3" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="118" unique_id=68997155 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3730, -985)
+rotation = 0.7853982
+strength = 128.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUpRight2" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="119" unique_id=801784885 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2916, 577.0001)
+rotation = -0.7853982
+strength = 745.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUpLeft2" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="120" unique_id=2126761368 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3302.0002, 209.00018)
+rotation = -2.3561945
+strength = 745.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDownLeft2" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="121" unique_id=587490907 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2923.0002, -172)
+rotation = 2.3561945
+strength = 128.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUpRight6" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="122" unique_id=491291824 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2172.9998, -1799)
+rotation = -0.7853982
+strength = 745.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDownLeft8" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="123" unique_id=1335474077 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(1764, -1375)
+rotation = 2.3561945
+strength = 128.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDownLeft6" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="124" unique_id=2034399951 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3729, -1755)
+rotation = 2.3561945
+strength = 128.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDownLeft7" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="125" unique_id=1151250196 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(4093.0002, -1331)
+rotation = 2.3561945
+strength = 128.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDownRight2" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="126" unique_id=805164545 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2552, 202.00012)
+rotation = 0.7853982
+strength = 128.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUpRight4" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="127" unique_id=1107024991 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2946, -998.9999)
+rotation = -0.7853982
+strength = 745.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUpRight7" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="128" unique_id=1593447003 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2140, 584.9999)
+rotation = -0.7853982
+strength = 745.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUpRight8" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="129" unique_id=1078271859 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(1754, 182)
+rotation = -0.7853982
+strength = 745.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDownLeft5" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="130" unique_id=1315765489 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3718, 616.9999)
+rotation = 2.3561945
+strength = 128.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUpRight5" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="131" unique_id=1308400533 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(4105, 214)
+rotation = -0.7853982
+strength = 745.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="WindUpLeft4" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="132" unique_id=507891270 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(3332.0002, -1366.9998)
+rotation = -2.3561945
+strength = 745.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 2.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDownLeft4" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="133" unique_id=466138301 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2953.0002, -1748)
+rotation = 2.3561945
+strength = 128.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 4.0
+zone_size = Vector2(500, 500)
+
+[node name="WindDownRight4" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="134" unique_id=195225690 instance=ExtResource("2_1pn4d")]
+z_index = 2
+position = Vector2(2582, -1373.9999)
+rotation = 0.7853982
+strength = 128.0
+curve = 0.06000000000000005
+always_active = false
+on_duration = 2.0
+off_duration = 6.0
+start_delay = 6.0
+zone_size = Vector2(500, 500)
+
+[node name="SeedA" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="135" unique_id=-1994967185 instance=ExtResource("2_object")]
+position = Vector2(-1245.0001, -813.0002)
+breathe_amount = 0.76
 
 [node name="SeedA#Path2D" type="Path2D" parent="Starter/SeedA" index="1" unique_id=-1994967175]
+position = Vector2(752.3998, 1262.7998)
 curve = SubResource("Curve2D_seed_a")
 script = ExtResource("3_path")
+metadata/_edit_lock_ = true
 
-[node name="SeedB" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="9" unique_id=-1994967184 instance=ExtResource("2_object")]
-position = Vector2(6352.9995, -3366.0002)
+[node name="SeedB" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="136" unique_id=-1994967184 instance=ExtResource("2_object")]
+position = Vector2(6380, -2621)
+breathe_amount = 0.75
 
 [node name="SeedB#Path2D" type="Path2D" parent="Starter/SeedB" index="1" unique_id=-1994967165]
 position = Vector2(3.6001952, 53.600094)
 curve = SubResource("Curve2D_seed_b")
 script = ExtResource("3_path")
+metadata/_edit_lock_ = true
 
-[node name="SeedC" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="10" unique_id=-1994967183 instance=ExtResource("2_object")]
-position = Vector2(1647.9999, -1273.9999)
+[node name="SeedC" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="137" unique_id=-1994967183 instance=ExtResource("2_object")]
+position = Vector2(5695, -2278)
+breathe_amount = 0.75
 
 [node name="SeedC#Path2D" type="Path2D" parent="Starter/SeedC" index="1" unique_id=-1994967155]
 curve = SubResource("Curve2D_seed_c")
 script = ExtResource("3_path")
+metadata/_edit_lock_ = true
 
 [node name="Platform" parent="." index="7" unique_id=1851131555]
 metadata/_edit_lock_ = true
@@ -83,10 +1630,13 @@ metadata/_edit_lock_ = true
 [node name="BGClouds2" parent="Platform/BGCloudsLayer" parent_id_path=PackedInt32Array(667529225) index="1" unique_id=1416871081]
 metadata/_edit_lock_ = true
 
-[node name="Glow" parent="Platform/BGCloudsLayer/Moon" parent_id_path=PackedInt32Array(1882401933) index="0" unique_id=367530511]
+[node name="Moon" parent="Platform/BGCloudsLayer" parent_id_path=PackedInt32Array(667529225) index="2" unique_id=1882401933]
 metadata/_edit_lock_ = true
 
-[node name="Sprite" parent="Platform/BGCloudsLayer/Moon" parent_id_path=PackedInt32Array(1882401933) index="1" unique_id=531339684]
+[node name="Glow" parent="Platform/BGCloudsLayer/Moon" index="0" unique_id=367530511]
+metadata/_edit_lock_ = true
+
+[node name="Sprite" parent="Platform/BGCloudsLayer/Moon" index="1" unique_id=531339684]
 metadata/_edit_lock_ = true
 
 [node name="ForegroundClouds" parent="Platform/ForegroundCloudsLayer" parent_id_path=PackedInt32Array(1122071185) index="0" unique_id=949056660]
