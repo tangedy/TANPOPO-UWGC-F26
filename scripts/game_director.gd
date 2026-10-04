@@ -47,18 +47,12 @@ const ENDING_FADE_IN := 3.4
 const ENDING_FADE_OUT := 2.8
 const CREDITS_ROLL_SPEED := 42.0
 
-## Steam rising off the memory sketch, then settling again. Built from the placeholder memory.
-const STEAM_SLIDES: Array[Texture2D] = [
-	preload("res://Assets/images/slideshow/steam_00.png"),
-	preload("res://Assets/images/slideshow/steam_01.png"),
-	preload("res://Assets/images/slideshow/steam_02.png"),
-	preload("res://Assets/images/slideshow/steam_03.png"),
-	preload("res://Assets/images/slideshow/steam_04.png"),
-	preload("res://Assets/images/slideshow/steam_05.png"),
-	preload("res://Assets/images/slideshow/steam_06.png"),
-	preload("res://Assets/images/slideshow/steam_07.png"),
+## The three memories collected this stage. Placeholder art for now; swap per stage later.
+const STAGE_MEMORIES: Array[Texture2D] = [
+	preload("res://Assets/images/memories/testmemor.png"),
+	preload("res://Assets/images/memories/testmemor.png"),
+	preload("res://Assets/images/memories/testmemor.png"),
 ]
-const SLIDE_HOLD := 0.22
 
 @onready var world: Node = $World
 @onready var fade: ColorRect = $UI/Fade
@@ -109,10 +103,10 @@ func present_line() -> void:
 	line_box.visible = false
 
 
-## Over the black fade between stages, play the memory as a short steam slideshow,
+## Over the black fade between stages, flash the memories one by one, blurred and
 ## framed by an inky organic border.
 func _flash_memories(token: int) -> void:
-	if STEAM_SLIDES.is_empty():
+	if STAGE_MEMORIES.is_empty():
 		return
 	var layer := CanvasLayer.new()
 	layer.name = "MemoryFlash"
