@@ -225,6 +225,10 @@ func _tangent() -> Vector2:
 	return xf.x.normalized()
 
 
+func is_drifting() -> bool:
+	return _released and not collected
+
+
 func seed_position() -> Vector2:
 	if collect_shape:
 		return collect_shape.global_position
