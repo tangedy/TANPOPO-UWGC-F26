@@ -4,27 +4,24 @@
 [ext_resource type="Shader" uid="uid://bnw4rtyv21c71" path="res://shaders/wind_lines.gdshader" id="2_lines"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l8tg2"]
-size = Vector2(1000.02, 100)
+size = Vector2(200, 200)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_eyaig"]
 resource_local_to_scene = true
 shader = ExtResource("2_lines")
 shader_parameter/wind_color = Color(1, 1, 1, 1)
 shader_parameter/flow_speed = 84.4
-shader_parameter/active = 0.07441683333333453
-shader_parameter/fill_mode = 0.0
-shader_parameter/zone_size = Vector2(1000.02, 100)
-shader_parameter/rect_size = Vector2(1120.02, 280)
-shader_parameter/curve = -1.0
+shader_parameter/active = 1.0
+shader_parameter/fill_mode = 1.0
+shader_parameter/zone_size = Vector2(200, 200)
+shader_parameter/rect_size = Vector2(320, 280)
+shader_parameter/curve = 0.0
 
 [node name="WindZone" type="Area2D" unique_id=858789183]
-position = Vector2(3, 3)
 collision_layer = 0
 collision_mask = 6
 monitorable = false
 script = ExtResource("1_wind")
-curve = -1.0
-zone_size = Vector2(1000.02, 100)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2097485913]
 shape = SubResource("RectangleShape2D_l8tg2")
@@ -32,9 +29,9 @@ metadata/_edit_lock_ = true
 
 [node name="WindVisual" type="ColorRect" parent="." unique_id=302773827]
 material = SubResource("ShaderMaterial_eyaig")
-offset_left = -560.01
+offset_left = -160.0
 offset_top = -140.0
-offset_right = 560.01
+offset_right = 160.0
 offset_bottom = 140.0
 mouse_filter = 2
 metadata/_edit_lock_ = true

@@ -6,18 +6,19 @@ const AirPush = preload("res://scripts/air_push.gd")
 ## Push strength in pixels per second squared. Direction follows the curved flow.
 @export_range(0.0, 2000.0, 1.0) var strength := 240.0
 ## How much the flow bows. 0 = straight along local right, +/- bends the arc.
-@export_range(-1.0, 1.0, 0.01) var curve := 0.35:
+@export_range(-1.0, 1.0, 0.01) var curve := 0.0:
 	set(value):
 		curve = value
 		_apply_zone_size()
-@export var always_active := false
+## Constant wind. Turn this off to use the on/off cycle below.
+@export var always_active := true
 ## Seconds the wind blows each cycle.
 @export var on_duration := 1.5
 ## Seconds the wind rests each cycle.
 @export var off_duration := 1.5
 ## Seconds to wait before the first cycle.
 @export var start_delay := 0.0
-@export var zone_size := Vector2(260, 180):
+@export var zone_size := Vector2(200, 200):
 	set(value):
 		zone_size = value
 		_apply_zone_size()
@@ -60,8 +61,25 @@ func _physics_process(delta: float) -> void:
 
 
 ## Accel applied to a body at a given global position, following the curved flow.
+## An up-diagonal box pushes sideways at full strength and up at half strength.
 func _push_at(global_pos: Vector2) -> Vector2:
+	var base := push_direction()
+	if _is_up_diagonal(base):
+		var side := signf(base.x)
+		if side == 0.0:
+			side = 1.0
+		return Vector2(side * strength, -strength * 0.5)
 	return push_direction_at(global_pos) * strength
+
+
+## True when this box is aimed up and sideways together, like the 45° up winds.
+func _is_up_diagonal(direction: Vector2) -> bool:
+	return direction.y < -0.5 and absf(direction.x) > 0.5
+
+
+## The player folds a sideways gust's upward pinch downward. An up-diagonal opts out.
+func keeps_upward_push() -> bool:
+	return _is_up_diagonal(push_direction())
 
 
 ## Base (uncurved) flow direction: this node's local right in global space.

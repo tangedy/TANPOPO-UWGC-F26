@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://b3pysxyp7ecus"]
+
+[ext_resource type="PackedScene" uid="uid://dguw2im0huc5" path="res://scenes/drift.tscn" id="1_drift"]
+[ext_resource type="PackedScene" uid="uid://bbxbxebcdr7d0" path="res://scenes/drifting_object.tscn" id="2_object"]
+[ext_resource type="Script" uid="uid://mydps3xxhia8" path="res://scripts/path_debug.gd" id="3_path"]
+
+[sub_resource type="Curve2D" id="Curve2D_seed_a"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(0, -55.228, 0, 55.228, 100, 0, 39.052, -39.052, -39.052, 39.052, 70.711, 70.711, 55.228, 0, -55.228, 0, 0, 100, 39.052, 39.052, -39.052, -39.052, -70.711, 70.711, 0, 55.228, 0, -55.228, -100, 0, -39.052, 39.052, 39.052, -39.052, -70.711, -70.711, -55.228, 0, 55.228, 0, 0, -100, -39.052, -39.052, 39.052, 39.052, 70.711, -70.711)
+}
+point_count = 8
+
+[sub_resource type="Curve2D" id="Curve2D_seed_b"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(0, -55.228, 0, 55.228, 100, 0, 39.052, -39.052, -39.052, 39.052, 70.711, 70.711, 55.228, 0, -55.228, 0, 0, 100, 39.052, 39.052, -39.052, -39.052, -70.711, 70.711, 0, 55.228, 0, -55.228, -100, 0, -39.052, 39.052, 39.052, -39.052, -70.711, -70.711, -55.228, 0, 55.228, 0, 0, -100, -39.052, -39.052, 39.052, 39.052, 70.711, -70.711)
+}
+point_count = 8
+
+[sub_resource type="Curve2D" id="Curve2D_seed_c"]
+resource_local_to_scene = true
+_data = {
+"points": PackedVector2Array(0, -55.228, 0, 55.228, 100, 0, 39.052, -39.052, -39.052, 39.052, 70.711, 70.711, 55.228, 0, -55.228, 0, 0, 100, 39.052, 39.052, -39.052, -39.052, -70.711, 70.711, 0, 55.228, 0, -55.228, -100, 0, -39.052, 39.052, 39.052, -39.052, -70.711, -70.711, -55.228, 0, 55.228, 0, 0, -100, -39.052, -39.052, 39.052, 39.052, 70.711, -70.711)
+}
+point_count = 8
+
+[node name="Level 3" unique_id=492314800 instance=ExtResource("1_drift")]
+
+[node name="SeedA" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="8" unique_id=-1994967185 instance=ExtResource("2_object")]
+
+[node name="SeedA#Path2D" type="Path2D" parent="Starter/SeedA" index="1" unique_id=-1994967175]
+curve = SubResource("Curve2D_seed_a")
+script = ExtResource("3_path")
+
+[node name="SeedB" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="9" unique_id=-1994967184 instance=ExtResource("2_object")]
+
+[node name="SeedB#Path2D" type="Path2D" parent="Starter/SeedB" index="1" unique_id=-1994967165]
+curve = SubResource("Curve2D_seed_b")
+script = ExtResource("3_path")
+
+[node name="SeedC" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="10" unique_id=-1994967183 instance=ExtResource("2_object")]
+
+[node name="SeedC#Path2D" type="Path2D" parent="Starter/SeedC" index="1" unique_id=-1994967155]
+curve = SubResource("Curve2D_seed_c")
+script = ExtResource("3_path")
+
+[node name="Platform" parent="." index="7" unique_id=1851131555]
+metadata/_edit_lock_ = true
+
+[node name="BGClouds" parent="Platform/BGCloudsLayer" parent_id_path=PackedInt32Array(667529225) index="0" unique_id=706455837]
+metadata/_edit_lock_ = true
+
+[node name="BGClouds2" parent="Platform/BGCloudsLayer" parent_id_path=PackedInt32Array(667529225) index="1" unique_id=1416871081]
+metadata/_edit_lock_ = true
+
+[node name="ForegroundClouds" parent="Platform/ForegroundCloudsLayer" parent_id_path=PackedInt32Array(1122071185) index="0" unique_id=949056660]
+metadata/_edit_lock_ = true
+
+[node name="ForegroundClouds2" parent="Platform/ForegroundCloudsLayer" parent_id_path=PackedInt32Array(1122071185) index="1" unique_id=316306333]
+metadata/_edit_lock_ = true
+
+[node name="ForegroundClouds3" parent="Platform/ForegroundCloudsLayer" parent_id_path=PackedInt32Array(1122071185) index="2" unique_id=1215963296]
+metadata/_edit_lock_ = true
+
+[node name="Foliage" parent="." index="10" unique_id=1666564183]
+metadata/_edit_lock_ = true
+
+[node name="BirdSpawner" parent="." index="11" unique_id=1770055013]
+metadata/_edit_lock_ = true
+
+[node name="ForegroundBirdSpawner" parent="." index="12" unique_id=1770055014]
+metadata/_edit_lock_ = true

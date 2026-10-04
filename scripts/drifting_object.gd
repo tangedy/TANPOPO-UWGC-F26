@@ -2,18 +2,19 @@
 extends Node2D
 
 ## Cruising speed along the path, in pixels per second.
-@export var speed := 80.0
+@export var speed := 350.0
 ## How much the cruising speed swells and eases. 0 is steady, 1 is a strong breath.
 @export_range(0.0, 1.0, 0.01) var breathe_amount := 0.5
 ## Seconds for one relaxed-to-rushed cycle.
 @export var breathe_period := 4.0
 ## Downward world speed while the path descends.
-@export var fall_speed := 30.0
+@export var fall_speed := 120.0
 ## Extra acceleration along the path while it climbs, like a quick upbreeze.
 @export var upbreeze_acceleration := 220.0
 @export var max_up_speed := 260.0
 ## Where on the path this object starts, from 0 to 1.
 @export_range(0.0, 1.0, 0.01) var start_ratio := 0.0
+## Pull back to the path. Farther seeds are pulled harder.
 @export var path_return := 36.0
 @export var max_drift_offset := 140.0
 
@@ -30,15 +31,21 @@ var _lift_dir := Vector2.UP
 var _lift_speed := 0.0
 var _lift_accel := 0.0
 var _player: Node2D
+var _released := false
+var _prev_pos := Vector2.ZERO
+var _has_prev := false
+var _frame_clock := 0.0
+var _shake_left := false
 
 ## Drawn seed bounds inside the texture, measured from the sprite center.
 const SEED_ART_OFFSET := Vector2(0.5, 4.0)
 
-@onready var path: Path2D = get_node_or_null("Path2D") as Path2D
-@onready var follow: PathFollow2D = get_node_or_null("Path2D/PathFollow2D") as PathFollow2D
+var path: Path2D
+var follow: PathFollow2D
 @onready var hitbox: Area2D = $Body
 @onready var visual: Sprite2D = $Body/Visual
 @onready var collect_shape: CollisionShape2D = $Body/CollisionShape2D
+@onready var seed_parti: GPUParticles2D = $Body/SeedParti
 
 
 func _enter_tree() -> void:
@@ -46,6 +53,7 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+	_bind_path()
 	if Engine.is_editor_hint():
 		_preview()
 		update_configuration_warnings()
@@ -64,6 +72,28 @@ func _ready() -> void:
 		follow.progress_ratio = start_ratio
 	_along = speed
 	_sync_collider_to_sprite()
+	if seed_parti:
+		seed_parti.emitting = false
+		seed_parti.visible = false
+
+
+func _bind_path() -> void:
+	path = get_node_or_null("Path2D") as Path2D
+	if path == null:
+		for child in get_children():
+			if child is Path2D:
+				path = child
+				break
+	follow = null
+	if path == null:
+		return
+	follow = path.get_node_or_null("PathFollow2D") as PathFollow2D
+	if follow == null and not Engine.is_editor_hint():
+		follow = PathFollow2D.new()
+		follow.name = "PathFollow2D"
+		follow.rotates = false
+		follow.loop = true
+		path.add_child(follow)
 
 
 func _close_loop() -> void:
@@ -79,7 +109,7 @@ func _close_loop() -> void:
 	path.curve = closed
 
 
-func add_air_push(accel: Vector2) -> void:
+func add_air_push(accel: Vector2, _keep_up: bool = false) -> void:
 	if collected:
 		return
 	_pending_push += accel
@@ -95,10 +125,12 @@ func add_lift(direction: Vector2, speed: float, accel: float) -> void:
 
 
 func air_push_scale() -> float:
-	return 0.5
+	return 0.1
 
 
 func _process(_delta: float) -> void:
+	if path == null:
+		_bind_path()
 	if Engine.is_editor_hint():
 		_preview()
 
@@ -106,13 +138,39 @@ func _process(_delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if Engine.is_editor_hint() or collected:
 		return
+	if path == null or follow == null:
+		_bind_path()
 	if path == null or follow == null or path.curve == null or path.curve.point_count < 2:
 		return
+	if not _released:
+		_pending_push = Vector2.ZERO
+		_has_lift = false
+		hitbox.global_position = follow.global_position + _offset
+		_sync_collider_to_sprite()
+		if not _player_left_the_edge():
+			return
+		_released = true
+		_start_trail()
 	_time += delta
 	_advance_along_path(delta)
 	_apply_air(delta)
 	hitbox.global_position = follow.global_position + _offset
 	_sync_collider_to_sprite()
+	_tilt_with_motion(delta)
+
+
+func _player_left_the_edge() -> bool:
+	var player := get_tree().get_first_node_in_group("player")
+	return player != null and player.is_in_group("off_the_edge")
+
+
+func _start_trail() -> void:
+	if seed_parti == null:
+		return
+	seed_parti.preprocess = 0.0
+	seed_parti.visible = true
+	seed_parti.emitting = true
+	seed_parti.restart()
 
 
 func _advance_along_path(delta: float) -> void:
@@ -150,7 +208,8 @@ func _apply_air(delta: float) -> void:
 	var drag := 1.0 - exp(-1.2 * delta)
 	_air_velocity = _air_velocity.lerp(Vector2.ZERO, drag)
 	_offset += _air_velocity * delta
-	_offset = _offset.move_toward(Vector2.ZERO, path_return * delta)
+	var pull := path_return * _offset.length() / 48.0
+	_offset = _offset.move_toward(Vector2.ZERO, pull * delta)
 	_offset = _offset.limit_length(max_drift_offset)
 
 
@@ -172,6 +231,37 @@ func seed_position() -> Vector2:
 	if visual:
 		return visual.global_position
 	return global_position
+
+
+func _tilt_with_motion(delta: float) -> void:
+	if visual == null or hitbox == null:
+		return
+	var velocity := Vector2.ZERO
+	var pos := hitbox.global_position
+	if _has_prev and delta > 0.0:
+		velocity = (pos - _prev_pos) / delta
+	_prev_pos = pos
+	_has_prev = true
+	var speed_ref := maxf(speed, 1.0)
+	var amount := clampf(velocity.x / speed_ref, -1.0, 1.0)
+	var lean := amount * 12.0
+	var frame_time := _move_frame_time()
+	_frame_clock += delta
+	if _frame_clock >= frame_time:
+		_frame_clock = fmod(_frame_clock, frame_time)
+		_shake_left = not _shake_left
+	var shake := -5.0 if _shake_left else 5.0
+	visual.rotation = deg_to_rad(lean + shake)
+
+
+func _move_frame_time() -> float:
+	var player := get_tree().get_first_node_in_group("player")
+	if player == null:
+		return 0.2
+	var step = player.get("frame_time")
+	if step == null:
+		return 0.2
+	return maxf(float(step), 0.05)
 
 
 func _sync_collider_to_sprite() -> void:
@@ -211,7 +301,7 @@ func _preview() -> void:
 
 
 func _get_configuration_warnings() -> PackedStringArray:
-	var path_node := get_node_or_null("Path2D") as Path2D
-	if path_node == null or path_node.curve == null or path_node.curve.point_count < 2:
-		return PackedStringArray(["Add at least two points to the child Path2D."])
+	_bind_path()
+	if path == null or path.curve == null or path.curve.point_count < 2:
+		return PackedStringArray(["Add a child Path2D with at least two points."])
 	return PackedStringArray()

@@ -231,9 +231,10 @@ func finish() -> void:
 	_set_seed_parti(false)
 
 
-func add_air_push(accel: Vector2) -> void:
+func add_air_push(accel: Vector2, keep_up: bool = false) -> void:
 	# A sideways gust's upward component is the pinch that launches her. Fold it downward.
-	if absf(accel.x) >= absf(accel.y):
+	# Up-diagonals pass keep_up so their half-strength lift stays upward.
+	if not keep_up and absf(accel.x) >= absf(accel.y):
 		accel.y = absf(accel.y)
 	_air_push += accel
 
@@ -335,6 +336,7 @@ func _run_off(delta: float) -> void:
 
 func _leap() -> void:
 	state = State.GLIDE
+	add_to_group("off_the_edge")
 	_lifted = true
 	floor_snap_length = 0.0
 	_control_timer = leap_drift_time
