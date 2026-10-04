@@ -311,6 +311,7 @@ z_index = -1
 position = Vector2(-314, 20.799997)
 curve = SubResource("Curve2D_seed_a")
 script = ExtResource("3_path")
+tail_soft = null
 
 [node name="SeedB" parent="Starter" index="38" unique_id=2100000112 instance=ExtResource("2_object")]
 position = Vector2(-698.00006, 931.0001)
@@ -321,6 +322,7 @@ memory_slot = 1
 z_index = -1
 curve = SubResource("Curve2D_seed_b")
 script = ExtResource("3_path")
+tail_soft = null
 
 [node name="SeedC" parent="Starter" index="39" unique_id=2100000113 instance=ExtResource("2_object")]
 position = Vector2(4129.9995, -755)
@@ -331,6 +333,7 @@ memory_slot = 2
 z_index = -1
 curve = SubResource("Curve2D_seed_c")
 script = ExtResource("3_path")
+tail_soft = null
 
 [node name="Platform" parent="." index="7" unique_id=1851131555]
 metadata/_edit_lock_ = true
