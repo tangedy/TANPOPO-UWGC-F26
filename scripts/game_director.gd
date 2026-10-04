@@ -6,12 +6,27 @@ const LEVELS: Array[PackedScene] = [
 	preload("res://scenes/level_3.tscn"),
 ]
 const InputSetup = preload("res://scripts/input_setup.gd")
+const MEMORY_FRAME := preload("res://shaders/memory_frame.gdshader")
+const POOF_SFX := preload("res://Assets/sfx/freesound_community-poof-of-smoke-87381.mp3")
+
+## How long the black between stages takes to arrive and clear.
+const FADE_OUT_TIME := 1.9
+const FADE_IN_TIME := 1.6
+
+## The three memories collected this stage. Placeholder art for now; swap per stage later.
+const STAGE_MEMORIES: Array[Texture2D] = [
+	preload("res://Assets/images/memories/testmemor.png"),
+	preload("res://Assets/images/memories/testmemor.png"),
+	preload("res://Assets/images/memories/testmemor.png"),
+]
 
 @onready var world: Node = $World
 @onready var fade: ColorRect = $UI/Fade
 @onready var line_box: Control = $UI/LineBox
 
 var _fade_tween: Tween
+var _poof: AudioStreamPlayer
+var _current_room: Node
 var _level := 0
 var _play_token := 0
 var _debug_buttons: Array[Button] = []
@@ -19,6 +34,11 @@ var _debug_buttons: Array[Button] = []
 
 func _ready() -> void:
 	InputSetup.ensure()
+	_poof = AudioStreamPlayer.new()
+	_poof.name = "MemoryPoof"
+	_poof.stream = POOF_SFX
+	_poof.volume_db = 6.0
+	add_child(_poof)
 	fade.color = Color.BLACK
 	var from_black := get_tree().has_meta("fade_from_black")
 	if from_black:
@@ -50,12 +70,64 @@ func present_line() -> void:
 	line_box.visible = false
 
 
+## Over the black fade between stages, flash the memories one by one, blurred and
+## framed by an inky organic border.
+func _flash_memories(token: int) -> void:
+	if STAGE_MEMORIES.is_empty():
+		return
+	var layer := CanvasLayer.new()
+	layer.name = "MemoryFlash"
+	layer.layer = 11
+	add_child(layer)
+	# Inset equally on every side so the picture stays centered and a little inside the window.
+	var vp := get_viewport().get_visible_rect().size
+	var inset := minf(vp.x, vp.y) * 0.06
+	var rect := TextureRect.new()
+	rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	rect.offset_left = inset
+	rect.offset_top = inset
+	rect.offset_right = -inset
+	rect.offset_bottom = -inset
+	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	rect.modulate.a = 0.0
+	var mat := ShaderMaterial.new()
+	mat.shader = MEMORY_FRAME
+	mat.set_shader_parameter("blur_amount", 18.0)
+	mat.set_shader_parameter("rect_size", Vector2(vp.x - inset * 2.0, vp.y - inset * 2.0))
+	rect.material = mat
+	layer.add_child(rect)
+	for i in STAGE_MEMORIES.size():
+		if token != _play_token or not is_inside_tree():
+			break
+		rect.texture = STAGE_MEMORIES[i]
+		# Vary the border noise so each memory frame looks a little different.
+		mat.set_shader_parameter("seed", float(i) * 7.3)
+		rect.modulate.a = 0.0
+		if _poof:
+			_poof.play()
+		# Fade this memory in, hold, then fade it fully out to black before the next.
+		var tween := create_tween()
+		tween.tween_property(rect, "modulate:a", 1.0, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_interval(0.75)
+		tween.tween_property(rect, "modulate:a", 0.0, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+		tween.tween_interval(0.25)
+		await tween.finished
+	if is_instance_valid(layer):
+		layer.queue_free()
+
+
 func _play_level(from_black: bool) -> void:
 	var token := _play_token
+	# Tell the next room to bring its music/ambience up from silence as it loads.
+	if from_black:
+		get_tree().set_meta("drift_fade_audio_in", FADE_IN_TIME)
 	var scene := _swap(LEVELS[_level])
+	_current_room = scene
 	_refresh_level_debug()
 	if from_black:
-		await _fade_to(0.0, 1.15)
+		await _fade_to(0.0, FADE_IN_TIME)
 	if token != _play_token or not is_instance_valid(scene):
 		return
 	scene.returned.connect(_on_level_returned, CONNECT_ONE_SHOT)
@@ -68,7 +140,12 @@ func _on_level_returned() -> void:
 func _advance(token: int) -> void:
 	if token != _play_token:
 		return
-	await _fade_to(1.0, 1.2)
+	if is_instance_valid(_current_room) and _current_room.has_method("fade_audio_out"):
+		_current_room.fade_audio_out(FADE_OUT_TIME)
+	await _fade_to(1.0, FADE_OUT_TIME)
+	if token != _play_token or not is_inside_tree():
+		return
+	await _flash_memories(token)
 	if token != _play_token or not is_inside_tree():
 		return
 	_level += 1
@@ -114,9 +191,12 @@ func _debug_select(index: int) -> void:
 	_level = clampi(index, 0, LEVELS.size() - 1)
 	if _fade_tween and _fade_tween.is_valid():
 		_fade_tween.kill()
+	if get_tree().has_meta("drift_fade_audio_in"):
+		get_tree().remove_meta("drift_fade_audio_in")
 	fade.modulate.a = 0.0
 	line_box.visible = false
 	var scene := _swap(LEVELS[_level])
+	_current_room = scene
 	_refresh_level_debug()
 	if is_instance_valid(scene):
 		scene.returned.connect(_on_level_returned, CONNECT_ONE_SHOT)

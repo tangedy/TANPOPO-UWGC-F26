@@ -50,36 +50,36 @@ void fragment() {
 
 	float streaks = 0.0;
 
-	for (int layer = 0; layer < 2; layer++) {
+	for (int layer = 0; layer < 1; layer++) {
 		float id = float(layer);
-		float row_pitch = (32.0 + id * 14.0) * max(line_gap, 0.25);
-		float shifted = py + id * 40.0;
+		float row_pitch = 88.0 * max(line_gap, 0.25);
+		float shifted = py;
 		float row = floor(shifted / row_pitch);
-		float row_id = row + id * 100.0;
-		float present = step(0.45 + id * 0.08, hash(row_id + 1.7));
+		float row_id = row;
+		float present = 1.0;
 
-		float y_center = (row + 0.5) * row_pitch - id * 40.0;
+		float y_center = (row + 0.5) * row_pitch;
 		float wave = sin(flow.x * 0.03 + TIME * (1.1 + id * 0.35) + row_id) * (1.6 + id * 0.8);
 		// Perpendicular distance to the curved centerline keeps the width even.
 		float dy = abs(py - y_center - wave) * inv_len;
 
-		float dash_len = mix(55.0, 110.0, hash(row_id + 2.3)) + id * 16.0;
-		float gap = mix(40.0, 90.0, hash(row_id + 6.1));
+		float dash_len = mix(120.0, 220.0, hash(row_id + 2.3)) + id * 28.0;
+		float gap = mix(48.0, 96.0, hash(row_id + 6.1));
 		float period = dash_len + gap;
 		float spd = flow_speed * mix(0.72, 1.28, hash(row_id + 3.8)) * (1.0 + id * 0.28);
 		float along = mod(flow.x - TIME * spd + hash(row_id + 0.4) * period, period);
 
 		float t = clamp(along / max(dash_len, 0.001), 0.0, 1.0);
 		float on_dash = step(along, dash_len);
-		// Soft tail, pointed tip at the leading end so a still frame still shows direction.
-		float profile = smoothstep(0.0, 0.12, t) * (1.0 - smoothstep(0.7, 1.0, t));
-		float thick = max(mix(0.9, 1.7, hash(row_id + 8.2)) * profile, 0.001);
-		float core = (1.0 - smoothstep(thick * 0.2, thick, dy)) * on_dash * profile;
-		float halo = (1.0 - smoothstep(thick, thick * 2.2, dy)) * on_dash * profile;
+		// Soft tail, pointed tip, same shape as the path streaks.
+		float profile = smoothstep(0.0, 0.16, t) * (1.0 - smoothstep(0.78, 1.0, t));
+		float thick = max(mix(2.6, 3.8, hash(row_id + 8.2)) * profile, 0.001);
+		float core = (1.0 - smoothstep(thick * 0.28, thick, dy)) * on_dash * profile;
+		float halo = (1.0 - smoothstep(thick, thick * 2.3, dy)) * on_dash * profile;
 
-		float brightness = mix(0.6, 1.0, hash(row_id + 4.4));
-		float layer_fade = mix(1.0, 0.7, id);
-		streaks += (core + halo * 0.25) * present * brightness * layer_fade;
+		float brightness = mix(0.75, 0.9, hash(row_id + 4.4));
+		float layer_fade = mix(1.0, 0.85, id);
+		streaks += (core + halo * 0.38) * present * brightness * layer_fade;
 	}
 
 	streaks = clamp(streaks, 0.0, 1.0);

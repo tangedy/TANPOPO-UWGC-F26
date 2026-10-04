@@ -36,10 +36,15 @@ const _TIME_LABELS := {
 
 var collected := 0
 
+const _AUDIO_SILENT_DB := -80.0
 var _ending := false
 var _chase := false
 var _listen_for_chase := false
 var _time_button: Button
+var _music_base_db := 0.0
+var _ambience_base_db := 0.0
+var _pending_fade_in := -1.0
+var _audio_tween: Tween
 
 @onready var glow: CanvasItem = $Platform/CompletionArea/Glow
 @onready var completion_area: Area2D = $Platform/CompletionArea
@@ -53,12 +58,32 @@ var _time_button: Button
 
 func _enter_tree() -> void:
 	add_to_group("drift_room")
+	# Capture authored volumes and, if the director is fading us in, pre-mute the
+	# music/ambience here (before their autoplay) so there's no full-volume blip.
+	var music_node := get_node_or_null("Music")
+	if music_node:
+		_music_base_db = music_node.volume_db
+	var ambience_node := get_node_or_null("Music/Ambience")
+	if ambience_node:
+		_ambience_base_db = ambience_node.volume_db
+	var tree := get_tree()
+	if tree and tree.has_meta("drift_fade_audio_in"):
+		_pending_fade_in = float(tree.get_meta("drift_fade_audio_in"))
+		tree.remove_meta("drift_fade_audio_in")
+		if music_node:
+			music_node.volume_db = _AUDIO_SILENT_DB
+		if ambience_node:
+			ambience_node.volume_db = _AUDIO_SILENT_DB
 
 
 func _ready() -> void:
 	_build_time_toggle()
 	_build_level_label()
+	_build_debug_collect()
 	_apply_time_of_day()
+	if _pending_fade_in >= 0.0:
+		fade_audio_in(_pending_fade_in)
+		_pending_fade_in = -1.0
 	InputSetup.ensure()
 	glow.visible = false
 	completion_area.monitoring = false
@@ -89,6 +114,15 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _listen_for_chase and event.is_action_pressed("chase"):
 		_chase = true
 		get_viewport().set_input_as_handled()
+		return
+	var key := event as InputEventKey
+	if key and key.pressed and not key.echo:
+		if key.physical_keycode == KEY_K:
+			debug_collect_all()
+			get_viewport().set_input_as_handled()
+		elif key.physical_keycode == KEY_R:
+			debug_teleport_start()
+			get_viewport().set_input_as_handled()
 
 
 func _build_time_toggle() -> void:
@@ -100,6 +134,45 @@ func _build_time_toggle() -> void:
 	button.pressed.connect(_cycle_time)
 	_time_button = button
 	_refresh_time_button()
+
+
+func _build_debug_collect() -> void:
+	var button := Button.new()
+	button.name = "DebugCollect"
+	button.position = Vector2(16, 60)
+	button.custom_minimum_size = Vector2(160, 32)
+	button.focus_mode = Control.FOCUS_NONE
+	button.text = "Collect 3 (K)"
+	$UI.add_child(button)
+	button.pressed.connect(debug_collect_all)
+
+	var tp := Button.new()
+	tp.name = "DebugTeleport"
+	tp.position = Vector2(16, 96)
+	tp.custom_minimum_size = Vector2(160, 32)
+	tp.focus_mode = Control.FOCUS_NONE
+	tp.text = "TP Start (R)"
+	$UI.add_child(tp)
+	tp.pressed.connect(debug_teleport_start)
+
+
+## Debug: send Peppermint back to the cliff start so you can retry a stage.
+func debug_teleport_start() -> void:
+	if peppermint and peppermint.has_method("teleport_to_start"):
+		peppermint.teleport_to_start()
+
+
+## Debug: instantly fill the stage's seed meter so you can skip collecting and head to the box.
+func debug_collect_all() -> void:
+	if _ending:
+		return
+	# Clear any seeds still drifting so they don't linger once the meter is filled.
+	for seed_node in get_tree().get_nodes_in_group("seed"):
+		if is_instance_valid(seed_node) and seed_node.get("collected") != true:
+			seed_node.set("collected", true)
+			seed_node.visible = false
+	while collected < required_collectibles:
+		note_collected()
 
 
 func _build_level_label() -> void:
@@ -164,6 +237,29 @@ func _play_music(stream: AudioStream) -> void:
 			wav.loop_end = frames
 		wav.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	music.play()
+
+
+## Ease this room's music and ambience up from silence (called as the stage loads).
+func fade_audio_in(duration: float) -> void:
+	_tween_audio(_music_base_db, _ambience_base_db, duration)
+
+
+## Ease this room's music and ambience down to silence (called as the stage exits).
+func fade_audio_out(duration: float) -> void:
+	_tween_audio(_AUDIO_SILENT_DB, _AUDIO_SILENT_DB, duration)
+
+
+func _tween_audio(music_db: float, ambience_db: float, duration: float) -> void:
+	if _audio_tween and _audio_tween.is_valid():
+		_audio_tween.kill()
+	_audio_tween = create_tween().set_parallel(true)
+	if music:
+		_audio_tween.tween_property(music, "volume_db", music_db, duration) \
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	var ambience_node := get_node_or_null("Music/Ambience")
+	if ambience_node:
+		_audio_tween.tween_property(ambience_node, "volume_db", ambience_db, duration) \
+			.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 
 func _fade_from_color(color: Color, duration: float) -> void:

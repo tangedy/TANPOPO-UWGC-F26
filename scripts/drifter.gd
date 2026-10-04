@@ -97,6 +97,7 @@ enum Pose { STAND, RUN, MOVE, REACH }
 
 var state := State.WAIT
 var followers: Array[Node2D] = []
+var _spawn_position := Vector2.ZERO
 
 var _air_push := Vector2.ZERO
 var _has_lift := false
@@ -146,6 +147,7 @@ func _ready() -> void:
 	_size_scale = maxf(absf(scale.x), 0.001)
 	floor_snap_length = _sized(12.0)
 	velocity = Vector2.ZERO
+	_spawn_position = global_position
 	camera.make_current()
 	camera.zoom = Vector2(1.0, 1.0)
 	_fit_camera_limits()
@@ -226,11 +228,33 @@ func start_run() -> void:
 	_apply_pose(Pose.RUN)
 
 
+## Debug: teleport to the cliff start while staying in the controllable glide
+## (move/reach) state, so you can keep steering from there.
+func teleport_to_start() -> void:
+	global_position = _spawn_position
+	velocity = Vector2.ZERO
+	_air_push = Vector2.ZERO
+	_has_lift = false
+	_lift_accel = 0.0
+	_gust_pending = false
+	_control_timer = 0.0
+	_trail.clear()
+	if not is_in_group("off_the_edge"):
+		add_to_group("off_the_edge")
+	state = State.GLIDE
+	motion_mode = MOTION_MODE_FLOATING
+	floor_snap_length = 0.0
+	_lifted = true
+	_leap_hop = false
+	camera.zoom = Vector2(0.5, 0.5)
+	camera.make_current()
+	_set_seed_parti(true)
+
+
 func finish() -> void:
 	state = State.FINISHED
 	velocity = Vector2.ZERO
-	visual.rotation = 0.0
-	_apply_pose(Pose.STAND)
+	# Freeze on her current move/reach pose while the screen fades; don't snap to idle.
 	_set_seed_parti(false)
 
 
@@ -293,7 +317,7 @@ func attach_follower(node: Node2D) -> void:
 func _physics_process(delta: float) -> void:
 	if state == State.FINISHED:
 		velocity = Vector2.ZERO
-		_sync_pose(delta)
+		# Leave the last flight pose in place; only let the wind sound settle.
 		_update_wind_whoosh(delta)
 		return
 	if state == State.WAIT:
