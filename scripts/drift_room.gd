@@ -39,9 +39,11 @@ var _music_base_db := 0.0
 var _ambience_base_db := 0.0
 var _pending_fade_in := -1.0
 var _audio_tween: Tween
-var _exit_trail: Path2D
-var _exit_end := Vector2.ZERO
-var _exit_sway := 0.0
+var _exit_trails: Array[Path2D] = []
+var _exit_clocks: Array[float] = []
+var _exit_live: Array[bool] = []
+const _EXIT_STREAK_COUNT := 3
+const _EXIT_STREAK_TIME := 5.2
 
 @onready var glow: CanvasItem = $Platform/CompletionArea/Glow
 @onready var completion_area: Area2D = $Platform/CompletionArea
@@ -93,7 +95,8 @@ func _ready() -> void:
 	_opening()
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	_advance_exit_streak(delta)
 	if _listen_for_chase and Input.is_action_just_pressed("chase"):
 		_chase = true
 	if not glow.visible:
@@ -262,50 +265,76 @@ func _physics_process(_delta: float) -> void:
 	returned.emit()
 
 
-## Once every seed is collected, a curved wind streak drifts off screen toward the exit.
+## Once every seed is collected, curved wind streaks drift off screen toward the exit.
 func _begin_exit_trail() -> void:
-	if _exit_trail != null:
+	if not _exit_trails.is_empty():
 		return
-	var lip := _cliff_lip()
-	if lip == Vector2.INF:
+	if _cliff_lip() == Vector2.INF:
 		return
-	var trail := Path2D.new()
-	trail.name = "ExitWind"
-	# Behind the girl (she sits at z 5) but above the sky and clouds.
-	trail.z_index = 1
-	trail.set_script(PathTrail)
-	trail.set("close_loop", false)
-	trail.set("trail_alpha", 0.72)
-	trail.set("trail_count", 2)
-	trail.set("trail_length", 900.0)
-	trail.set("flow_speed", 360.0)
-	trail.set("line_width", 16.0)
-	add_child(trail)
-	_exit_trail = trail
+	var stagger := 0.35
+	for i in _EXIT_STREAK_COUNT:
+		var trail := Path2D.new()
+		trail.name = "ExitWind%d" % i
+		# She is z -5. Keep the gusts just behind her, above the distant clouds.
+		trail.z_index = -6
+		trail.set_script(PathTrail)
+		trail.set("close_loop", false)
+		trail.set("trail_alpha", 0.62)
+		trail.set("trail_count", 1)
+		trail.set("trail_length", 720.0)
+		trail.set("flow_speed", 180.0)
+		trail.set("line_width", 16.0)
+		trail.set("tail_soft", 0.42)
+		trail.set("manual_head", 2.0)
+		add_child(trail)
+		_exit_trails.append(trail)
+		_exit_clocks.append(-stagger * float(i))
+		_exit_live.append(false)
 
+
+## Each gust starts at the girl, then travels on its own. The next one starts wherever she is then.
+func _advance_exit_streak(delta: float) -> void:
+	if _exit_trails.is_empty() or _ending:
+		return
+	for i in _exit_trails.size():
+		var trail := _exit_trails[i]
+		_exit_clocks[i] += delta
+		if not _exit_live[i]:
+			if _exit_clocks[i] < 0.0:
+				continue
+			_exit_live[i] = true
+			_exit_clocks[i] = 0.0
+			_launch_exit_streak(trail, i)
+		elif _exit_clocks[i] >= _EXIT_STREAK_TIME:
+			_exit_clocks[i] = 0.0
+			_launch_exit_streak(trail, i)
+		trail.set("manual_head", clampf(_exit_clocks[i] / _EXIT_STREAK_TIME, 0.0, 1.0))
+
+
+func _launch_exit_streak(trail: Path2D, index: int) -> void:
 	var body := peppermint as Node2D
-	if body == null:
+	var lip := _cliff_lip()
+	if body == null or lip == Vector2.INF:
 		return
 	var cam := body.get_node_or_null("Camera2D") as Camera2D
 	var zoom := cam.zoom.x if cam != null else 0.5
 	var view := get_viewport().get_visible_rect().size / maxf(zoom, 0.05)
-	# The far end sits off the left edge, up in the air near the exit.
-	_exit_end = Vector2(lip.x - view.x * 0.55, lip.y - view.y * 0.28)
-	_exit_sway = view.y * 0.07
-	_exit_trail.global_position = Vector2.ZERO
-	# Anchored once at the girl's current spot, then left in place as she drifts on.
-	var start := body.global_position
-	var span := absf(start.x - _exit_end.x)
+	var visual := body.get_node_or_null("Visual") as Node2D
+	var start := visual.global_position if visual != null else body.global_position
+	var end := Vector2(lip.x - view.x * 0.55, lip.y - view.y * 0.28)
+	var span := absf(start.x - end.x)
+	var handle := Vector2(-span * 0.16, 0.0)
+	var sway := view.y * 0.07
 	var curve := Curve2D.new()
-	for i in 4:
-		var t := float(i) / 3.0
-		var point := start.lerp(_exit_end, t)
-		if i != 0:
-			point.y += sin(t * PI * 1.5) * _exit_sway
-		# Horizontal handles keep the curve smooth and flowing left.
-		var handle := Vector2(-span * 0.16, 0.0)
+	for n in 4:
+		var t := float(n) / 3.0
+		var point := start.lerp(end, t)
+		if n != 0:
+			point.y += sin(t * PI * 1.5 + float(index) * 1.4) * sway
 		curve.add_point(point, -handle, handle)
-	_exit_trail.curve = curve
+	trail.global_position = Vector2.ZERO
+	trail.curve = curve
+	trail.set("manual_head", 0.0)
 
 
 ## Left end of the cliff top, in world space. The return is this lip, not the yellow box.

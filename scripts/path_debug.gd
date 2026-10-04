@@ -14,6 +14,8 @@ const TRAIL_SHADER := preload("res://shaders/path_trail.gdshader")
 ## Seed paths close the gap between the last point and the first. A guide trail stays open.
 @export var close_loop := true
 @export var line_width := 12.0
+## Rear fade of each streak. The exit gusts use a longer fade so the start isn't a cut line.
+@export_range(0.01, 0.8, 0.01) var tail_soft := 0.04
 
 const DISPERSE_TIME := 2.6
 
@@ -24,6 +26,8 @@ var _length := 0.0
 var _white: Texture2D
 var _dispersing := false
 var _disperse_time := 0.0
+## Below 0, the streak loops on its own. Otherwise this is the head, from 0 at the start to 1 at the end.
+var manual_head := -1.0
 
 
 func _enter_tree() -> void:
@@ -88,6 +92,8 @@ func _apply_uniforms() -> void:
 	_material.set_shader_parameter("portion", span / _length)
 	_material.set_shader_parameter("flow", flow_speed / _length)
 	_material.set_shader_parameter("trail_alpha", trail_alpha)
+	_material.set_shader_parameter("head_override", manual_head)
+	_material.set_shader_parameter("tail_soft", tail_soft)
 	if not _dispersing:
 		_material.set_shader_parameter("wipe", 0.0)
 
@@ -104,8 +110,8 @@ func _ensure_line() -> Line2D:
 	_line.texture_mode = Line2D.LINE_TEXTURE_STRETCH
 	_line.width = line_width
 	_line.joint_mode = Line2D.LINE_JOINT_ROUND
-	_line.begin_cap_mode = Line2D.LINE_CAP_NONE
-	_line.end_cap_mode = Line2D.LINE_CAP_NONE
+	_line.begin_cap_mode = Line2D.LINE_CAP_ROUND
+	_line.end_cap_mode = Line2D.LINE_CAP_ROUND
 	_line.antialiased = true
 	add_child(_line, false, INTERNAL_MODE_BACK)
 	return _line
