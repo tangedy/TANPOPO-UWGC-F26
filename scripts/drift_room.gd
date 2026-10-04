@@ -54,6 +54,7 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	_build_time_toggle()
+	_build_level_label()
 	_apply_time_of_day()
 	InputSetup.ensure()
 	glow.visible = false
@@ -90,6 +91,17 @@ func _build_time_toggle() -> void:
 	button.pressed.connect(_cycle_time)
 	_time_button = button
 	_refresh_time_button()
+
+
+func _build_level_label() -> void:
+	var label := Label.new()
+	label.name = "LevelLabel"
+	label.position = Vector2(152, 20)
+	label.text = name
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.add_theme_font_size_override("font_size", 22)
+	label.add_theme_color_override("font_color", Color(1, 1, 1, 0.92))
+	$UI.add_child(label)
 
 
 func _cycle_time() -> void:

@@ -1,6 +1,6 @@
 extends Control
 
-const DRIFT := "res://scenes/drift.tscn"
+const GAME := "res://scenes/game.tscn"
 
 @onready var music: AudioStreamPlayer = $Music
 
@@ -24,7 +24,7 @@ func _loop_music() -> void:
 
 
 func _on_play() -> void:
-	get_tree().change_scene_to_file(DRIFT)
+	get_tree().change_scene_to_file(GAME)
 
 
 func _on_exit() -> void:

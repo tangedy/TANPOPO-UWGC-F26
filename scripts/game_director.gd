@@ -1,6 +1,10 @@
 extends Node
 
-const DRIFT := preload("res://scenes/drift.tscn")
+const LEVELS: Array[PackedScene] = [
+	preload("res://scenes/level_1.tscn"),
+	preload("res://scenes/level_2.tscn"),
+	preload("res://scenes/level_3.tscn"),
+]
 const InputSetup = preload("res://scripts/input_setup.gd")
 
 @onready var world: Node = $World
@@ -8,6 +12,7 @@ const InputSetup = preload("res://scripts/input_setup.gd")
 @onready var line_box: Control = $UI/LineBox
 
 var _fade_tween: Tween
+var _level := 0
 
 
 func _ready() -> void:
@@ -15,7 +20,7 @@ func _ready() -> void:
 	fade.color = Color.BLACK
 	fade.modulate.a = 0.0
 	line_box.visible = false
-	_play_drift(false)
+	_play_level(false)
 
 
 func present_line() -> void:
@@ -29,24 +34,30 @@ func present_line() -> void:
 	line_box.visible = false
 
 
-func _play_drift(from_black: bool) -> void:
-	var scene := _swap(DRIFT)
+func _play_level(from_black: bool) -> void:
+	var scene := _swap(LEVELS[_level])
 	if from_black:
 		await _fade_to(0.0, 1.15)
 	if not is_instance_valid(scene):
 		return
-	scene.returned.connect(_on_drift_returned, CONNECT_ONE_SHOT)
+	scene.returned.connect(_on_level_returned, CONNECT_ONE_SHOT)
 
 
-func _on_drift_returned() -> void:
-	_end_and_loop.call_deferred()
+func _on_level_returned() -> void:
+	_advance.call_deferred()
 
 
-func _end_and_loop() -> void:
-	await present_line()
+func _advance() -> void:
+	await _fade_to(1.0, 1.2)
 	if not is_inside_tree():
 		return
-	await _play_drift(true)
+	_level += 1
+	if _level >= LEVELS.size():
+		_level = 0
+		await present_line()
+		if not is_inside_tree():
+			return
+	await _play_level(true)
 
 
 func _swap(packed: PackedScene) -> Node:

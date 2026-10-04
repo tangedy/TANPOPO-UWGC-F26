@@ -5,7 +5,6 @@
 [ext_resource type="AudioStream" uid="uid://csbu7j3r200it" path="res://Assets/sfx/fluff.wav" id="3_jd5w8"]
 [ext_resource type="PackedScene" uid="uid://uel7xvwc5jvp" path="res://scenes/wind_zone.tscn" id="3_wind"]
 [ext_resource type="AudioStream" uid="uid://226tuyi3psv6" path="res://Assets/sfx/freesound_community-poof-of-smoke-87381.mp3" id="4_d527q"]
-[ext_resource type="PackedScene" uid="uid://bbxbxebcdr7d0" path="res://scenes/drifting_object.tscn" id="4_object"]
 [ext_resource type="AudioStream" uid="uid://d32volynrc4lg" path="res://Assets/sfx/freesound_community-nature-ambience_cyprus_troodos_mountains_mount_olympus_omni_mics-19736.mp3" id="4_y6epy"]
 [ext_resource type="AudioStream" uid="uid://cym3i3f13ugcd" path="res://Assets/sfx/joentnt-walk-on-grass-1-291984.mp3" id="5_mg2cb"]
 [ext_resource type="PackedScene" uid="uid://c5bm054jrtsb4" path="res://scenes/peppermint.tscn" id="5_peppermint"]
@@ -18,7 +17,6 @@
 [ext_resource type="AudioStream" uid="uid://dycsjsjo3xbe8" path="res://Assets/sfx/soundreality-wind-blowing-457954.mp3" id="8_mds2f"]
 [ext_resource type="Script" uid="uid://b4akt728jpi0v" path="res://scripts/bird_spawner.gd" id="9_birds"]
 [ext_resource type="PackedScene" uid="uid://t0yrhsy5mo5e" path="res://scenes/grass.tscn" id="9_wgtfl"]
-[ext_resource type="Script" uid="uid://mydps3xxhia8" path="res://scripts/path_debug.gd" id="10_path"]
 [ext_resource type="PackedScene" uid="uid://b6skvnu5lj85b" path="res://scenes/flower.tscn" id="10_svi47"]
 [ext_resource type="PackedScene" uid="uid://b3dksb1403hhd" path="res://scenes/dandelion.tscn" id="13_arjxv"]
 [ext_resource type="Script" uid="uid://dshw2c2ojvjsq" path="res://scripts/cloud_parallax.gd" id="14_parallax"]
@@ -41,24 +39,6 @@ shader_parameter/ray2_intensity = 0.526000024985
 shader_parameter/color = Color(1, 1, 1, 0.6)
 shader_parameter/hdr = false
 shader_parameter/seed = 10.0
-
-[sub_resource type="Curve2D" id="Curve2D_a"]
-_data = {
-"points": PackedVector2Array(-25.342, 0, 25.342, 0, 0, -120, -137.64076, 22.736885, 137.64076, -22.736885, 257.59998, -5.600006, 163.72574, -59.95836, -163.72574, 59.95836, 616.7999, 44, 73.84625, -80.00073, -73.84625, 80.00073, 305.6001, 121.99999, 75.06107, -93.50676, -75.06107, 93.50676, 584.4, 403.2, 0, 0, 0, 0, 220.40002, 88.8, 141.49641, -91.59163, -141.49641, 91.59163, -53.19995, 5.199997, 117.32872, -17.969719, -117.32872, 17.969719, 282.79993, 372.8, -145.68665, 233.68333, 145.68665, -233.68333, 13.599976, 147.2, 355.69714, 35.881104, -355.69714, -35.881104, 180.79993, 187.2, -22.036951, 48.547142, 22.036951, -48.547142, -264, -54)
-}
-point_count = 11
-
-[sub_resource type="Curve2D" id="Curve2D_b"]
-_data = {
-"points": PackedVector2Array(-25.342, 0, 25.342, 0, 60, -243.20007, 89.82905, -152.13606, -89.82905, 152.13606, -89.6001, 23.599976, -505.6662, -147.88705, 505.6662, 147.88705, -780.3999, 172.80005, 169.29106, -120.97704, -169.29106, 120.97704, -1278, -287.59998, 94.235435, -168.01295, -94.235435, 168.01295, -602.80005, -6, 0, 0, 0, 0, -306.80005, 77.599976, 79.16202, 67.27503, -79.16202, -67.27503, -436, 12.799927, 106.61404, 173.66408, -106.61404, -173.66408, -914.80005, 45.19995, 376.49817, -150.81407, -376.49817, 150.81407, -153.2002, -67.20007, 559.9703, -142.74107, -559.9703, 142.74107, -1243.5999, -284.79993, -61.515, 16.414, 61.515, -16.414, -36.80005, -234.40002)
-}
-point_count = 11
-
-[sub_resource type="Curve2D" id="Curve2D_c"]
-_data = {
-"points": PackedVector2Array(-25.342, 0, 25.342, 0, 0, -120, -20.502, -14.895, 20.502, 14.895, 70.534, -97.082, -7.831, -24.101, 7.831, 24.101, 114.127, -37.082, 7.831, -24.101, -7.831, 24.101, 114.127, 37.082, 20.502, -14.895, -20.502, 14.895, 70.534, 97.082, 25.342, 0, -25.342, 0, 0, 120, 20.502, 14.895, -20.502, -14.895, -70.534, 97.082, 7.831, 24.101, -7.831, -24.101, -114.127, 37.082, -7.831, 24.101, 7.831, -24.101, -114.127, -37.082, -20.502, 14.895, 20.502, -14.895, -70.534, -97.082)
-}
-point_count = 10
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bok0l"]
 shader = ExtResource("6_bok0l")
@@ -145,456 +125,46 @@ z_index = 2
 position = Vector2(3488, 2790)
 lift_speed = 600.0
 
-[node name="WindRight" parent="." unique_id=625048384 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(5553.0005, 364)
-scale = Vector2(2.643618, 2.2104135)
-strength = 1007.0
-curve = 0.0
-on_duration = 1.4
-off_duration = 1.8
-zone_size = Vector2(340, 200)
+[node name="Starter" type="Node2D" parent="." unique_id=2000000101]
+position = Vector2(500, 150)
 
-[node name="WindRight4" parent="." unique_id=858789183 instance=ExtResource("3_wind")]
+[node name="WindRight" parent="Starter" unique_id=2000000102 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(5746, -2621)
-scale = Vector2(2.643618, 2.2104135)
-strength = 1007.0
-curve = -0.02000000000000001
-off_duration = 5.0
-start_delay = 3.0
-zone_size = Vector2(200, 500)
 
-[node name="WindRight7" parent="." unique_id=623419029 instance=ExtResource("3_wind")]
+[node name="WindUpRight" parent="Starter" unique_id=2000000103 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(6462, -3448.0002)
-scale = Vector2(2.643618, 2.2104135)
-strength = 1007.0
-curve = -0.02000000000000001
-off_duration = 5.0
-start_delay = 1.0
-zone_size = Vector2(200, 500)
+position = Vector2(280, 0)
+rotation = -0.7853982
 
-[node name="WindRight5" parent="." unique_id=374050633 instance=ExtResource("3_wind")]
+[node name="WindUp" parent="Starter" unique_id=2000000104 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(1720.9999, -2073)
-scale = Vector2(2.643618, 2.2104135)
-strength = 1007.0
-curve = -0.02000000000000001
-on_duration = 1.0
-off_duration = 5.0
-start_delay = 0.6
-zone_size = Vector2(100, 500)
-
-[node name="WindRight6" parent="." unique_id=685437992 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(2940, -3129)
-scale = Vector2(2.643618, 2.2104135)
-strength = 1007.0
-curve = -0.02000000000000001
-on_duration = 1.0
-off_duration = 5.0
-start_delay = 1.2
-zone_size = Vector2(100, 500)
-
-[node name="WindRight2" parent="." unique_id=2081410529 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(5242, -1010)
-scale = Vector2(2.643618, 2.2104135)
-strength = 1231.0
-curve = 0.26
-always_active = true
-on_duration = 1.4
-off_duration = 1.8
-zone_size = Vector2(1000, 300)
-
-[node name="WindRight3" parent="." unique_id=855113649 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(5678, 1056)
-scale = Vector2(2.643618, 2.2104135)
-strength = 1007.0
-curve = 0.0
-on_duration = 1.4
-off_duration = 1.8
-zone_size = Vector2(340, 200)
-
-[node name="WindUp" parent="." unique_id=1057585122 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(6828, 250)
+position = Vector2(560, 0)
 rotation = -1.570796
-scale = Vector2(2.6436212, 2.2104154)
-strength = 305.0
-curve = 0.05000000000000004
-on_duration = 2.0
-off_duration = 3.0
-start_delay = 1.0
-zone_size = Vector2(400, 300)
 
-[node name="WindUp9" parent="." unique_id=1178311837 instance=ExtResource("3_wind")]
+[node name="WindUpLeft" parent="Starter" unique_id=2000000105 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(6819, 1822)
-rotation = -1.570796
-scale = Vector2(2.6436212, 2.2104154)
-strength = 305.0
-curve = 0.05000000000000004
-on_duration = 2.0
-off_duration = 3.0
-zone_size = Vector2(400, 300)
+position = Vector2(840, 0)
+rotation = -2.3561945
 
-[node name="WindUp5" parent="." unique_id=1096495153 instance=ExtResource("3_wind")]
+[node name="WindLeft" parent="Starter" unique_id=2000000106 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(6977.0005, -1006)
-rotation = -1.570796
-scale = Vector2(2.6436212, 2.2104154)
-strength = 365.0
-curve = 0.05000000000000004
-on_duration = 2.0
-off_duration = 3.0
-start_delay = 2.0
-zone_size = Vector2(200, 150)
+position = Vector2(1120, 0)
+rotation = 3.141593
 
-[node name="WindUp8" parent="." unique_id=2124334716 instance=ExtResource("3_wind")]
+[node name="WindDownLeft" parent="Starter" unique_id=2000000107 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(6633, -1907)
-rotation = -1.570796
-scale = Vector2(2.6436212, 2.2104154)
-strength = 260.0
-curve = 0.05000000000000004
-on_duration = 2.0
-off_duration = 3.0
-start_delay = 2.5
-zone_size = Vector2(300, 200)
+position = Vector2(1400, 0)
+rotation = 2.3561945
 
-[node name="WindUp2" parent="." unique_id=1821354042 instance=ExtResource("3_wind")]
+[node name="WindDown" parent="Starter" unique_id=2000000108 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(4620, -2047.9998)
-rotation = -1.570796
-scale = Vector2(2.6436212, 2.2104154)
-strength = 270.0
-curve = 0.1100000000000001
-on_duration = 2.0
-off_duration = 2.0
-start_delay = 0.5
-zone_size = Vector2(260, 320)
-
-[node name="WindUp3" parent="." unique_id=360849610 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(1704, 1019)
-rotation = -1.570796
-scale = Vector2(2.6436212, 2.2104154)
-strength = 360.0
-curve = -0.08999999999999997
-on_duration = 3.0
-off_duration = 2.0
-start_delay = 1.0
-zone_size = Vector2(260, 320)
-
-[node name="WindUp6" parent="." unique_id=90731068 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(2483, -176)
-rotation = -1.570796
-scale = Vector2(2.6436212, 2.2104154)
-strength = 360.0
-curve = -0.08999999999999997
-on_duration = 3.0
-off_duration = 2.0
-start_delay = 2.0
-zone_size = Vector2(260, 320)
-
-[node name="WindUp7" parent="." unique_id=1883737840 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(934.00037, -695)
-rotation = -1.570796
-scale = Vector2(2.6436212, 2.2104154)
-strength = 360.0
-curve = -0.08999999999999997
-on_duration = 2.0
-off_duration = 3.0
-start_delay = 0.5
-zone_size = Vector2(260, 320)
-
-[node name="WindUp10" parent="." unique_id=1777326290 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(161, -1757)
-rotation = -1.570796
-scale = Vector2(2.6436212, 2.2104154)
-strength = 360.0
-curve = -0.08999999999999997
-on_duration = 2.0
-off_duration = 3.0
-start_delay = 1.5
-zone_size = Vector2(260, 320)
-
-[node name="WindUp4" parent="." unique_id=676034572 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(5402, -283)
-rotation = -1.570796
-scale = Vector2(2.6436212, 2.2104154)
-curve = -0.17000000000000004
-on_duration = 2.0
-off_duration = 5.0
-start_delay = 0.5
-zone_size = Vector2(260, 320)
-
-[node name="WindLeft" parent="." unique_id=883681909 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(6485, 1389)
-rotation = -3.1415923
-scale = Vector2(2.6436212, 2.2104135)
-strength = 1063.0
-curve = -0.25
-on_duration = 1.2
-off_duration = 1.6
-start_delay = 0.2
-zone_size = Vector2(300, 200)
-
-[node name="WindLeft2" parent="." unique_id=962844555 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(4180.0005, -312)
-rotation = -3.1415923
-scale = Vector2(2.6436212, 2.2104135)
-strength = 1213.0
-curve = -0.09999999999999998
-off_duration = 3.0
-start_delay = 2.0
-zone_size = Vector2(400, 300)
-
-[node name="WindLeft3" parent="." unique_id=1315347894 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(3788.9998, 1809)
-rotation = -3.1415923
-scale = Vector2(2.6436212, 2.2104135)
-strength = 1250.0
-curve = -0.29000000000000004
-always_active = true
-on_duration = 1.2
-off_duration = 1.6
-start_delay = 0.2
-zone_size = Vector2(500, 600)
-
-[node name="WindLeft4" parent="." unique_id=1516108209 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(3372, -3110.9998)
-rotation = -3.1415923
-scale = Vector2(2.6436212, 2.2104135)
-strength = 1250.0
-curve = -0.04000000000000003
-on_duration = 0.18
-off_duration = 5.0
-start_delay = 0.2
-zone_size = Vector2(100, 500)
-
-[node name="WindLeft9" parent="." unique_id=1645188838 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(6125.9995, -3112)
-rotation = -3.1415923
-scale = Vector2(2.6436212, 2.2104135)
-strength = 1250.0
-curve = -0.04000000000000003
-off_duration = 5.0
-start_delay = 2.0
-zone_size = Vector2(200, 500)
-
-[node name="WindLeft10" parent="." unique_id=424182812 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(6900, -3065.0002)
-rotation = -3.1415923
-scale = Vector2(2.6436212, 2.2104135)
-strength = 1250.0
-curve = -0.04000000000000003
-off_duration = 5.0
-zone_size = Vector2(200, 500)
-
-[node name="WindLeft5" parent="." unique_id=568333024 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(4069, -2184)
-rotation = -3.1415923
-scale = Vector2(2.6436212, 2.2104135)
-strength = 1250.0
-curve = -0.04000000000000003
-on_duration = 1.0
-off_duration = 5.0
-start_delay = 2.8
-zone_size = Vector2(100, 500)
-
-[node name="WindLeft8" parent="." unique_id=169794234 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(2584, -2979)
-rotation = -3.1415923
-scale = Vector2(2.6436212, 2.2104135)
-strength = 1250.0
-curve = -0.04000000000000003
-on_duration = 1.0
-off_duration = 5.0
-start_delay = 4.0
-zone_size = Vector2(100, 500)
-
-[node name="WindLeft6" parent="." unique_id=898436416 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(5158, -2198.0002)
-rotation = -3.1415923
-scale = Vector2(2.6436212, 2.2104135)
-strength = 1250.0
-curve = -0.04000000000000003
-off_duration = 5.0
-start_delay = 1.0
-zone_size = Vector2(100, 500)
-
-[node name="WindLeft7" parent="." unique_id=95302129 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(4560, -2996.9998)
-rotation = -3.1415923
-scale = Vector2(2.6436212, 2.2104135)
-strength = 1250.0
-curve = -0.04000000000000003
-off_duration = 5.0
-start_delay = 3.4
-zone_size = Vector2(100, 500)
-
-[node name="WindDown" parent="." unique_id=1493769024 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(3738, 663.00006)
+position = Vector2(1680, 0)
 rotation = 1.570796
-scale = Vector2(2.6436212, 2.2104154)
-strength = 718.0
-curve = -0.07999999999999996
-always_active = true
-on_duration = 0.7
-off_duration = 2.4
-start_delay = 1.0
-zone_size = Vector2(500, 400)
 
-[node name="WindDown2" parent="." unique_id=1610622654 instance=ExtResource("3_wind")]
+[node name="WindDownRight" parent="Starter" unique_id=2000000109 instance=ExtResource("3_wind")]
 z_index = 2
-position = Vector2(3339, -1564.0001)
-rotation = 1.570796
-scale = Vector2(2.6436212, 2.2104154)
-strength = 792.0
-curve = 0.0
-always_active = true
-on_duration = 0.7
-off_duration = 2.4
-start_delay = 1.0
-zone_size = Vector2(260, 400)
-
-[node name="WindDown4" parent="." unique_id=88067414 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(2331.0002, -1793)
-rotation = 1.570796
-scale = Vector2(2.6436212, 2.2104154)
-strength = 718.0
-curve = 0.0
-always_active = true
-on_duration = 0.7
-off_duration = 2.4
-start_delay = 1.0
-zone_size = Vector2(260, 400)
-
-[node name="WindDown5" parent="." unique_id=496003000 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(2123, -2762.0002)
-rotation = 1.570796
-scale = Vector2(2.6436212, 2.2104154)
-strength = 325.0
-curve = 0.30000000000000004
-always_active = true
-on_duration = 0.7
-off_duration = 2.4
-start_delay = 1.0
-zone_size = Vector2(400, 200)
-
-[node name="WindDown3" parent="." unique_id=302321053 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(7427.0005, -2019)
-rotation = 1.570796
-scale = Vector2(2.6436212, 2.2104154)
-strength = 325.0
-curve = 0.0
-always_active = true
-on_duration = 0.7
-off_duration = 2.4
-start_delay = 1.0
-zone_size = Vector2(260, 400)
-
-[node name="WindSteady" parent="." unique_id=322785786 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(4947, 1260)
-scale = Vector2(2.643618, 2.2104135)
-strength = 312.0
-always_active = true
-zone_size = Vector2(300, 160)
-
-[node name="WindSteady2" parent="." unique_id=2051477290 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(3362, -2252)
-scale = Vector2(2.643618, 2.2104135)
-strength = 69.0
-curve = 0.46
-always_active = true
-zone_size = Vector2(300, 160)
-
-[node name="WindSteady4" parent="." unique_id=1421952709 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(5268, -3537.0002)
-scale = Vector2(2.643618, 2.2104135)
-strength = 69.0
-curve = 0.46
-always_active = true
-zone_size = Vector2(300, 160)
-
-[node name="WindSteady5" parent="." unique_id=728548971 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(3941, -3521)
-scale = Vector2(2.643618, 2.2104135)
-strength = 69.0
-curve = 0.46
-always_active = true
-zone_size = Vector2(300, 160)
-
-[node name="WindSteady3" parent="." unique_id=797665751 instance=ExtResource("3_wind")]
-z_index = 2
-position = Vector2(5851, -1846)
-scale = Vector2(2.643618, 2.2104135)
-strength = 69.0
-curve = 0.46
-always_active = true
-zone_size = Vector2(300, 160)
-
-[node name="ObjectA" parent="." unique_id=760653982 instance=ExtResource("4_object")]
-position = Vector2(5699, 535)
-speed = 120.0
-breathe_amount = 0.25
-breathe_period = 3.4
-start_ratio = 0.05
-
-[node name="Path2D2" type="Path2D" parent="ObjectA" unique_id=1849203311]
-position = Vector2(-291.59998, 11.600005)
-curve = SubResource("Curve2D_a")
-script = ExtResource("10_path")
-
-[node name="ObjectB" parent="." unique_id=623485281 instance=ExtResource("4_object")]
-position = Vector2(5525.0005, -3045)
-speed = 60.0
-breathe_amount = 0.7
-breathe_period = 5.5
-start_ratio = 0.4
-
-[node name="Path2D2" type="Path2D" parent="ObjectB" unique_id=1849203321]
-position = Vector2(53.199802, 98)
-curve = SubResource("Curve2D_b")
-script = ExtResource("10_path")
-
-[node name="ObjectC" parent="." unique_id=2135189073 instance=ExtResource("4_object")]
-position = Vector2(-98.49994, -3040)
-speed = 100.0
-breathe_amount = 0.35
-breathe_period = 2.6
-start_ratio = 0.75
-
-[node name="Path2D2" type="Path2D" parent="ObjectC" unique_id=1849203331]
-position = Vector2(-1, 123)
-curve = SubResource("Curve2D_c")
-script = ExtResource("10_path")
+position = Vector2(1960, 0)
+rotation = 0.7853982
 
 [node name="Platform" type="StaticBody2D" parent="." unique_id=1851131555]
 position = Vector2(280, 1450)

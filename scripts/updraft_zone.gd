@@ -3,7 +3,7 @@ extends Area2D
 
 ## Upward speed of the one gust fired when the traveler is fully inside.
 ## Tuned so the arc crests at the top of the tall platform.
-@export var lift_speed := 600.0
+@export var lift_speed := 200.0
 @export var zone_size := Vector2(16000, 700):
 	set(value):
 		zone_size = value
