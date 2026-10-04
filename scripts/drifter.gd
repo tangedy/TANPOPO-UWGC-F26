@@ -359,27 +359,21 @@ func _set_seed_parti(on: bool) -> void:
 	seed_parti.emitting = on
 	if on:
 		seed_parti.restart()
+	_set_leaf_hint(on)
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if not event is InputEventKey:
-		return
-	var key := event as InputEventKey
-	if not key.pressed or key.echo or key.physical_keycode != KEY_G:
-		return
-	_play_fuzz_hint()
-	get_viewport().set_input_as_handled()
-
-
-func _play_fuzz_hint() -> void:
-	if _fuzz_line == null or not is_instance_valid(_fuzz_line):
-		_fuzz_line = FuzzLine.new()
-		_fuzz_line.name = "FuzzLine"
-		var room := get_parent()
-		if room == null:
-			return
-		room.add_child(_fuzz_line)
-	_fuzz_line.play(self)
+func _set_leaf_hint(on: bool) -> void:
+	if on:
+		if _fuzz_line == null or not is_instance_valid(_fuzz_line):
+			_fuzz_line = FuzzLine.new()
+			_fuzz_line.name = "FuzzLine"
+			var room := get_parent()
+			if room == null:
+				return
+			room.add_child(_fuzz_line)
+		_fuzz_line.begin(self)
+	elif is_instance_valid(_fuzz_line):
+		_fuzz_line.end()
 
 
 func _zoom_through_run() -> void:

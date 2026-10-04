@@ -1,38 +1,52 @@
 extends Node2D
 
-## Hint fluff. G releases a thin cloud over one second. Each bit walks toward the
-## nearest drifting seed, sweeps away, and fades out on its own lifetime.
+## Leaf hint. Every 10 to 20 seconds a thin cloud appears off-camera, on the side
+## opposite the nearest seed, then crosses toward it. Each leaf lasts about 4 seconds.
 
-const FLUFF := preload("res://Assets/images/drift_seed_parti.png")
-const KEY := preload("res://shaders/white_key.gdshader")
-const TINT := Color(0.35, 0.32, 0.28, 1)
+const LEAVES: Array[Texture2D] = [
+	preload("res://Assets/images/leaf_1.png"),
+	preload("res://Assets/images/leaf_2.png"),
+]
+const WOOSH := preload("res://Assets/sfx/soundreality-wind-blowing-457954.mp3")
+const TINT := Color(1, 1, 1, 1)
 
 const COUNT := 12
 const SPAWN_WINDOW := 1.0
-const FOLLOW_SPEED := 200.0
-const ARRIVE_DISTANCE := 72.0
-const LIFE := 2.0
+const FOLLOW_SPEED := 460.0
+const ARRIVE_DISTANCE := 80.0
+const LIFE := 4.0
 const FADE_IN := 0.12
 const FADE_OUT := 0.4
+const INTERVAL_MIN := 10.0
+const INTERVAL_MAX := 20.0
 
 var _player: Node2D
+var _armed := false
+var _wait := 0.0
 var _bursts: Array[Burst] = []
-var _material: ShaderMaterial
 
 
-func play(player: Node2D) -> void:
-	_player = player
-	_launch()
-
-
-func _ready() -> void:
+func begin(player: Node2D) -> void:
 	z_index = 2
-	_material = ShaderMaterial.new()
-	_material.shader = KEY
-	_material.set_shader_parameter("cutoff", 0.96)
+	_player = player
+	if _armed:
+		return
+	_armed = true
+	_wait = randf_range(INTERVAL_MIN, INTERVAL_MAX)
+
+
+func end() -> void:
+	_armed = false
 
 
 func _process(delta: float) -> void:
+	if _armed and is_instance_valid(_player):
+		_wait -= delta
+		if _wait <= 0.0:
+			if _launch():
+				_wait = randf_range(INTERVAL_MIN, INTERVAL_MAX)
+			else:
+				_wait = 2.0
 	var i := _bursts.size() - 1
 	while i >= 0:
 		if _bursts[i].tick(delta, self):
@@ -41,16 +55,60 @@ func _process(delta: float) -> void:
 		i -= 1
 
 
-func _launch() -> void:
+func _launch() -> bool:
 	if not is_instance_valid(_player):
-		return
+		return false
 	var origin := _origin()
 	var target := _nearest_drifter(origin)
 	if target == null:
-		return
+		return false
+	var spawn := _offscreen_spawn(origin, _seed_body(target))
 	var burst := Burst.new()
-	burst.setup(self, target, _material)
+	burst.setup(self, target, spawn)
 	_bursts.append(burst)
+	_play_woosh(origin)
+	return true
+
+
+func _play_woosh(at: Vector2) -> void:
+	var voice := AudioStreamPlayer2D.new()
+	voice.stream = WOOSH
+	voice.volume_db = -6.0
+	voice.pitch_scale = randf_range(1.25, 1.5)
+	voice.attenuation = 0.0
+	add_child(voice)
+	voice.global_position = at
+	voice.play()
+	get_tree().create_timer(0.55).timeout.connect(func() -> void:
+		if is_instance_valid(voice):
+			voice.stop()
+			voice.queue_free()
+	)
+
+
+func _offscreen_spawn(player_pos: Vector2, seed_pos: Vector2) -> Vector2:
+	var away := player_pos - seed_pos
+	if away.length_squared() < 1.0:
+		away = Vector2.LEFT
+	away = away.normalized()
+	var view := _view_rect().grow(150.0)
+	var point := player_pos
+	var guard := 0
+	while view.has_point(point) and guard < 48:
+		point += away * 90.0
+		guard += 1
+	return point
+
+
+func _view_rect() -> Rect2:
+	var cam := _player.get_node_or_null("Camera2D") as Camera2D
+	var view := get_viewport_rect().size
+	if cam == null:
+		var at := _origin()
+		return Rect2(at - view * 0.5, view)
+	var size := view / cam.zoom
+	var center := cam.get_screen_center_position()
+	return Rect2(center - size * 0.5, size)
 
 
 func _origin() -> Vector2:
@@ -85,21 +143,23 @@ func _seed_body(node: Node2D) -> Vector2:
 
 class Burst:
 	var age := 0.0
+	var spawn_at := Vector2.ZERO
 	var target: Node2D
 	var wisps: Array[Wisp] = []
 
-	func setup(host: Node2D, seed: Node2D, material: Material) -> void:
+	func setup(host: Node2D, seed: Node2D, at: Vector2) -> void:
 		target = seed
+		spawn_at = at
 		for i in COUNT:
 			var wisp := Wisp.new()
 			wisp.delay = randf() * SPAWN_WINDOW
 			wisp.spin = randf() * TAU
 			wisp.freq = randf_range(1.4, 2.8)
-			wisp.base_rot = deg_to_rad(randf_range(-20.0, 20.0))
-			wisp.scale = randf_range(0.46, 0.7)
+			wisp.base_rot = randf() * TAU
+			wisp.spin_rate = randf_range(-1.4, 1.4)
+			wisp.scale = randf_range(0.08, 0.2)
 			wisp.sprite = Sprite2D.new()
-			wisp.sprite.texture = FLUFF
-			wisp.sprite.material = material
+			wisp.sprite.texture = LEAVES[randi() % LEAVES.size()]
 			wisp.sprite.centered = true
 			wisp.sprite.visible = false
 			wisp.sprite.z_index = 2
@@ -133,8 +193,7 @@ class Burst:
 	func _birth(wisp: Wisp, host: Node2D) -> void:
 		wisp.born = age
 		wisp.life = LIFE
-		var origin: Vector2 = host.call("_origin")
-		wisp.pos = origin + Vector2.from_angle(randf() * TAU) * randf_range(8.0, 36.0)
+		wisp.pos = spawn_at + Vector2.from_angle(randf() * TAU) * randf_range(10.0, 48.0)
 		wisp.sprite.visible = true
 
 	func _follow(wisp: Wisp, aim: Vector2, delta: float, lived: float) -> void:
@@ -145,7 +204,7 @@ class Burst:
 		if dist > 1.0:
 			var step := to_aim / dist * FOLLOW_SPEED * launch * delta
 			wisp.pos += step.rotated(sway)
-		wisp.pos += Vector2(cos(lived * wisp.freq + wisp.spin), sin(lived * (wisp.freq * 0.7) + wisp.spin)) * 26.0 * delta
+		wisp.pos += Vector2(cos(lived * wisp.freq + wisp.spin), sin(lived * (wisp.freq * 0.7) + wisp.spin)) * 34.0 * delta
 		if lived > 0.2 and dist <= ARRIVE_DISTANCE:
 			_start_sweep(wisp)
 
@@ -153,7 +212,7 @@ class Burst:
 		if wisp.sweeping:
 			return
 		wisp.sweeping = true
-		wisp.scatter = Vector2.from_angle(randf() * TAU) * randf_range(260.0, 900.0)
+		wisp.scatter = Vector2.from_angle(randf() * TAU) * randf_range(520.0, 1400.0)
 
 	func _sweep(wisp: Wisp, delta: float) -> void:
 		wisp.pos += wisp.scatter * delta
@@ -185,7 +244,7 @@ class Burst:
 		if lived > fade_at:
 			fade *= 1.0 - smoothstep(fade_at, wisp.life, lived)
 		wisp.sprite.global_position = wisp.pos
-		wisp.sprite.global_rotation = wisp.base_rot + sin(lived * wisp.freq) * 0.2
+		wisp.sprite.global_rotation = wisp.base_rot + wisp.spin_rate * lived
 		wisp.sprite.scale = Vector2(wisp.scale, wisp.scale)
 		var color := TINT
 		color.a = fade
@@ -209,4 +268,5 @@ class Wisp:
 	var spin := 0.0
 	var freq := 1.0
 	var base_rot := 0.0
+	var spin_rate := 0.0
 	var scale := 1.0
