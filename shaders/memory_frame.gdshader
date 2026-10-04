@@ -1,8 +1,12 @@
 shader_type canvas_item;
 
-// Soft, dreamy memory: a light blur plus an organic, inky blob border that
+// Soft, dreamy memory: a heavy blur plus an organic, inky blob border that
 // eats into the edges so the picture reads like the splotchy reference frame.
-uniform float blur_amount : hint_range(0.0, 24.0) = 9.0;
+// Blur radius as a fraction of the image, so it is just as heavy on any size
+// of PNG (pixel-based offsets vanished on the big memory art).
+uniform float blur_amount : hint_range(0.0, 0.5) = 0.22;
+// 0 is gray, 1 is the picture's own color.
+uniform float saturation : hint_range(0.0, 1.0) = 0.08;
 // How far the inky border eats in from each edge (0..0.5).
 uniform float border_width : hint_range(0.0, 0.5) = 0.13;
 // Width of the soft falloff at the border.
@@ -45,19 +49,6 @@ float fbm(vec2 p) {
 	return v;
 }
 
-vec4 blurred(sampler2D tex, vec2 uv, vec2 ps) {
-	vec4 col = vec4(0.0);
-	float weight = 0.0;
-	for (int y = -3; y <= 3; y++) {
-		for (int x = -3; x <= 3; x++) {
-			float w = exp(-float(x * x + y * y) / 10.0);
-			col += texture(tex, uv + ps * vec2(float(x), float(y))) * w;
-			weight += w;
-		}
-	}
-	return col / weight;
-}
-
 // Signed distance to a rounded rectangle, so corners fade the same as the sides.
 float rounded_box(vec2 p, vec2 half_size, float radius) {
 	vec2 q = abs(p) - half_size + vec2(radius);
@@ -86,7 +77,22 @@ void fragment() {
 	vec2 half_size = rect_size * 0.5 - vec2(inset + (n - 0.5) * edge * noise_strength);
 	float dist = rounded_box(p, half_size, edge * 0.06);
 	float mask = 1.0 - smoothstep(0.0, soft, dist);
-	vec4 img = blurred(TEXTURE, UV, TEXTURE_PIXEL_SIZE * blur_amount);
+	// Sampling has to happen here. Godot rejects texture() inside a helper.
+	vec4 img = vec4(0.0);
+	float weight = 0.0;
+	float sigma = max(blur_amount * 0.5, 0.001);
+	float step_px = blur_amount / 5.0;
+	for (int y = -5; y <= 5; y++) {
+		for (int x = -5; x <= 5; x++) {
+			vec2 o = vec2(float(x), float(y)) * step_px;
+			float w = exp(-dot(o, o) / (2.0 * sigma * sigma));
+			img += texture(TEXTURE, UV + o * TEXTURE_PIXEL_SIZE) * w;
+			weight += w;
+		}
+	}
+	img /= max(weight, 0.0001);
+	float luma = dot(img.rgb, vec3(0.299, 0.587, 0.114));
+	img.rgb = mix(vec3(luma), img.rgb, saturation);
 	COLOR = img * tint;
 	COLOR.a *= mask;
 }

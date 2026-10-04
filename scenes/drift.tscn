@@ -26,6 +26,7 @@
 [ext_resource type="Shader" uid="uid://bx6p2btkr8mum" path="res://shaders/godray.gdshader" id="16_8brjc"]
 [ext_resource type="AudioStream" uid="uid://b55e4imb8hqqj" path="res://Assets/music/drift_day.wav" id="17_day"]
 [ext_resource type="PackedScene" uid="uid://d1vjnycg1nnao" path="res://scenes/ceiling_cushion.tscn" id="18_cushion"]
+[ext_resource type="Texture2D" uid="uid://6kvbalwfqmui" path="res://Assets/images/sitting on bench.png" id="27_6yvvu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5xdv5"]
 shader = ExtResource("16_8brjc")
@@ -99,6 +100,42 @@ size = Vector2(220, 160)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5xdv5"]
 size = Vector2(361.0005, 9036.75)
+
+[sub_resource type="Shader" id="Shader_6yvvu"]
+code = "shader_type canvas_item;
+
+uniform sampler2D flowMap;
+uniform float strength;
+uniform float speed;
+uniform int frames : hint_range(1, 60);
+
+float clock(float time){
+	float fframes = float(frames);
+	return floor(mod(time * speed, fframes)) / fframes;
+}
+
+void fragment(){
+	float c = clock(TIME);
+	vec4 offset = texture(flowMap, vec2(UV.x + c, UV.y + c)) * strength;
+	COLOR = texture(TEXTURE, vec2(UV.x,UV.y) + offset.xy - vec2(0.5,0.5)*strength);
+}
+"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xn0i5"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wkg11"]
+noise = SubResource("FastNoiseLite_xn0i5")
+seamless = true
+as_normal_map = true
+seamless_blend_skirt = 1.0
+bump_strength = 32.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0cwwd"]
+shader = SubResource("Shader_6yvvu")
+shader_parameter/flowMap = SubResource("NoiseTexture2D_wkg11")
+shader_parameter/strength = 0.003
+shader_parameter/speed = 5.0
+shader_parameter/frames = 5
 
 [node name="Drift" type="Node2D" unique_id=1080770655]
 script = ExtResource("1_room")
@@ -468,3 +505,10 @@ vertical_alignment = 1
 
 [node name="CeilingCushion" parent="." unique_id=2000000202 instance=ExtResource("18_cushion")]
 position = Vector2(2945, -3735)
+
+[node name="SittingOnBench" type="Sprite2D" parent="." unique_id=727903304]
+visible = false
+material = SubResource("ShaderMaterial_0cwwd")
+position = Vector2(-771, 687)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("27_6yvvu")

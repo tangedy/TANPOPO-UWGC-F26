@@ -6,6 +6,7 @@ const LEVELS: Array[PackedScene] = [
 	preload("res://scenes/level_3.tscn"),
 ]
 const TITLE_SCENE := "res://scenes/title.tscn"
+const FINAL_SCENE := "res://final.tscn"
 const LOGO := preload("res://Assets/images/tanpopo_test.png")
 const LOGO_WAVE := preload("res://drift.gdshader")
 const LOGO_SCALE := 0.5
@@ -47,11 +48,18 @@ const ENDING_FADE_IN := 3.4
 const ENDING_FADE_OUT := 2.8
 const CREDITS_ROLL_SPEED := 42.0
 
-## The three memories collected this stage. Placeholder art for now; swap per stage later.
+const MEMORIES_PER_STAGE := 3
+## One memory per seed, in play order: level 1 is 1–3, level 2 is 4–6, level 3 is 7–9.
 const STAGE_MEMORIES: Array[Texture2D] = [
-	preload("res://Assets/images/memories/testmemor.png"),
-	preload("res://Assets/images/memories/testmemor.png"),
-	preload("res://Assets/images/memories/testmemor.png"),
+	preload("res://Assets/images/memories/memory 1.png"),
+	preload("res://Assets/images/memories/memory 2.png"),
+	preload("res://Assets/images/memories/memory 3.png"),
+	preload("res://Assets/images/memories/memory 4.png"),
+	preload("res://Assets/images/memories/memory 5.png"),
+	preload("res://Assets/images/memories/memory 6.png"),
+	preload("res://Assets/images/memories/memory 7.png"),
+	preload("res://Assets/images/memories/memory 8.png"),
+	preload("res://Assets/images/memories/memory 9.png"),
 ]
 
 @onready var world: Node = $World
@@ -73,12 +81,18 @@ func _ready() -> void:
 	_poof.stream = POOF_SFX
 	_poof.volume_db = 6.0
 	add_child(_poof)
+	line_box.visible = false
+	if get_tree().has_meta("drift_play_credits"):
+		get_tree().remove_meta("drift_play_credits")
+		fade.color = Color.WHITE
+		fade.modulate.a = 1.0
+		_play_ending(_play_token)
+		return
 	fade.color = Color.BLACK
 	var from_black := get_tree().has_meta("fade_from_black")
 	if from_black:
 		get_tree().remove_meta("fade_from_black")
 	fade.modulate.a = 1.0 if from_black else 0.0
-	line_box.visible = false
 	_play_level(from_black)
 
 
@@ -135,7 +149,8 @@ func _flash_memories(token: int) -> void:
 	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var mat := ShaderMaterial.new()
 	mat.shader = MEMORY_FRAME
-	mat.set_shader_parameter("blur_amount", 18.0)
+	mat.set_shader_parameter("blur_amount", 0.26)
+	mat.set_shader_parameter("saturation", 0.06)
 	var frame_size := Vector2(vp.x - inset - gutter - inset * 0.35, vp.y - inset * 2.0)
 	mat.set_shader_parameter("rect_size", frame_size)
 	rect.material = mat
@@ -166,13 +181,16 @@ func _flash_memories(token: int) -> void:
 	seed_mat.set_shader_parameter("cutoff", 0.988)
 	seed.material = seed_mat
 	flash.add_child(seed)
-	for i in STAGE_MEMORIES.size():
+	var stage_start := _level * MEMORIES_PER_STAGE
+	var stage_count := mini(MEMORIES_PER_STAGE, maxi(STAGE_MEMORIES.size() - stage_start, 0))
+	for i in stage_count:
 		if token != _play_token or not is_inside_tree():
 			break
-		rect.texture = STAGE_MEMORIES[i]
+		var slot := stage_start + i
+		rect.texture = STAGE_MEMORIES[slot]
 		# Vary the border noise so each memory frame looks a little different.
-		mat.set_shader_parameter("seed", float(i) * 7.3)
-		var color: Color = SeedScript.rainbow_color(_level * STAGE_MEMORIES.size() + i)
+		mat.set_shader_parameter("seed", float(slot) * 7.3)
+		var color: Color = SeedScript.rainbow_color(slot)
 		var halo := color
 		halo.a = 0.16
 		glow_mat.set_shader_parameter("glow_color", halo)
@@ -228,10 +246,11 @@ func _advance(token: int) -> void:
 		return
 	_level += 1
 	if _level >= LEVELS.size():
-		await present_line()
+		await _fade_to_white(FADE_IN_TIME)
 		if token != _play_token or not is_inside_tree():
 			return
-		await _play_ending(token)
+		get_tree().set_meta("fade_from_white", true)
+		get_tree().change_scene_to_file(FINAL_SCENE)
 		return
 	await _play_level(true)
 
@@ -245,6 +264,7 @@ func _play_ending(token: int) -> void:
 	_current_room = scene
 	if is_instance_valid(scene):
 		scene.set("time_of_day", 0)
+		_show_credits_pose(scene)
 	if token != _play_token or not is_inside_tree():
 		return
 	var credits := _build_credits(scene)
@@ -264,6 +284,21 @@ func _play_ending(token: int) -> void:
 		return
 	get_tree().set_meta("fade_from_black", true)
 	get_tree().change_scene_to_file(TITLE_SCENE)
+
+
+## Credits use the bench pose. The running girl stays hidden, and the bench sprite stays hidden in play.
+func _show_credits_pose(room: Node) -> void:
+	var peppermint := room.get_node_or_null("Peppermint")
+	if peppermint:
+		var visual := peppermint.get_node_or_null("Visual")
+		if visual:
+			visual.visible = false
+		var seeds := peppermint.get_node_or_null("SeedParti")
+		if seeds:
+			seeds.visible = false
+	var sitting := room.get_node_or_null("SittingOnBench")
+	if sitting:
+		sitting.visible = true
 
 
 func _build_credits(room: Node) -> Node2D:
@@ -391,4 +426,14 @@ func _fade_to(target: float, duration: float) -> void:
 		_fade_tween.kill()
 	_fade_tween = create_tween()
 	_fade_tween.tween_property(fade, "modulate:a", target, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	await _fade_tween.finished
+
+
+## The screen is already black after the last memories. Ease that black into white.
+func _fade_to_white(duration: float) -> void:
+	fade.modulate.a = 1.0
+	if _fade_tween and _fade_tween.is_valid():
+		_fade_tween.kill()
+	_fade_tween = create_tween()
+	_fade_tween.tween_property(fade, "color", Color.WHITE, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	await _fade_tween.finished

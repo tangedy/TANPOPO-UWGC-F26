@@ -1,6 +1,18 @@
-extends RefCounted
+extends Node
+
+const CURSOR := preload("res://Assets/images/drift_cursor.png")
+## Tip of the arrow, in texture pixels.
+const CURSOR_HOTSPOT := Vector2(16, 9)
+
+
+func _ready() -> void:
+	ensure()
+
 
 static func ensure() -> void:
+	# CursorShape is not exposed to scripts, so each shape is set by its enum value.
+	for shape in 17:
+		Input.set_custom_mouse_cursor(CURSOR, shape, CURSOR_HOTSPOT)
 	_bind("left", [KEY_A, KEY_LEFT])
 	_bind("right", [KEY_D, KEY_RIGHT])
 	_bind("down", [KEY_S, KEY_DOWN])

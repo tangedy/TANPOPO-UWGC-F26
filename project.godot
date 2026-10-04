@@ -16,12 +16,18 @@ config/features=PackedStringArray("4.7", "Forward Plus")
 boot_splash/bg_color=Color(0.5985247, 0.59852463, 0.59852445, 1)
 config/icon="res://icon.svg"
 
+[autoload]
+
+InputSetup="*res://scripts/input_setup.gd"
+
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+mouse_cursor/custom_image="res://Assets/images/drift_cursor.png"
+mouse_cursor/custom_image_hotspot=Vector2(16, 9)
 
 [gui]
 
