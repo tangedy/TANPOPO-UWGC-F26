@@ -12,7 +12,7 @@ static func deliver(area: Area2D, accel: Vector2) -> void:
 ## Callable taking the receiver's global position and returning a Vector2.
 static func deliver_field(area: Area2D, field: Callable) -> void:
 	var seen: Array[Node] = []
-	var keep_up := area.has_method("keeps_upward_push") and area.keeps_upward_push()
+	var keep_up: bool = area.has_method("keeps_upward_push") and bool(area.keeps_upward_push())
 	for node in area.get_overlapping_bodies():
 		_send_field(node, field, seen, keep_up)
 	for node in area.get_overlapping_areas():

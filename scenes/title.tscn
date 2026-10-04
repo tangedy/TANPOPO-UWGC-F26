@@ -312,7 +312,7 @@ modulate = Color(1, 1, 1, 0.77254903)
 position = Vector2(681, 244)
 scale = Vector2(3, 3)
 strength = 116.0
-always_active = true
+curve = -1.0
 zone_size = Vector2(500, 40)
 
 [node name="CollisionShape2D" parent="WindZone" index="0" unique_id=2097485913]
@@ -331,7 +331,7 @@ modulate = Color(1, 1, 1, 0.77254903)
 position = Vector2(681, 544)
 scale = Vector2(3, 3)
 strength = 116.0
-always_active = true
+curve = -1.0
 zone_size = Vector2(500, 20)
 
 [node name="CollisionShape2D" parent="WindZone2" index="0" unique_id=2097485913]
