@@ -102,7 +102,6 @@ size = Vector2(361.0005, 9036.75)
 
 [node name="Drift" type="Node2D" unique_id=1080770655]
 script = ExtResource("1_room")
-time_of_day = 1
 
 [node name="Godray" type="ColorRect" parent="." unique_id=186856081]
 visible = false

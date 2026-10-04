@@ -16,16 +16,16 @@ config/features=PackedStringArray("4.7", "Forward Plus")
 boot_splash/bg_color=Color(0.5985247, 0.59852463, 0.59852445, 1)
 config/icon="res://icon.svg"
 
-[gui]
-
-theme/custom_font="res://Assets/images/CHILDREN-ONE.otf"
-
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+
+[gui]
+
+theme/custom_font="res://Assets/images/CHILDREN-ONE.otf"
 
 [input]
 

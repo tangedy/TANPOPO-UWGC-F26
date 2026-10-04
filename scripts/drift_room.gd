@@ -64,9 +64,12 @@ func _ready() -> void:
 	completion_area.body_entered.connect(_on_return_body)
 	prompt.visible = false
 	set_process_unhandled_input(true)
-	if get_tree().has_meta("fade_from_black"):
+	if get_tree().has_meta("fade_from_white"):
+		get_tree().remove_meta("fade_from_white")
+		_fade_from_color(Color.WHITE, 0.9)
+	elif get_tree().has_meta("fade_from_black"):
 		get_tree().remove_meta("fade_from_black")
-		_fade_from_black()
+		_fade_from_color(Color.BLACK, 0.55)
 	_opening()
 
 
@@ -160,17 +163,17 @@ func _play_music(stream: AudioStream) -> void:
 	music.play()
 
 
-func _fade_from_black() -> void:
+func _fade_from_color(color: Color, duration: float) -> void:
 	var layer := CanvasLayer.new()
 	layer.layer = 100
 	add_child(layer)
 	var rect := ColorRect.new()
-	rect.color = Color.BLACK
+	rect.color = color
 	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	layer.add_child(rect)
 	var tween := create_tween()
-	tween.tween_property(rect, "modulate:a", 0.0, 0.55).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(rect, "modulate:a", 0.0, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	await tween.finished
 	layer.queue_free()
 
@@ -179,17 +182,7 @@ func _opening() -> void:
 	_chase = false
 	_listen_for_chase = false
 	prompt.visible = false
-	await get_tree().create_timer(1.15).timeout
-	if not is_inside_tree():
-		return
-	prompt.visible = true
-	_listen_for_chase = true
-	while is_inside_tree() and not _chase:
-		await get_tree().process_frame
-	_listen_for_chase = false
-	if not is_inside_tree():
-		return
-	prompt.visible = false
+	# Start running immediately so she is already mid-chase while the white fade clears.
 	if peppermint.has_method("start_run"):
 		peppermint.start_run()
 

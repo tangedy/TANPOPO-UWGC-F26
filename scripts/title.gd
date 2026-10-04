@@ -1,6 +1,6 @@
 extends Control
 
-const GAME := "res://scenes/game.tscn"
+const INTRO := "res://shaders/intro.tscn"
 const OUTLINE_SIZE := 20
 const ARROW_GAP := -8.0
 
@@ -82,7 +82,7 @@ func _on_play() -> void:
 	click_sfx.play()
 	await _fade_black(0.45)
 	get_tree().set_meta("fade_from_black", true)
-	get_tree().change_scene_to_file(GAME)
+	get_tree().change_scene_to_file(INTRO)
 
 
 func _on_exit() -> void:
