@@ -6,7 +6,7 @@ const InputSetup = preload("res://scripts/input_setup.gd")
 const DAY_MUSIC := preload("res://Assets/music/drift_day.wav")
 const NIGHT_MUSIC := preload("res://Assets/music/drift_night.wav")
 
-enum TimeOfDay { DAY, SUNSET, NIGHT }
+enum TimeOfDay { DAY, AFTERNOON, SUNSET, NIGHT }
 
 @export var required_collectibles := 3
 @export var time_of_day: TimeOfDay = TimeOfDay.DAY:
@@ -17,16 +17,19 @@ enum TimeOfDay { DAY, SUNSET, NIGHT }
 
 const _SKY := {
 	TimeOfDay.DAY: Color(0.690196, 0.878431, 0.917647, 1),
+	TimeOfDay.AFTERNOON: Color(0.96, 0.74, 0.48, 1),
 	TimeOfDay.SUNSET: Color(0.93, 0.48, 0.36, 1),
 	TimeOfDay.NIGHT: Color(0.05, 0.07, 0.16, 1),
 }
 const _TINT := {
 	TimeOfDay.DAY: Color(1, 1, 1, 1),
+	TimeOfDay.AFTERNOON: Color(1.0, 0.86, 0.66, 1),
 	TimeOfDay.SUNSET: Color(1.0, 0.72, 0.52, 1),
 	TimeOfDay.NIGHT: Color(0.38, 0.42, 0.68, 1),
 }
 const _TIME_LABELS := {
 	TimeOfDay.DAY: "Day",
+	TimeOfDay.AFTERNOON: "Afternoon",
 	TimeOfDay.SUNSET: "Sunset",
 	TimeOfDay.NIGHT: "Night",
 }
@@ -111,7 +114,7 @@ func _build_level_label() -> void:
 
 
 func _cycle_time() -> void:
-	time_of_day = ((int(time_of_day) + 1) % 3) as TimeOfDay
+	time_of_day = ((int(time_of_day) + 1) % TimeOfDay.size()) as TimeOfDay
 
 
 func _refresh_time_button() -> void:
@@ -136,7 +139,7 @@ func _apply_time_of_day() -> void:
 		)
 	_refresh_time_button()
 	match time_of_day:
-		TimeOfDay.DAY:
+		TimeOfDay.DAY, TimeOfDay.AFTERNOON:
 			_play_music(DAY_MUSIC)
 		TimeOfDay.NIGHT:
 			_play_music(NIGHT_MUSIC)

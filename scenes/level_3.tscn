@@ -14,7 +14,7 @@ point_count = 8
 [sub_resource type="Curve2D" id="Curve2D_seed_b"]
 resource_local_to_scene = true
 _data = {
-"points": PackedVector2Array(0, -55.228, 0, 55.228, 100, 0, 39.052, -39.052, -39.052, 39.052, 70.711, 70.711, 55.228, 0, -55.228, 0, 0, 100, 39.052, 39.052, -39.052, -39.052, -70.711, 70.711, 0, 55.228, 0, -55.228, -100, 0, -39.052, 39.052, 39.052, -39.052, -70.711, -70.711, -55.228, 0, 55.228, 0, 0, -100, -39.052, -39.052, 39.052, 39.052, 70.711, -70.711)
+"points": PackedVector2Array(-283.04602, -221.3198, 283.04602, 221.3198, 100, 0, -168.15509, -135.92804, 168.15509, 135.92804, -2433.1997, 1822.3999, 1736.0057, -9.816778, -1736.0057, 9.816778, -1476.3999, 729.19995, 71.287506, -46.90935, -71.287506, 46.90935, -84.3999, 1913.5999, -305.7956, -1270.7017, 305.7956, 1270.7017, -1404.3999, 754.39996, -286.08344, 286.08344, 286.08344, -286.08344, -3053.1997, 24, 1946.9551, -10.745169, -1946.9551, 10.745169, -1418.7999, 689.99994, -216.74127, -117.06192, 216.74127, 117.06192, 37.19995, -32.400024)
 }
 point_count = 8
 
@@ -26,20 +26,49 @@ _data = {
 point_count = 8
 
 [node name="Level 3" unique_id=492314800 instance=ExtResource("1_drift")]
+time_of_day = 3
+
+[node name="WindRight" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="0" unique_id=2000000102]
+position = Vector2(3594, -885)
+
+[node name="WindUpRight" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="1" unique_id=2000000103]
+position = Vector2(3879, -864)
+
+[node name="WindUp" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="2" unique_id=2000000104]
+position = Vector2(4159, -864)
+
+[node name="WindUpLeft" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="3" unique_id=2000000105]
+position = Vector2(4439, -864)
+
+[node name="WindLeft" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="4" unique_id=2000000106]
+position = Vector2(4719, -864)
+
+[node name="WindDownLeft" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="5" unique_id=2000000107]
+position = Vector2(4999, -864)
+
+[node name="WindDown" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="6" unique_id=2000000108]
+position = Vector2(5279, -864)
+
+[node name="WindDownRight" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="7" unique_id=2000000109]
+position = Vector2(5559, -864)
 
 [node name="SeedA" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="8" unique_id=-1994967185 instance=ExtResource("2_object")]
+position = Vector2(995.99994, -1354.9999)
 
 [node name="SeedA#Path2D" type="Path2D" parent="Starter/SeedA" index="1" unique_id=-1994967175]
 curve = SubResource("Curve2D_seed_a")
 script = ExtResource("3_path")
 
 [node name="SeedB" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="9" unique_id=-1994967184 instance=ExtResource("2_object")]
+position = Vector2(6352.9995, -3366.0002)
 
 [node name="SeedB#Path2D" type="Path2D" parent="Starter/SeedB" index="1" unique_id=-1994967165]
+position = Vector2(3.6001952, 53.600094)
 curve = SubResource("Curve2D_seed_b")
 script = ExtResource("3_path")
 
 [node name="SeedC" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="10" unique_id=-1994967183 instance=ExtResource("2_object")]
+position = Vector2(1647.9999, -1273.9999)
 
 [node name="SeedC#Path2D" type="Path2D" parent="Starter/SeedC" index="1" unique_id=-1994967155]
 curve = SubResource("Curve2D_seed_c")
@@ -52,6 +81,12 @@ metadata/_edit_lock_ = true
 metadata/_edit_lock_ = true
 
 [node name="BGClouds2" parent="Platform/BGCloudsLayer" parent_id_path=PackedInt32Array(667529225) index="1" unique_id=1416871081]
+metadata/_edit_lock_ = true
+
+[node name="Glow" parent="Platform/BGCloudsLayer/Moon" parent_id_path=PackedInt32Array(1882401933) index="0" unique_id=367530511]
+metadata/_edit_lock_ = true
+
+[node name="Sprite" parent="Platform/BGCloudsLayer/Moon" parent_id_path=PackedInt32Array(1882401933) index="1" unique_id=531339684]
 metadata/_edit_lock_ = true
 
 [node name="ForegroundClouds" parent="Platform/ForegroundCloudsLayer" parent_id_path=PackedInt32Array(1122071185) index="0" unique_id=949056660]

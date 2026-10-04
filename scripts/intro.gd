@@ -1,6 +1,6 @@
 extends Node2D
 
-const DRIFT := "res://scenes/drift.tscn"
+const GAME := "res://scenes/game.tscn"
 ## Point in the intro animation (seconds) where the white fade-out to drift begins.
 const DRIFT_CUE := 30.0
 const FADE_IN_TIME := 0.9
@@ -27,19 +27,19 @@ func _process(delta: float) -> void:
 		_skip_held += delta
 		if _skip_held >= SKIP_HOLD:
 			_leaving = true
-			_go_to_drift()
+			_go_to_game()
 			return
 	else:
 		_skip_held = 0.0
 	if anim.is_playing() and anim.current_animation_position >= DRIFT_CUE:
 		_leaving = true
-		_go_to_drift()
+		_go_to_game()
 
 
-func _go_to_drift() -> void:
+func _go_to_game() -> void:
 	await _fade_white(WHITE_FADE_TIME)
 	get_tree().set_meta("fade_from_white", true)
-	get_tree().change_scene_to_file(DRIFT)
+	get_tree().change_scene_to_file(GAME)
 
 
 func _fade_from_black(duration: float) -> void:

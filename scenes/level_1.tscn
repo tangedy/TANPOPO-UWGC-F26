@@ -28,6 +28,7 @@ _data = {
 point_count = 9
 
 [node name="Level 1" unique_id=112998883 instance=ExtResource("1_drift")]
+time_of_day = 0
 
 [node name="Godray" parent="." index="0" unique_id=186856081]
 metadata/_edit_lock_ = true
