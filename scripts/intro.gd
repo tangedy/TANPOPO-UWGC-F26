@@ -5,10 +5,13 @@ const DRIFT := "res://scenes/drift.tscn"
 const DRIFT_CUE := 30.0
 const FADE_IN_TIME := 0.9
 const WHITE_FADE_TIME := 1.2
+## How long space must be held to skip the intro.
+const SKIP_HOLD := 0.6
 
 @onready var anim: AnimationPlayer = $AnimationPlayer
 
 var _leaving := false
+var _skip_held := 0.0
 
 
 func _ready() -> void:
@@ -17,9 +20,17 @@ func _ready() -> void:
 		_fade_from_black(FADE_IN_TIME)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if _leaving:
 		return
+	if Input.is_physical_key_pressed(KEY_SPACE):
+		_skip_held += delta
+		if _skip_held >= SKIP_HOLD:
+			_leaving = true
+			_go_to_drift()
+			return
+	else:
+		_skip_held = 0.0
 	if anim.is_playing() and anim.current_animation_position >= DRIFT_CUE:
 		_leaving = true
 		_go_to_drift()
