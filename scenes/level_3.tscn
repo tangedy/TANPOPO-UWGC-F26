@@ -54,7 +54,7 @@ curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
 off_duration = 6.0
-start_delay = 6.0
+start_delay = 4.0
 zone_size = Vector2(500, 500)
 
 [node name="WindLeft2" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="2" unique_id=1952284084 instance=ExtResource("2_1pn4d")]
@@ -100,7 +100,7 @@ curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
 off_duration = 6.0
-start_delay = 2.0
+start_delay = 4.0
 zone_size = Vector2(500, 500)
 
 [node name="WindLeft3" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="6" unique_id=978161860 instance=ExtResource("2_1pn4d")]
@@ -132,7 +132,7 @@ curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
 off_duration = 6.0
-start_delay = 6.0
+start_delay = 4.0
 zone_size = Vector2(500, 500)
 
 [node name="WindUp" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="9" unique_id=2000000104]
@@ -203,7 +203,7 @@ curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
 off_duration = 6.0
-start_delay = 6.0
+start_delay = 4.0
 zone_size = Vector2(500, 500)
 
 [node name="WindLeft13" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="16" unique_id=477418033 instance=ExtResource("2_1pn4d")]
@@ -250,7 +250,7 @@ curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
 off_duration = 6.0
-start_delay = 6.0
+start_delay = 4.0
 zone_size = Vector2(500, 500)
 
 [node name="WindLeft14" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="20" unique_id=1797552871 instance=ExtResource("2_1pn4d")]
@@ -353,7 +353,7 @@ curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
 off_duration = 6.0
-start_delay = 2.0
+start_delay = 4.0
 zone_size = Vector2(500, 500)
 
 [node name="WindUp26" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="29" unique_id=1783163133 instance=ExtResource("2_1pn4d")]
@@ -389,7 +389,7 @@ curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
 off_duration = 6.0
-start_delay = 2.0
+start_delay = 4.0
 zone_size = Vector2(500, 500)
 
 [node name="WindUp30" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="32" unique_id=2007764407 instance=ExtResource("2_1pn4d")]
@@ -436,7 +436,6 @@ curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
 off_duration = 6.0
-start_delay = 4.0
 zone_size = Vector2(500, 500)
 
 [node name="WindLeft8" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="36" unique_id=230464236 instance=ExtResource("2_1pn4d")]
@@ -493,7 +492,7 @@ curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
 off_duration = 6.0
-start_delay = 6.0
+start_delay = 4.0
 zone_size = Vector2(500, 500)
 
 [node name="WindLeft26" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="41" unique_id=1376049263 instance=ExtResource("2_1pn4d")]
@@ -540,7 +539,6 @@ curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
 off_duration = 6.0
-start_delay = 4.0
 zone_size = Vector2(500, 500)
 
 [node name="WindLeft4" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="45" unique_id=724119258 instance=ExtResource("2_1pn4d")]
@@ -643,7 +641,7 @@ curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
 off_duration = 6.0
-start_delay = 2.0
+start_delay = 4.0
 zone_size = Vector2(500, 500)
 
 [node name="WindLeft15" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="54" unique_id=866837891 instance=ExtResource("2_1pn4d")]
@@ -782,7 +780,6 @@ curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
 off_duration = 6.0
-start_delay = 4.0
 zone_size = Vector2(500, 500)
 
 [node name="WindLeft18" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="66" unique_id=126290087 instance=ExtResource("2_1pn4d")]
@@ -828,7 +825,6 @@ curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
 off_duration = 6.0
-start_delay = 6.0
 zone_size = Vector2(500, 500)
 
 [node name="WindLeft19" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="70" unique_id=1199393346 instance=ExtResource("2_1pn4d")]
@@ -946,7 +942,6 @@ curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
 off_duration = 6.0
-start_delay = 2.0
 zone_size = Vector2(500, 500)
 
 [node name="WindDown11" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="80" unique_id=1640875062 instance=ExtResource("2_1pn4d")]
@@ -1005,7 +1000,7 @@ curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
 off_duration = 6.0
-start_delay = 6.0
+start_delay = 4.0
 zone_size = Vector2(500, 500)
 
 [node name="WindUp13" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="85" unique_id=902002614 instance=ExtResource("2_1pn4d")]
@@ -1110,7 +1105,6 @@ curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
 off_duration = 6.0
-start_delay = 6.0
 zone_size = Vector2(500, 500)
 
 [node name="WindUp25" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="94" unique_id=1243969654 instance=ExtResource("2_1pn4d")]
@@ -1122,7 +1116,7 @@ curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
 off_duration = 6.0
-start_delay = 2.0
+start_delay = 4.0
 zone_size = Vector2(500, 500)
 
 [node name="WindLeft22" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="95" unique_id=2068156519 instance=ExtResource("2_1pn4d")]
@@ -1275,7 +1269,7 @@ curve = 0.06000000000000005
 always_active = false
 on_duration = 2.0
 off_duration = 6.0
-start_delay = 6.0
+start_delay = 4.0
 zone_size = Vector2(500, 500)
 
 [node name="WindLeft25" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="108" unique_id=38433213 instance=ExtResource("2_1pn4d")]
