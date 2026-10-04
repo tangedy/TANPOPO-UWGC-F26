@@ -1598,6 +1598,7 @@ zone_size = Vector2(500, 500)
 [node name="SeedA" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="135" unique_id=-1994967185 instance=ExtResource("2_object")]
 position = Vector2(-1245.0001, -813.0002)
 breathe_amount = 0.76
+memory_slot = 6
 
 [node name="SeedA#Path2D" type="Path2D" parent="Starter/SeedA" index="1" unique_id=-1994967175]
 z_index = -1
@@ -1609,6 +1610,7 @@ metadata/_edit_lock_ = true
 [node name="SeedB" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="136" unique_id=-1994967184 instance=ExtResource("2_object")]
 position = Vector2(6380, -2621)
 breathe_amount = 0.75
+memory_slot = 7
 
 [node name="SeedB#Path2D" type="Path2D" parent="Starter/SeedB" index="1" unique_id=-1994967165]
 z_index = -1
@@ -1620,6 +1622,7 @@ metadata/_edit_lock_ = true
 [node name="SeedC" parent="Starter" parent_id_path=PackedInt32Array(2000000101) index="137" unique_id=-1994967183 instance=ExtResource("2_object")]
 position = Vector2(5695, -2278)
 breathe_amount = 0.75
+memory_slot = 8
 
 [node name="SeedC#Path2D" type="Path2D" parent="Starter/SeedC" index="1" unique_id=-1994967155]
 z_index = -1

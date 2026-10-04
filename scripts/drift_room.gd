@@ -3,7 +3,9 @@ extends Node2D
 signal returned
 
 const InputSetup = preload("res://scripts/input_setup.gd")
+const PathTrail = preload("res://scripts/path_debug.gd")
 const DAY_MUSIC := preload("res://Assets/music/drift_day.wav")
+const AFTERNOON_MUSIC := preload("res://Assets/music/drift_afternoon.wav")
 const NIGHT_MUSIC := preload("res://Assets/music/drift_night.wav")
 
 enum TimeOfDay { DAY, AFTERNOON, SUNSET, NIGHT }
@@ -27,24 +29,19 @@ const _TINT := {
 	TimeOfDay.SUNSET: Color(1.0, 0.72, 0.52, 1),
 	TimeOfDay.NIGHT: Color(0.38, 0.42, 0.68, 1),
 }
-const _TIME_LABELS := {
-	TimeOfDay.DAY: "Day",
-	TimeOfDay.AFTERNOON: "Afternoon",
-	TimeOfDay.SUNSET: "Sunset",
-	TimeOfDay.NIGHT: "Night",
-}
-
 var collected := 0
 
 const _AUDIO_SILENT_DB := -80.0
 var _ending := false
 var _chase := false
 var _listen_for_chase := false
-var _time_button: Button
 var _music_base_db := 0.0
 var _ambience_base_db := 0.0
 var _pending_fade_in := -1.0
 var _audio_tween: Tween
+var _exit_trail: Path2D
+var _exit_end := Vector2.ZERO
+var _exit_sway := 0.0
 
 @onready var glow: CanvasItem = $Platform/CompletionArea/Glow
 @onready var completion_area: Area2D = $Platform/CompletionArea
@@ -77,9 +74,6 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
-	_build_time_toggle()
-	_build_level_label()
-	_build_debug_collect()
 	_apply_time_of_day()
 	if _pending_fade_in >= 0.0:
 		fade_audio_in(_pending_fade_in)
@@ -88,8 +82,6 @@ func _ready() -> void:
 	glow.visible = false
 	completion_area.monitoring = false
 	completion_area.monitorable = false
-	completion_area.collision_mask = 2
-	completion_area.body_entered.connect(_on_return_body)
 	prompt.visible = false
 	set_process_unhandled_input(true)
 	if get_tree().has_meta("fade_from_white"):
@@ -125,37 +117,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 
 
-func _build_time_toggle() -> void:
-	var button := Button.new()
-	button.name = "TimeToggle"
-	button.position = Vector2(16, 16)
-	button.custom_minimum_size = Vector2(120, 36)
-	$UI.add_child(button)
-	button.pressed.connect(_cycle_time)
-	_time_button = button
-	_refresh_time_button()
-
-
-func _build_debug_collect() -> void:
-	var button := Button.new()
-	button.name = "DebugCollect"
-	button.position = Vector2(16, 60)
-	button.custom_minimum_size = Vector2(160, 32)
-	button.focus_mode = Control.FOCUS_NONE
-	button.text = "Collect 3 (K)"
-	$UI.add_child(button)
-	button.pressed.connect(debug_collect_all)
-
-	var tp := Button.new()
-	tp.name = "DebugTeleport"
-	tp.position = Vector2(16, 96)
-	tp.custom_minimum_size = Vector2(160, 32)
-	tp.focus_mode = Control.FOCUS_NONE
-	tp.text = "TP Start (R)"
-	$UI.add_child(tp)
-	tp.pressed.connect(debug_teleport_start)
-
-
 ## Debug: send Peppermint back to the cliff start so you can retry a stage.
 func debug_teleport_start() -> void:
 	if peppermint and peppermint.has_method("teleport_to_start"):
@@ -175,26 +136,6 @@ func debug_collect_all() -> void:
 		note_collected()
 
 
-func _build_level_label() -> void:
-	var label := Label.new()
-	label.name = "LevelLabel"
-	label.position = Vector2(152, 20)
-	label.text = name
-	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	label.add_theme_font_size_override("font_size", 22)
-	label.add_theme_color_override("font_color", Color(1, 1, 1, 0.92))
-	$UI.add_child(label)
-
-
-func _cycle_time() -> void:
-	time_of_day = ((int(time_of_day) + 1) % TimeOfDay.size()) as TimeOfDay
-
-
-func _refresh_time_button() -> void:
-	if _time_button:
-		_time_button.text = _TIME_LABELS[time_of_day]
-
-
 func _apply_time_of_day() -> void:
 	if sky:
 		sky.color = _SKY[time_of_day]
@@ -210,10 +151,11 @@ func _apply_time_of_day() -> void:
 			0.98 / maxf(tint.b, 0.05),
 			1.0
 		)
-	_refresh_time_button()
 	match time_of_day:
-		TimeOfDay.DAY, TimeOfDay.AFTERNOON:
+		TimeOfDay.DAY:
 			_play_music(DAY_MUSIC)
+		TimeOfDay.AFTERNOON:
+			_play_music(AFTERNOON_MUSIC if name == "Level 2" else DAY_MUSIC)
 		TimeOfDay.NIGHT:
 			_play_music(NIGHT_MUSIC)
 		_:
@@ -299,31 +241,107 @@ func note_collected() -> void:
 	collected += 1
 	if collected < required_collectibles:
 		return
-	glow.visible = true
-	completion_area.monitoring = true
-	_check_return_overlap.call_deferred()
-
-
-func _check_return_overlap() -> void:
-	await get_tree().physics_frame
-	if _ending or not is_inside_tree():
-		return
-	for body in completion_area.get_overlapping_bodies():
-		_on_return_body(body)
-
-
-func _on_return_body(body: Node) -> void:
+	_begin_exit_trail()
+func _physics_process(_delta: float) -> void:
 	if _ending or collected < required_collectibles:
 		return
-	if body.is_in_group("player"):
-		_ending = true
-		if body.has_method("finish"):
-			body.finish()
-		returned.emit()
-
-
-func _physics_process(_delta: float) -> void:
-	if _ending or collected < required_collectibles or not completion_area.monitoring:
+	var body := peppermint as Node2D
+	var lip := _cliff_lip()
+	if body == null or lip == Vector2.INF:
 		return
-	for body in completion_area.get_overlapping_bodies():
-		_on_return_body(body)
+	var pos := body.global_position
+	var on_the_left := pos.x <= lip.x + 340.0 and pos.x >= lip.x - 120.0
+	var dy := pos.y - lip.y
+	var at_the_grass := dy >= -200.0 and dy <= 48.0
+	if not on_the_left or not at_the_grass:
+		return
+	_ending = true
+	_open_left_edge()
+	if body.has_method("begin_exit_walk"):
+		body.begin_exit_walk(lip.y)
+	returned.emit()
+
+
+## Once every seed is collected, a curved wind streak drifts off screen toward the exit.
+func _begin_exit_trail() -> void:
+	if _exit_trail != null:
+		return
+	var lip := _cliff_lip()
+	if lip == Vector2.INF:
+		return
+	var trail := Path2D.new()
+	trail.name = "ExitWind"
+	# Behind the girl (she sits at z 5) but above the sky and clouds.
+	trail.z_index = 1
+	trail.set_script(PathTrail)
+	trail.set("close_loop", false)
+	trail.set("trail_alpha", 0.72)
+	trail.set("trail_count", 2)
+	trail.set("trail_length", 900.0)
+	trail.set("flow_speed", 360.0)
+	trail.set("line_width", 16.0)
+	add_child(trail)
+	_exit_trail = trail
+
+	var body := peppermint as Node2D
+	if body == null:
+		return
+	var cam := body.get_node_or_null("Camera2D") as Camera2D
+	var zoom := cam.zoom.x if cam != null else 0.5
+	var view := get_viewport().get_visible_rect().size / maxf(zoom, 0.05)
+	# The far end sits off the left edge, up in the air near the exit.
+	_exit_end = Vector2(lip.x - view.x * 0.55, lip.y - view.y * 0.28)
+	_exit_sway = view.y * 0.07
+	_exit_trail.global_position = Vector2.ZERO
+	# Anchored once at the girl's current spot, then left in place as she drifts on.
+	var start := body.global_position
+	var span := absf(start.x - _exit_end.x)
+	var curve := Curve2D.new()
+	for i in 4:
+		var t := float(i) / 3.0
+		var point := start.lerp(_exit_end, t)
+		if i != 0:
+			point.y += sin(t * PI * 1.5) * _exit_sway
+		# Horizontal handles keep the curve smooth and flowing left.
+		var handle := Vector2(-span * 0.16, 0.0)
+		curve.add_point(point, -handle, handle)
+	_exit_trail.curve = curve
+
+
+## Left end of the cliff top, in world space. The return is this lip, not the yellow box.
+func _cliff_lip() -> Vector2:
+	var platform := get_node_or_null("Platform") as Node2D
+	if platform == null:
+		return Vector2.INF
+	var poly := platform.get_node_or_null("FloorCollider") as CollisionPolygon2D
+	if poly == null or poly.polygon.is_empty():
+		return Vector2.INF
+	var top_y := poly.polygon[0].y
+	for point in poly.polygon:
+		top_y = minf(top_y, point.y)
+	var left := Vector2(INF, top_y)
+	for point in poly.polygon:
+		if absf(point.y - top_y) <= 30.0 and point.x < left.x:
+			left = point
+	return platform.to_global(left)
+
+
+## The side wall sits on the lip. Drop it so she can run off the grass.
+func _open_left_edge() -> void:
+	var platform := get_node_or_null("Platform") as Node2D
+	if platform == null:
+		return
+	var left_shape: CollisionShape2D = null
+	var left_x := INF
+	for child in platform.get_children():
+		var shape_node := child as CollisionShape2D
+		if shape_node == null:
+			continue
+		var rect := shape_node.shape as RectangleShape2D
+		if rect == null or rect.size.y <= rect.size.x:
+			continue
+		if shape_node.position.x < left_x:
+			left_x = shape_node.position.x
+			left_shape = shape_node
+	if left_shape:
+		left_shape.disabled = true

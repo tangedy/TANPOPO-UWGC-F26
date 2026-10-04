@@ -9,8 +9,8 @@ const TITLE_SCENE := "res://scenes/title.tscn"
 const LOGO := preload("res://Assets/images/tanpopo_test.png")
 const LOGO_WAVE := preload("res://drift.gdshader")
 const LOGO_SCALE := 0.5
-## Texture pixel where the T's ink starts, so the lines meet the letter rather than the empty margin.
-const LOGO_INK_LEFT := 103.0
+## Texture pixel where the Japanese subtitle starts, so the lines share that left edge.
+const LOGO_INK_LEFT := 148.0
 const CREDIT_LINES: Array[Dictionary] = [
 	{"text": "Daniel", "size": 40, "gap": 14.0, "name": true},
 	{"text": "Official Soundtrack + SFX", "size": 26, "gap": 6.0},
@@ -30,6 +30,10 @@ const CREDIT_LINES: Array[Dictionary] = [
 ]
 const InputSetup = preload("res://scripts/input_setup.gd")
 const MEMORY_FRAME := preload("res://shaders/memory_frame.gdshader")
+const SEED_GLOW := preload("res://shaders/seed_glow.gdshader")
+const WHITE_KEY := preload("res://shaders/white_key.gdshader")
+const SEED_TEX := preload("res://Assets/images/seed_rough.png")
+const SeedScript = preload("res://scripts/drifting_object.gd")
 const POOF_SFX := preload("res://Assets/sfx/freesound_community-poof-of-smoke-87381.mp3")
 
 ## How long the black between stages takes to arrive and clear.
@@ -66,7 +70,6 @@ var _poof: AudioStreamPlayer
 var _current_room: Node
 var _level := 0
 var _play_token := 0
-var _debug_buttons: Array[Button] = []
 
 
 func _ready() -> void:
@@ -82,7 +85,6 @@ func _ready() -> void:
 		get_tree().remove_meta("fade_from_black")
 	fade.modulate.a = 1.0 if from_black else 0.0
 	line_box.visible = false
-	_build_level_debug()
 	_play_level(from_black)
 
 
@@ -116,42 +118,81 @@ func _flash_memories(token: int) -> void:
 	layer.name = "MemoryFlash"
 	layer.layer = 11
 	add_child(layer)
-	# Inset equally on every side so the picture stays centered and a little inside the window.
+	# Picture on the left, the matching seed in a gutter on the right.
 	var vp := get_viewport().get_visible_rect().size
 	var inset := minf(vp.x, vp.y) * 0.06
+	var art := SEED_TEX.get_size()
+	var seed_h := vp.y * 0.5
+	var seed_w := seed_h * art.x / maxf(art.y, 1.0)
+	var gutter := seed_w + inset
+	var flash := Control.new()
+	flash.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	flash.modulate.a = 0.0
+	layer.add_child(flash)
 	var rect := TextureRect.new()
 	rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	rect.offset_left = inset
 	rect.offset_top = inset
-	rect.offset_right = -inset
+	rect.offset_right = -(gutter + inset * 0.35)
 	rect.offset_bottom = -inset
 	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	rect.modulate.a = 0.0
-	rect.texture = STEAM_SLIDES[0]
 	var mat := ShaderMaterial.new()
 	mat.shader = MEMORY_FRAME
-	mat.set_shader_parameter("blur_amount", 6.0)
-	mat.set_shader_parameter("rect_size", Vector2(vp.x - inset * 2.0, vp.y - inset * 2.0))
+	mat.set_shader_parameter("blur_amount", 18.0)
+	var frame_size := Vector2(vp.x - inset - gutter - inset * 0.35, vp.y - inset * 2.0)
+	mat.set_shader_parameter("rect_size", frame_size)
 	rect.material = mat
-	layer.add_child(rect)
-	if _poof:
-		_poof.play()
-	var fade_in := create_tween()
-	fade_in.tween_property(rect, "modulate:a", 1.0, 0.35).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	await fade_in.finished
-	for i in STEAM_SLIDES.size():
+	flash.add_child(rect)
+	var seed_pos := Vector2(vp.x - inset - seed_w, (vp.y - seed_h) * 0.5)
+	var puff := seed_pos + Vector2(seed_w * 0.5, seed_h * 0.22)
+	var glow_px := seed_w * 1.35
+	var glow := TextureRect.new()
+	glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	glow.texture = SeedScript.glow_texture()
+	glow.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	glow.stretch_mode = TextureRect.STRETCH_SCALE
+	glow.position = puff - Vector2(glow_px, glow_px) * 0.5
+	glow.size = Vector2(glow_px, glow_px)
+	var glow_mat := ShaderMaterial.new()
+	glow_mat.shader = SEED_GLOW
+	glow.material = glow_mat
+	flash.add_child(glow)
+	var seed := TextureRect.new()
+	seed.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	seed.texture = SEED_TEX
+	seed.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	seed.stretch_mode = TextureRect.STRETCH_SCALE
+	seed.position = seed_pos
+	seed.size = Vector2(seed_w, seed_h)
+	var seed_mat := ShaderMaterial.new()
+	seed_mat.shader = WHITE_KEY
+	seed_mat.set_shader_parameter("cutoff", 0.988)
+	seed.material = seed_mat
+	flash.add_child(seed)
+	for i in STAGE_MEMORIES.size():
 		if token != _play_token or not is_inside_tree():
 			break
-		if i > 0:
-			rect.texture = STEAM_SLIDES[i]
-			mat.set_shader_parameter("seed", float(i) * 1.7)
-		await get_tree().create_timer(SLIDE_HOLD).timeout
-	if token == _play_token and is_inside_tree():
-		var fade_out := create_tween()
-		fade_out.tween_property(rect, "modulate:a", 0.0, 0.45).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-		await fade_out.finished
+		rect.texture = STAGE_MEMORIES[i]
+		# Vary the border noise so each memory frame looks a little different.
+		mat.set_shader_parameter("seed", float(i) * 7.3)
+		var color: Color = SeedScript.rainbow_color(_level * STAGE_MEMORIES.size() + i)
+		var halo := color
+		halo.a = 0.16
+		glow_mat.set_shader_parameter("glow_color", halo)
+		seed.self_modulate = color.lerp(Color.WHITE, 0.78)
+		flash.modulate.a = 0.0
+		if _poof:
+			_poof.play()
+		# Fade this memory in, hold, then fade it fully out to black before the next.
+		var tween := create_tween()
+		tween.tween_property(flash, "modulate:a", 1.0, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_interval(0.75)
+		tween.tween_property(flash, "modulate:a", 0.0, 0.6).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+		tween.tween_interval(0.25)
+		await tween.finished
 	if is_instance_valid(layer):
 		layer.queue_free()
 
@@ -163,7 +204,6 @@ func _play_level(from_black: bool) -> void:
 		get_tree().set_meta("drift_fade_audio_in", FADE_IN_TIME)
 	var scene := _swap(LEVELS[_level])
 	_current_room = scene
-	_refresh_level_debug()
 	if from_black:
 		await _fade_to(0.0, FADE_IN_TIME)
 	if token != _play_token or not is_instance_valid(scene):
@@ -205,9 +245,6 @@ func _advance(token: int) -> void:
 ## After the last stage: day cliff, camera held on the opening frame, credits rising
 ## from behind the rock, then a fade out to the title.
 func _play_ending(token: int) -> void:
-	var debug := $UI.get_node_or_null("LevelDebug")
-	if debug:
-		debug.visible = false
 	get_tree().set_meta("drift_hold_start", true)
 	get_tree().set_meta("drift_fade_audio_in", ENDING_FADE_IN)
 	var scene := _swap(LEVELS[0])
@@ -282,11 +319,12 @@ func _build_credits(room: Node) -> Node2D:
 			label.add_theme_color_override("font_color", Color.WHITE)
 		label.add_theme_color_override("font_outline_color", Color(0.18, 0.2, 0.24, 0.55))
 		label.add_theme_constant_override("outline_size", 10)
+		label.add_theme_constant_override("font_spacing_glyph", 4)
 		root.add_child(label)
 		y += float(size) + float(line["gap"])
 	# First line starts under the grass lip, so the roll climbs out from behind the cliff.
 	# Shifted right so the column sits in the open sky beside her.
-	root.global_position = Vector2(center.x + 140.0, cliff_top + 36.0)
+	root.global_position = Vector2(center.x + 200.0, cliff_top + 36.0)
 	root.set_meta("end_top", center.y - half_view.y - y - 36.0)
 	return root
 
@@ -323,35 +361,6 @@ func _fade_unless(target: float, duration: float, token: int) -> bool:
 	return token == _play_token and is_inside_tree()
 
 
-func _build_level_debug() -> void:
-	var bar := HBoxContainer.new()
-	bar.name = "LevelDebug"
-	bar.anchor_left = 1.0
-	bar.anchor_right = 1.0
-	bar.offset_left = -430.0
-	bar.offset_top = 16.0
-	bar.offset_right = -16.0
-	bar.offset_bottom = 52.0
-	bar.grow_horizontal = Control.GROW_DIRECTION_BEGIN
-	bar.add_theme_constant_override("separation", 8)
-	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	$UI.add_child(bar)
-	var hint := Label.new()
-	hint.text = "L"
-	hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	hint.add_theme_font_size_override("font_size", 22)
-	hint.add_theme_color_override("font_color", Color(1, 1, 1, 0.92))
-	bar.add_child(hint)
-	for i in LEVELS.size():
-		var button := Button.new()
-		button.text = str(i + 1)
-		button.focus_mode = Control.FOCUS_NONE
-		button.pressed.connect(_debug_select.bind(i))
-		bar.add_child(button)
-		_debug_buttons.append(button)
-	_refresh_level_debug()
-
-
 func _debug_select(index: int) -> void:
 	_play_token += 1
 	_level = clampi(index, 0, LEVELS.size() - 1)
@@ -363,22 +372,12 @@ func _debug_select(index: int) -> void:
 		get_tree().remove_meta("drift_fade_audio_in")
 	if get_tree().has_meta("drift_hold_start"):
 		get_tree().remove_meta("drift_hold_start")
-	var debug := $UI.get_node_or_null("LevelDebug")
-	if debug:
-		debug.visible = true
 	fade.modulate.a = 0.0
 	line_box.visible = false
 	var scene := _swap(LEVELS[_level])
 	_current_room = scene
-	_refresh_level_debug()
 	if is_instance_valid(scene):
 		scene.returned.connect(_on_level_returned, CONNECT_ONE_SHOT)
-
-
-func _refresh_level_debug() -> void:
-	for i in _debug_buttons.size():
-		var button := _debug_buttons[i]
-		button.modulate = Color(1, 1, 1, 1) if i == _level else Color(1, 1, 1, 0.55)
 
 
 func _swap(packed: PackedScene) -> Node:
