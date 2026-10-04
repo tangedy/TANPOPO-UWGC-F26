@@ -1,7 +1,8 @@
 extends Node2D
 
 ## Leaf hint. Every 5 to 15 seconds a line of leaves appears just off-camera,
-## on the side opposite the nearest seed, then crosses toward it.
+## on the side opposite the nearest seed, then crosses toward it. They speed up
+## the longer they fly, pass through the seed, and vanish once they leave the screen.
 ## Once that seed is collected, the line fades out over 3 seconds.
 
 const LEAVES: Array[Texture2D] = [
@@ -14,10 +15,10 @@ const TINT := Color(0.88, 0.96, 0.86, 1)
 const COUNT := 18
 const SPAWN_WINDOW := 1.5
 const FOLLOW_SPEED := 460.0
+## Extra speed gained each second a leaf has been flying.
+const SPEED_GAIN := 320.0
 const ARRIVE_DISTANCE := 80.0
-const LIFE := 4.0
 const FADE_IN := 0.12
-const FADE_OUT := 0.4
 const COLLECT_FADE := 3.0
 const INTERVAL_MIN := 5.0
 const INTERVAL_MAX := 15.0
@@ -208,15 +209,12 @@ class Burst:
 			if age - collected_at >= COLLECT_FADE:
 				return true
 			for wisp in wisps:
-				if wisp.born < 0.0:
+				if wisp.born < 0.0 or wisp.gone:
 					continue
-				var lived := age - wisp.born
-				if lived >= wisp.life:
-					wisp.sprite.visible = false
-					continue
-				_place(wisp, lived)
+				_place(wisp, age - wisp.born)
 			return false
 		var aim := _live_aim(host)
+		var view: Rect2 = host.call("_view_rect")
 		var pending := false
 		for wisp in wisps:
 			if wisp.born < 0.0:
@@ -224,17 +222,20 @@ class Burst:
 					pending = true
 					continue
 				_birth(wisp, host)
-			var lived := age - wisp.born
-			if lived >= wisp.life:
-				wisp.sprite.visible = false
+			if wisp.gone:
 				continue
-			pending = true
-			if aim == Vector2.INF:
-				_start_sweep(wisp)
-			elif not wisp.sweeping:
+			var lived := age - wisp.born
+			if wisp.passed:
+				_coast(wisp, delta, lived)
+				if _left_screen(wisp, view):
+					wisp.gone = true
+					wisp.sprite.visible = false
+					continue
+			elif aim == Vector2.INF:
+				_begin_pass(wisp, -approach)
+			else:
 				_follow(wisp, aim, delta, lived)
-			if wisp.sweeping:
-				_sweep(wisp, delta)
+			pending = true
 			_place(wisp, lived)
 		return not pending
 
@@ -243,47 +244,55 @@ class Burst:
 			return true
 		if is_instance_valid(target) and target.get("collected") == true:
 			collected_at = age
-			for wisp in wisps:
-				wisp.sweeping = false
-				wisp.scatter = Vector2.ZERO
 			return true
 		return false
 
 	func _any_showing() -> bool:
 		for wisp in wisps:
-			if wisp.born < 0.0 or not is_instance_valid(wisp.sprite) or not wisp.sprite.visible:
+			if wisp.born < 0.0 or wisp.gone or not is_instance_valid(wisp.sprite) or not wisp.sprite.visible:
 				continue
-			if age - wisp.born < wisp.life:
-				return true
+			return true
 		return false
 
 	func _birth(wisp: Wisp, host: Node2D) -> void:
 		wisp.born = age
-		wisp.life = LIFE
 		wisp.pos = host.call("_offscreen_point", approach, wisp.delay, wisp.side)
 		wisp.sprite.visible = true
+
+	func _speed(lived: float) -> float:
+		return FOLLOW_SPEED + lived * SPEED_GAIN
 
 	func _follow(wisp: Wisp, aim: Vector2, delta: float, lived: float) -> void:
 		var launch := smoothstep(0.0, 0.2, lived)
 		var sway := sin(lived * wisp.freq + wisp.spin) * 0.28
 		var to_aim := aim - wisp.pos
 		var dist := to_aim.length()
+		var dir := -approach
 		if dist > 1.0:
-			var step := to_aim / dist * FOLLOW_SPEED * launch * delta
-			wisp.pos += step.rotated(sway)
+			dir = to_aim / dist
+			wisp.pos += dir.rotated(sway) * _speed(lived) * launch * delta
 		wisp.pos += Vector2(cos(lived * wisp.freq + wisp.spin), sin(lived * (wisp.freq * 0.7) + wisp.spin)) * 34.0 * delta
 		if lived > 0.2 and dist <= ARRIVE_DISTANCE:
-			_start_sweep(wisp)
+			_begin_pass(wisp, dir)
 
-	func _start_sweep(wisp: Wisp) -> void:
-		if wisp.sweeping:
+	func _begin_pass(wisp: Wisp, dir: Vector2) -> void:
+		if wisp.passed:
 			return
-		wisp.sweeping = true
-		wisp.scatter = Vector2.from_angle(randf() * TAU) * randf_range(520.0, 1400.0)
+		wisp.passed = true
+		wisp.pass_at = wisp.pos
+		if dir.length_squared() < 0.0001:
+			dir = -approach
+		wisp.heading = dir.normalized()
 
-	func _sweep(wisp: Wisp, delta: float) -> void:
-		wisp.pos += wisp.scatter * delta
-		wisp.scatter *= exp(-1.6 * delta)
+	func _coast(wisp: Wisp, delta: float, lived: float) -> void:
+		var sway := sin(lived * wisp.freq + wisp.spin) * 0.12
+		wisp.pos += wisp.heading.rotated(sway) * _speed(lived) * delta
+
+	func _left_screen(wisp: Wisp, view: Rect2) -> bool:
+		var past := (wisp.pos - wisp.pass_at).dot(wisp.heading)
+		if past < 60.0:
+			return false
+		return not view.grow(32.0).has_point(wisp.pos)
 
 	func _live_aim(host: Node2D) -> Vector2:
 		var from := _center()
@@ -307,9 +316,6 @@ class Burst:
 
 	func _place(wisp: Wisp, lived: float) -> void:
 		var fade := smoothstep(0.0, FADE_IN, lived)
-		var fade_at := wisp.life - FADE_OUT
-		if lived > fade_at:
-			fade *= 1.0 - smoothstep(fade_at, wisp.life, lived)
 		if collected_at >= 0.0:
 			fade *= 1.0 - smoothstep(0.0, COLLECT_FADE, age - collected_at)
 		wisp.sprite.global_position = wisp.pos
@@ -329,12 +335,13 @@ class Burst:
 class Wisp:
 	var sprite: Sprite2D
 	var pos := Vector2.ZERO
-	var scatter := Vector2.ZERO
+	var heading := Vector2.RIGHT
+	var pass_at := Vector2.ZERO
 	var delay := 0.0
 	var side := 0.0
 	var born := -1.0
-	var life := 2.0
-	var sweeping := false
+	var passed := false
+	var gone := false
 	var spin := 0.0
 	var freq := 1.0
 	var base_rot := 0.0
