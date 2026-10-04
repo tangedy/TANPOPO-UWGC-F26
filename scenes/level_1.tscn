@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://uel7xvwc5jvp" path="res://scenes/wind_zone.tscn" id="2_5xbjy"]
 [ext_resource type="PackedScene" uid="uid://bbxbxebcdr7d0" path="res://scenes/drifting_object.tscn" id="2_object"]
 [ext_resource type="Script" uid="uid://mydps3xxhia8" path="res://scripts/path_debug.gd" id="3_path"]
+[ext_resource type="Script" path="res://scripts/moon.gd" id="5_4nkto"]
 
 [sub_resource type="Curve2D" id="Curve2D_seed_a"]
 resource_local_to_scene = true
@@ -38,6 +39,7 @@ metadata/_edit_lock_ = true
 metadata/_edit_lock_ = true
 
 [node name="Updraft" parent="." index="5" unique_id=95024445]
+z_index = 2
 lift_speed = 200.0
 
 [node name="Starter" parent="." index="6" unique_id=2000000101]
@@ -106,7 +108,7 @@ zone_size = Vector2(400, 400)
 z_index = 2
 position = Vector2(-602, 1978)
 rotation = -1.570796
-curve = -0.10999999999999999
+curve = -0.11
 zone_size = Vector2(400, 400)
 
 [node name="WindUp5" parent="Starter" index="11" unique_id=1068069159 instance=ExtResource("2_5xbjy")]
@@ -114,7 +116,7 @@ z_index = 2
 position = Vector2(5666, 3303)
 rotation = -1.570796
 strength = 408.0
-curve = -0.10999999999999999
+curve = -0.11
 zone_size = Vector2(400, 400)
 
 [node name="WindUp6" parent="Starter" index="12" unique_id=1415266059 instance=ExtResource("2_5xbjy")]
@@ -122,7 +124,7 @@ z_index = 2
 position = Vector2(5414, 2371)
 rotation = -1.570796
 strength = 390.0
-curve = -0.10999999999999999
+curve = -0.11
 zone_size = Vector2(400, 400)
 
 [node name="WindUp7" parent="Starter" index="13" unique_id=2087689302 instance=ExtResource("2_5xbjy")]
@@ -130,7 +132,7 @@ z_index = 2
 position = Vector2(5637, 1656)
 rotation = -1.570796
 strength = 258.0
-curve = -0.10999999999999999
+curve = -0.11
 zone_size = Vector2(400, 400)
 
 [node name="WindUp8" parent="Starter" index="14" unique_id=534400002 instance=ExtResource("2_5xbjy")]
@@ -177,7 +179,7 @@ z_index = 2
 position = Vector2(60, -302)
 rotation = -1.570796
 strength = 345.0
-curve = -0.10999999999999999
+curve = -0.11
 zone_size = Vector2(400, 400)
 
 [node name="WindUp14" parent="Starter" index="20" unique_id=1832505622 instance=ExtResource("2_5xbjy")]
@@ -185,7 +187,7 @@ z_index = 2
 position = Vector2(3670, 2211)
 rotation = -1.570796
 strength = 389.0
-curve = -0.10999999999999999
+curve = -0.11
 zone_size = Vector2(400, 400)
 
 [node name="WindUp15" parent="Starter" index="21" unique_id=2061000845 instance=ExtResource("2_5xbjy")]
@@ -201,7 +203,7 @@ z_index = 2
 position = Vector2(1422, -41)
 rotation = -1.570796
 strength = 333.0
-curve = -0.10999999999999999
+curve = -0.11
 zone_size = Vector2(400, 400)
 
 [node name="WindUp17" parent="Starter" index="23" unique_id=1127107472 instance=ExtResource("2_5xbjy")]
@@ -209,7 +211,7 @@ z_index = 2
 position = Vector2(2006, -919)
 rotation = -1.570796
 strength = 333.0
-curve = -0.10999999999999999
+curve = -0.11
 zone_size = Vector2(400, 400)
 
 [node name="WindUpLeft" parent="Starter" index="24" unique_id=2000000105]
@@ -222,7 +224,7 @@ z_index = 2
 position = Vector2(4341, 1718)
 rotation = -2.3561945
 strength = 520.0
-curve = -0.10999999999999999
+curve = -0.11
 zone_size = Vector2(400, 600)
 
 [node name="WindUpLeft3" parent="Starter" index="26" unique_id=386778327 instance=ExtResource("2_5xbjy")]
@@ -230,7 +232,7 @@ z_index = 2
 position = Vector2(1048, -1601)
 rotation = -2.3561945
 strength = 408.0
-curve = -0.10999999999999999
+curve = -0.11
 zone_size = Vector2(400, 600)
 
 [node name="WindUpLeft4" parent="Starter" index="27" unique_id=625179559 instance=ExtResource("2_5xbjy")]
@@ -238,7 +240,7 @@ z_index = 2
 position = Vector2(3012, -1041)
 rotation = -2.3561945
 strength = 666.0
-curve = -0.10999999999999999
+curve = -0.11
 zone_size = Vector2(400, 1000)
 
 [node name="WindLeft" parent="Starter" index="28" unique_id=2000000106]
@@ -262,7 +264,7 @@ zone_size = Vector2(400, 1000)
 
 [node name="WindDown" parent="Starter" index="31" unique_id=2000000108]
 position = Vector2(153, 2014)
-curve = 0.010000000000000009
+curve = 0.01
 zone_size = Vector2(300, 600)
 
 [node name="WindDown2" parent="Starter" index="32" unique_id=871112169 instance=ExtResource("2_5xbjy")]
@@ -293,7 +295,7 @@ zone_size = Vector2(400, 800)
 [node name="WindDownRight" parent="Starter" index="36" unique_id=2000000109]
 position = Vector2(4330, 241)
 strength = 670.0
-curve = -0.10999999999999999
+curve = -0.11
 zone_size = Vector2(400, 1000)
 
 [node name="SeedA" parent="Starter" index="37" unique_id=2100000111 instance=ExtResource("2_object")]
@@ -323,11 +325,21 @@ script = ExtResource("3_path")
 [node name="Platform" parent="." index="7" unique_id=1851131555]
 metadata/_edit_lock_ = true
 
+[node name="Cliff" parent="Platform" index="0" unique_id=1488769419]
+material = null
+
+[node name="Cliff2" parent="Platform" index="1" unique_id=134169415]
+material = null
+
 [node name="BGClouds" parent="Platform/BGCloudsLayer" parent_id_path=PackedInt32Array(667529225) index="0" unique_id=706455837]
 metadata/_edit_lock_ = true
 
 [node name="BGClouds2" parent="Platform/BGCloudsLayer" parent_id_path=PackedInt32Array(667529225) index="1" unique_id=1416871081]
 metadata/_edit_lock_ = true
+
+[node name="Moon" parent="Platform/BGCloudsLayer" parent_id_path=PackedInt32Array(667529225) index="2" unique_id=1882401933]
+visible = false
+script = ExtResource("5_4nkto")
 
 [node name="ForegroundClouds" parent="Platform/ForegroundCloudsLayer" parent_id_path=PackedInt32Array(1122071185) index="0" unique_id=949056660]
 metadata/_edit_lock_ = true

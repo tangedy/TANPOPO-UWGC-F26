@@ -409,7 +409,29 @@ func _glide(delta: float) -> void:
 	_apply_vertical(delta, can_steer)
 	velocity.x = clampf(velocity.x, _sized(-900.0), _sized(900.0))
 	velocity.y = clampf(velocity.y, -_sized(max_up_speed), _sized(520.0))
+	_ease_into_ceiling()
 	_lean_with_speed()
+
+
+## Near a ceiling cushion, the rise cap falls to zero as the head reaches the top.
+func _ease_into_ceiling() -> void:
+	if velocity.y >= 0.0:
+		return
+	var body := body_rect()
+	var head := Vector2(body.get_center().x, body.position.y)
+	var full := _sized(max_up_speed)
+	var cap := full
+	var inside := false
+	for zone in get_tree().get_nodes_in_group("ceiling_cushion"):
+		if not zone.has_method("rise_limit"):
+			continue
+		var limit: float = zone.rise_limit(head, full)
+		if limit < 0.0:
+			continue
+		inside = true
+		cap = minf(cap, limit)
+	if inside:
+		velocity.y = maxf(velocity.y, -cap)
 
 
 ## A sideways slide into a corner can convert that speed into a rise. Put the same speed downward.

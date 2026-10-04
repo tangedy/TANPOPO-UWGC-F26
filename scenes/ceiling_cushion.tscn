@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://d1vjnycg1nnao"]
+
+[ext_resource type="Script" uid="uid://dk4ceilingsoft" path="res://scripts/ceiling_cushion.gd" id="1_cushion"]
+
+[node name="CeilingCushion" type="Node2D" unique_id=2000000200]
+script = ExtResource("1_cushion")
+
+[node name="Visual" type="ColorRect" parent="." unique_id=2000000201]
+offset_left = -4800.0
+offset_top = -400.0
+offset_right = 4800.0
+offset_bottom = 400.0
+mouse_filter = 2
+color = Color(0.75, 0.88, 1, 0.16)
+metadata/_edit_lock_ = true

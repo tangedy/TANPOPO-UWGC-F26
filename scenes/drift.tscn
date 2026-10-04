@@ -25,6 +25,7 @@
 [ext_resource type="Texture2D" uid="uid://b5jrc36hdebqt" path="res://Assets/images/drift_sun.png" id="15_sun"]
 [ext_resource type="Shader" uid="uid://bx6p2btkr8mum" path="res://shaders/godray.gdshader" id="16_8brjc"]
 [ext_resource type="AudioStream" uid="uid://b55e4imb8hqqj" path="res://Assets/music/drift_day.wav" id="17_day"]
+[ext_resource type="PackedScene" uid="uid://d1vjnycg1nnao" path="res://scenes/ceiling_cushion.tscn" id="18_cushion"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5xdv5"]
 shader = ExtResource("16_8brjc")
@@ -465,3 +466,6 @@ theme_override_font_sizes/font_size = 22
 text = "Press E to chase the memory"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="CeilingCushion" parent="." unique_id=2000000202 instance=ExtResource("18_cushion")]
+position = Vector2(2945, -3735)
