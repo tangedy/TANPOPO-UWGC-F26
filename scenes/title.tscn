@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://we505pdojeog"]
 
 [ext_resource type="Script" uid="uid://glm1f3308j66" path="res://scripts/title.gd" id="1_title"]
-[ext_resource type="AudioStream" uid="uid://b4bjo868npxgi" path="res://Assets/music/etherealskything.wav" id="2_music"]
+[ext_resource type="AudioStream" uid="uid://b4bjo868npxgi" path="res://Assets/music/etherealskything.ogg" id="2_music"]
 [ext_resource type="Shader" uid="uid://ci17e24q8o3qt" path="res://drift.gdshader" id="4_b3w7a"]
 [ext_resource type="Texture2D" uid="uid://b2blolc73eixo" path="res://Assets/images/smallercloud.png" id="5_4rr2b"]
 [ext_resource type="Shader" uid="uid://dexmydrykhi36" path="res://shaders/grass.gdshader" id="5_ia1n6"]

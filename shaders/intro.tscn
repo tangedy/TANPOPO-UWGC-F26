@@ -32,7 +32,7 @@
 [ext_resource type="AudioStream" uid="uid://bygy772iuokwx" path="res://Assets/sfx/benkirb-shine-1-268902.mp3" id="29_dbcjl"]
 [ext_resource type="AudioStream" uid="uid://bihv6sjle0uh0" path="res://Assets/sfx/u_vr5icvkppa-nature-ambience-323729.mp3" id="29_miu2m"]
 [ext_resource type="AudioStream" uid="uid://dh04ha2kmres7" path="res://Assets/sfx/dragon-studio-epic-whoosh-gust-478374.mp3" id="30_dbcjl"]
-[ext_resource type="AudioStream" uid="uid://b4bjo868npxgi" path="res://Assets/music/etherealskything.wav" id="30_qc65c"]
+[ext_resource type="AudioStream" uid="uid://b4bjo868npxgi" path="res://Assets/music/etherealskything.ogg" id="30_qc65c"]
 
 [sub_resource type="Shader" id="Shader_bfp5r"]
 code = "shader_type canvas_item;
@@ -72,107 +72,107 @@ shader_parameter/frames = 5
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tt056"]
 atlas = ExtResource("3_0khn2")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f02"]
 atlas = ExtResource("4_f02")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f03"]
 atlas = ExtResource("5_f03")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f04"]
 atlas = ExtResource("6_f04")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f05"]
 atlas = ExtResource("7_f05")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f06"]
 atlas = ExtResource("8_f06")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f07"]
 atlas = ExtResource("9_f07")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f08"]
 atlas = ExtResource("10_f08")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f09"]
 atlas = ExtResource("11_f09")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f10"]
 atlas = ExtResource("12_f10")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f11"]
 atlas = ExtResource("13_f11")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f12"]
 atlas = ExtResource("14_f12")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f13"]
 atlas = ExtResource("15_f13")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f14"]
 atlas = ExtResource("16_f14")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f15"]
 atlas = ExtResource("17_f15")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f16"]
 atlas = ExtResource("18_f16")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f17"]
 atlas = ExtResource("19_f17")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f18"]
 atlas = ExtResource("20_f18")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f19"]
 atlas = ExtResource("21_f19")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f20"]
 atlas = ExtResource("22_f20")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f21"]
 atlas = ExtResource("23_f21")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f22"]
 atlas = ExtResource("24_f22")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f23"]
 atlas = ExtResource("25_f23")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f24"]
 atlas = ExtResource("26_f24")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f25"]
 atlas = ExtResource("27_f25")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f26"]
 atlas = ExtResource("28_f26")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_5xdv5"]
 animations = [{
@@ -524,7 +524,7 @@ color = Color(0, 0, 0, 1)
 [node name="intro" type="AnimatedSprite2D" parent="." unique_id=1846269559]
 material = SubResource("ShaderMaterial_tt056")
 position = Vector2(635, 359)
-scale = Vector2(0.4530488, 0.45304877)
+scale = Vector2(0.95463176, 0.95463176)
 sprite_frames = SubResource("SpriteFrames_5xdv5")
 animation = &"1"
 

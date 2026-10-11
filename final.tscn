@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://c3wd324ys1unb" path="res://Assets/images/memories/memory 7.png" id="7_mem7"]
 [ext_resource type="Texture2D" uid="uid://dk2rd4q14hbfp" path="res://Assets/images/memories/memory 8.png" id="8_mem8"]
 [ext_resource type="Texture2D" uid="uid://b5eelsnkjjpl3" path="res://Assets/images/memories/memory 9.png" id="9_mem9"]
-[ext_resource type="AudioStream" uid="uid://c2eqaxar5ywku" path="res://Assets/music/drift_final_memory.wav" id="10_iquii"]
+[ext_resource type="AudioStream" uid="uid://c2eqaxar5ywku" path="res://Assets/music/drift_final_memory.ogg" id="10_iquii"]
 [ext_resource type="Texture2D" uid="uid://deco7iy23f5ol" path="res://Assets/images/final/Untitled_Artwork-1 3.png" id="11_f01"]
 [ext_resource type="Texture2D" uid="uid://cra38df64c2l4" path="res://Assets/images/final/Untitled_Artwork-2 3.png" id="12_f02"]
 [ext_resource type="Texture2D" uid="uid://1avpk5ija5sr" path="res://Assets/images/final/Untitled_Artwork-3 2.png" id="13_f03"]
@@ -77,131 +77,131 @@ shader_parameter/frames = 5
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m01"]
 atlas = ExtResource("1_mem1")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m02"]
 atlas = ExtResource("2_mem2")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m03"]
 atlas = ExtResource("3_mem3")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m04"]
 atlas = ExtResource("4_mem4")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m05"]
 atlas = ExtResource("5_mem5")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m06"]
 atlas = ExtResource("6_mem6")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m07"]
 atlas = ExtResource("7_mem7")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m08"]
 atlas = ExtResource("8_mem8")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m09"]
 atlas = ExtResource("9_mem9")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f01"]
 atlas = ExtResource("11_f01")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f02"]
 atlas = ExtResource("12_f02")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f03"]
 atlas = ExtResource("13_f03")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f04"]
 atlas = ExtResource("14_f04")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f05"]
 atlas = ExtResource("15_f05")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f06"]
 atlas = ExtResource("16_f06")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f07"]
 atlas = ExtResource("17_f07")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f08"]
 atlas = ExtResource("18_f08")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f09"]
 atlas = ExtResource("19_f09")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f10"]
 atlas = ExtResource("20_f10")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f11"]
 atlas = ExtResource("21_f11")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f12"]
 atlas = ExtResource("22_f12")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f13"]
 atlas = ExtResource("23_f13")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f14"]
 atlas = ExtResource("24_f14")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f15"]
 atlas = ExtResource("25_f15")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f16"]
 atlas = ExtResource("26_f16")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f17"]
 atlas = ExtResource("27_f17")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f18"]
 atlas = ExtResource("28_f18")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f19"]
 atlas = ExtResource("29_f19")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f20"]
 atlas = ExtResource("30_f20")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f21"]
 atlas = ExtResource("31_f21")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f22"]
 atlas = ExtResource("32_f22")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f23"]
 atlas = ExtResource("33_f23")
-region = Rect2(0, 0, 2360, 1640)
+region = Rect2(0, 0, 1120, 778)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_y4b80"]
 animations = [{
@@ -520,7 +520,7 @@ metadata/_edit_use_anchors_ = true
 [node name="final" type="AnimatedSprite2D" parent="." unique_id=1522513856]
 material = SubResource("ShaderMaterial_55stl")
 position = Vector2(635, 359)
-scale = Vector2(0.4530488, 0.45304877)
+scale = Vector2(0.95463176, 0.95463176)
 sprite_frames = SubResource("SpriteFrames_y4b80")
 animation = &"memory"
 
