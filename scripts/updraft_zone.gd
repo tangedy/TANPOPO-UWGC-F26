@@ -4,6 +4,8 @@ extends Area2D
 ## Upward speed of the one gust fired when the traveler is fully inside.
 ## Tuned so the arc crests at the top of the tall platform.
 @export var lift_speed := 200.0
+## Added to every level updraft at play time, along whatever way the zone is aimed.
+const LEVEL_LIFT_BONUS := 50.0
 @export var zone_size := Vector2(16000, 700):
 	set(value):
 		zone_size = value
@@ -40,9 +42,13 @@ func _physics_process(_delta: float) -> void:
 	if bounds.encloses(inset):
 		if not _launched:
 			_launched = true
-			player.apply_gust(lift_direction(), lift_speed)
+			player.apply_gust(lift_direction(), _played_lift())
 	else:
 		_launched = false
+
+
+func _played_lift() -> float:
+	return lift_speed if Engine.is_editor_hint() else lift_speed + LEVEL_LIFT_BONUS
 
 
 func lift_direction() -> Vector2:
@@ -78,5 +84,5 @@ func _apply_zone_size() -> void:
 	mat.set_shader_parameter("curve", 0.0)
 	mat.set_shader_parameter("active", 1.0)
 	mat.set_shader_parameter("fill_mode", 1.0)
-	var flow := lerpf(70.0, 150.0, clampf(lift_speed / 800.0, 0.0, 1.0))
+	var flow := lerpf(70.0, 150.0, clampf(_played_lift() / 800.0, 0.0, 1.0))
 	mat.set_shader_parameter("flow_speed", flow)
