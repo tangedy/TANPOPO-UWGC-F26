@@ -4,9 +4,9 @@ signal returned
 
 const InputSetup = preload("res://scripts/input_setup.gd")
 const PathTrail = preload("res://scripts/path_debug.gd")
-const DAY_MUSIC := preload("res://Assets/music/drift_day.wav")
-const AFTERNOON_MUSIC := preload("res://Assets/music/drift_afternoon.wav")
-const NIGHT_MUSIC := preload("res://Assets/music/drift_night.wav")
+const DAY_MUSIC := preload("res://Assets/music/drift_day.ogg")
+const AFTERNOON_MUSIC := preload("res://Assets/music/drift_afternoon.ogg")
+const NIGHT_MUSIC := preload("res://Assets/music/drift_night.ogg")
 
 enum TimeOfDay { DAY, AFTERNOON, SUNSET, NIGHT }
 
@@ -184,6 +184,8 @@ func _play_music(stream: AudioStream) -> void:
 		if frames > 1:
 			wav.loop_end = frames
 		wav.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	elif stream is AudioStreamOggVorbis:
+		(stream as AudioStreamOggVorbis).loop = true
 	music.play()
 
 

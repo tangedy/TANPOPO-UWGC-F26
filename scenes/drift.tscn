@@ -13,7 +13,6 @@
 [ext_resource type="AudioStream" uid="uid://d3uyxexew22cy" path="res://Assets/sfx/jump.mp3" id="6_m70us"]
 [ext_resource type="Texture2D" uid="uid://b2blolc73eixo" path="res://Assets/images/smallercloud.png" id="7_2r5rs"]
 [ext_resource type="Texture2D" uid="uid://b5ot21jb3anjd" path="res://Assets/images/clouds_rough.png" id="7_clouds"]
-[ext_resource type="Texture2D" uid="uid://c6wmgpoa2fhc1" path="res://Assets/images/grandma_stand_rough.png" id="8_grandma"]
 [ext_resource type="AudioStream" uid="uid://dycsjsjo3xbe8" path="res://Assets/sfx/soundreality-wind-blowing-457954.mp3" id="8_mds2f"]
 [ext_resource type="Script" uid="uid://b4akt728jpi0v" path="res://scripts/bird_spawner.gd" id="9_birds"]
 [ext_resource type="PackedScene" uid="uid://t0yrhsy5mo5e" path="res://scenes/grass.tscn" id="9_wgtfl"]
@@ -24,7 +23,7 @@
 [ext_resource type="Shader" uid="uid://cmsjwg5n7hiaa" path="res://shaders/moon_glow.gdshader" id="15_glow"]
 [ext_resource type="Texture2D" uid="uid://b5jrc36hdebqt" path="res://Assets/images/drift_sun.png" id="15_sun"]
 [ext_resource type="Shader" uid="uid://bx6p2btkr8mum" path="res://shaders/godray.gdshader" id="16_8brjc"]
-[ext_resource type="AudioStream" uid="uid://b55e4imb8hqqj" path="res://Assets/music/drift_day.wav" id="17_day"]
+[ext_resource type="AudioStream" uid="uid://b55e4imb8hqqj" path="res://Assets/music/drift_day.ogg" id="17_day"]
 [ext_resource type="PackedScene" uid="uid://d1vjnycg1nnao" path="res://scenes/ceiling_cushion.tscn" id="18_cushion"]
 [ext_resource type="Texture2D" uid="uid://6kvbalwfqmui" path="res://Assets/images/sitting on bench.png" id="27_6yvvu"]
 
@@ -275,7 +274,7 @@ scroll_scale = Vector2(0.35, 0.35)
 z_index = -10
 material = SubResource("ShaderMaterial_bok0l")
 position = Vector2(2896, -688)
-scale = Vector2(2.012581, 1.8432039)
+scale = Vector2(4.025162, 3.6864078)
 texture = ExtResource("7_clouds")
 
 [node name="BGClouds2" type="Sprite2D" parent="Platform/BGCloudsLayer" unique_id=1416871081]
@@ -283,7 +282,7 @@ modulate = Color(1, 1, 1, 0.41568628)
 z_index = -10
 material = SubResource("ShaderMaterial_bok0l")
 position = Vector2(2085.0002, -537.99994)
-scale = Vector2(-2.3, 1.843)
+scale = Vector2(-4.6, 3.686)
 texture = ExtResource("7_clouds")
 
 [node name="Moon" type="Node2D" parent="Platform/BGCloudsLayer" unique_id=1882401933]
@@ -312,7 +311,7 @@ fade_when_covering = true
 z_index = 1
 material = SubResource("ShaderMaterial_bok0l")
 position = Vector2(-816.99994, 1026)
-scale = Vector2(2.1288342, 1.8432039)
+scale = Vector2(4.2576684, 3.6864078)
 texture = ExtResource("7_2r5rs")
 
 [node name="ForegroundClouds2" type="Sprite2D" parent="Platform/ForegroundCloudsLayer" unique_id=316306333]
@@ -320,7 +319,7 @@ z_index = 1
 material = SubResource("ShaderMaterial_bok0l")
 position = Vector2(6226.9995, 1782)
 rotation = -5.9725165
-scale = Vector2(-2, 2)
+scale = Vector2(-4, 4)
 texture = ExtResource("7_2r5rs")
 
 [node name="ForegroundClouds3" type="Sprite2D" parent="Platform/ForegroundCloudsLayer" unique_id=1215963296]
@@ -328,7 +327,7 @@ z_index = 1
 material = SubResource("ShaderMaterial_bok0l")
 position = Vector2(2738, 1690)
 rotation = -2.1711895
-scale = Vector2(-2, 2)
+scale = Vector2(-4, 4)
 texture = ExtResource("7_2r5rs")
 
 [node name="FloorCollider" type="CollisionPolygon2D" parent="Platform" unique_id=628338554]
@@ -365,13 +364,6 @@ shape = SubResource("RectangleShape2D_5xdv5")
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Platform" unique_id=725885607]
 position = Vector2(7328, -2017)
 shape = SubResource("RectangleShape2D_5xdv5")
-
-[node name="Grandma" type="Sprite2D" parent="." unique_id=625137024]
-visible = false
-z_index = 4
-position = Vector2(-633.00006, 822)
-scale = Vector2(0.1853, 0.1853)
-texture = ExtResource("8_grandma")
 
 [node name="Peppermint" parent="." unique_id=262609286 instance=ExtResource("5_peppermint")]
 z_index = -5
@@ -510,5 +502,5 @@ position = Vector2(2945, -3735)
 visible = false
 material = SubResource("ShaderMaterial_0cwwd")
 position = Vector2(-771, 687)
-scale = Vector2(0.4, 0.4)
+scale = Vector2(1, 1)
 texture = ExtResource("27_6yvvu")

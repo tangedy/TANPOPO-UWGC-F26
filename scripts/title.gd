@@ -81,6 +81,8 @@ func _loop_music() -> void:
 		if frames > 1:
 			wav.loop_end = frames
 		wav.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	elif music.stream is AudioStreamOggVorbis:
+		(music.stream as AudioStreamOggVorbis).loop = true
 
 
 func _on_play() -> void:
