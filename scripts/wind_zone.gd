@@ -5,6 +5,8 @@ const AirPush = preload("res://scripts/air_push.gd")
 
 ## Push strength in pixels per second squared. Direction follows the curved flow.
 @export_range(0.0, 2000.0, 1.0) var strength := 240.0
+## Extra push on level drafts that blow up, left, or right. Downward drafts stay put.
+const LEVEL_STRENGTH_BONUS := 50.0
 ## How much the flow bows. 0 = straight along local right, +/- bends the arc.
 @export_range(-1.0, 1.0, 0.01) var curve := 0.0:
 	set(value):
@@ -63,13 +65,39 @@ func _physics_process(delta: float) -> void:
 ## Accel applied to a body at a given global position, following the curved flow.
 ## An up-diagonal box pushes sideways at full strength and up at half strength.
 func _push_at(global_pos: Vector2) -> Vector2:
+	var played := _played_strength()
 	var base := push_direction()
 	if _is_up_diagonal(base):
 		var side := signf(base.x)
 		if side == 0.0:
 			side = 1.0
-		return Vector2(side * strength, -strength * 0.5)
-	return push_direction_at(global_pos) * strength
+		return Vector2(side * played, -played * 0.5)
+	return push_direction_at(global_pos) * played
+
+
+## Authored strength, plus 50 on level drafts aimed up, left, right, or up-diagonal.
+func _played_strength() -> float:
+	if Engine.is_editor_hint() or not _gets_level_bonus():
+		return strength
+	return strength + LEVEL_STRENGTH_BONUS
+
+
+func _gets_level_bonus() -> bool:
+	if not _inside_drift_level():
+		return false
+	var direction := push_direction()
+	# Straight down and down-diagonals keep their authored strength.
+	return not (direction.y > 0.35 and direction.y >= absf(direction.x))
+
+
+func _inside_drift_level() -> bool:
+	var node: Node = self
+	while node != null:
+		var script_obj: Object = node.get_script()
+		if script_obj is Script and str(script_obj.resource_path).ends_with("drift_room.gd"):
+			return true
+		node = node.get_parent()
+	return false
 
 
 ## True when this box is aimed up and sideways together, like the 45° up winds.
@@ -168,5 +196,5 @@ func _update_visual(delta: float) -> void:
 	# Direction of the sweep: fill when heading on, empty when heading off.
 	mat.set_shader_parameter("fill_mode", target)
 	mat.set_shader_parameter("curve", curve)
-	var flow := lerpf(52.0, 160.0, clampf(strength / 800.0, 0.0, 1.0))
+	var flow := lerpf(52.0, 160.0, clampf(_played_strength() / 800.0, 0.0, 1.0))
 	mat.set_shader_parameter("flow_speed", flow)
